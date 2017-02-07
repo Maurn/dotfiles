@@ -190,5 +190,5 @@ client.unfocused	$bg		$bg	$text-inactive	$border	$bg
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 exec --no-startup-id nitrogen --restore &
-exec --no-startup-id compton
+exec --no-startup-id compton -b
 exec --no-startup-id unclutter &
