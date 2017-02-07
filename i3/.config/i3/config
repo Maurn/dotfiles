@@ -99,9 +99,9 @@ workspace 4 output DVI-D-0
 workspace 5 output DVI-I-1
 workspace 6 output DVI-D-0
 workspace 7 output DVI-I-1
-workspace 8  output DVI-D-0
+workspace 8 output DVI-D-0
 workspace 9 output DVI-I-1
-workspace 10  output DVI-D-0
+workspace 10 output DVI-D-0
 
 # switch to workspace
 bindsym $mod+1 workspace 1
@@ -182,11 +182,9 @@ set_from_resource $text-inactive i3wm.gray #808080
 set $indicator #ffffff
 
 # Setting window colors
-client.focused	$border	$bg	$text $indicator $border
-client.focused_inactive $bg $bg $text-inactive $indicator $bg
-client.unfocused	$bg		$bg	$text-inactive	$indicator	$bg
-
-set $tbg #000000cc
+client.focused	$border	$bg	$text $border $border
+client.focused_inactive $bg $bg $text-inactive $border $bg
+client.unfocused	$bg		$bg	$text-inactive	$border	$bg
 
 # Startup programs
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh

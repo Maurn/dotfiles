@@ -99,9 +99,9 @@ label-urgent-padding = 4
 [module/eth]
 type = internal/network
 interface = enp3s0
-interval = 3.0
+interval = 1
 
-format-connected-prefix = " "
+format-connected-prefix = " "
 ;format-connected-prefix-foreground = ${colors.foreground-alt}
 label-connected = %local_ip%
 label-connected-foreground = ${colors.success}
