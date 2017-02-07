@@ -1,70 +1,67 @@
-!URxvt.background: black
-!URxvt.foreground: white
+!!NumiX Darkest.
+!!BY WuX 
 
-URxvt.font: xft:dejavusansmono:size=9
-URxvt.scrollBar: false
+*background: #000000
+*foreground: #FFFFFF
+
+!Black
+*color0:    #555555
+*color8:    #888888
+
+!Red
+*color1:    #9C3528
+*color9:    #d64937
+
+!Green
+*color2:    #61BC3B
+*color10:   #86DF5D
+
+!yellow
+*color3:    #F3B43A
+*color11:   #FDD75A
+
+!blue
+*color4:    #0D68A8
+*color12:   #0F75BD
+
+!Magenta
+*color5:    #744560
+*color13:   #9E5E83
+
+!Cyan
+*color6:    #288e9c
+*color14:   #37c3d6
+
+!White
+*color7:    #A2A2A2
+*color15:   #f9f9f9
+
+URxvt*scrollBar:         false
+URxvt*scrollBar_right:   false
+
+URxvt*transparent:       false
+
 URxvt*depth: 32
-urxvt*foreground:#93d2ff
-urxvt*background:rgba:0000/0000/0000/cccc
+URxvt.background: [80]#000000
 
-!TomorrowNightBright
-#define t_background        	#1e1e1e
-#define t_current_line      	#2a2a2a
-#define t_selection      	#424242
-#define t_foreground      	#a3e8ff
-#define t_comment	     	#969896
-#define t_red		     	#d54e53
-#define t_orange	     	#e78c45
-#define t_yellow        	#e7c547
-#define t_green	        	#b9ca4a
-#define t_aqua	        	#70c0b1
-#define t_blue	        	#03c0ff
-#define t_purple        	#c397d8
+URxvt.font: xft:Source Code Pro Semibold:size=11
+URxvt.letterSpace: 0
+URxvt.internalBorder: 4
+
+*antialias:  true
+*autohint:   true
 
 ! ------------------------------------------------------------------------------
 ! ROFI Color theme
+! Copyright: 2017 leofa
 ! ------------------------------------------------------------------------------
-rofi.color-enabled: true
-rofi.color-window: #393939, #393939, #268bd2
-rofi.color-normal: #393939, #ffffff, #393939, #268bd2, #ffffff
-rofi.color-active: #393939, #268bd2, #393939, #268bd2, #205171
-rofi.color-urgent: #393939, #f3843d, #393939, #268bd2, #ffc39c
-rofi.width: 1366
-rofi.height: 768
-rofi.padding:200
-
-*foreground:   t_foreground
-*background:   t_background
-*cursorColor:  #aeafad
-
-! Black / Grey
-*color0:       #000000
-*color8:       #666666
-
-! Red / Bright Red
-*color1:       t_red
-*color9:       #FF3334
-
-! Green + Bright Green
-*color2:       t_green
-*color10:      #9ec400
-
-! Yellow (Orange) + Bright Yellow (Yellow)
-*color3:       t_orange
-*color11:      t_yellow
-
-! Blue + Bright Blue
-*color4:       t_blue
-*color12:      t_blue
-
-! Magenta (Purple) + Bright Magenta
-*color5:       t_purple
-*color13:      #b777e0
-
-! Cyan (Aqua) + Bright Cyan
-*color6:       t_aqua
-*color14:      #54ced6
-
-! Light Grey (Selection) + White (Current Line)
-*color7:       t_selection
-*color15: t_current_line
+! "Color scheme for normal row" Set from: File
+rofi.color-normal:                   argb:cc1d1f21, #c4cbd4, argb:96404552, #4084d6, #f9f9f9
+! "Color scheme for urgent row" Set from: File
+rofi.color-urgent:                   argb:cc1d1f21, #cc6666, argb:e54b5160, #a54242, #f9f9f9
+! "Color scheme for active row" Set from: File
+rofi.color-active:                   argb:cc1d1f21, #65acff, argb:e44b5160, #4491ed, #f9f9f9
+! "Color scheme window" Set from: File
+rofi.color-window:                   argb:cc2d303b, #7c8389, #1d1f21
+! "Separator style (none, dash, solid)" Set from: XResources
+rofi.separator-style:                solid

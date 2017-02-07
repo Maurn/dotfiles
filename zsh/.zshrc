@@ -18,10 +18,7 @@ PROMPT='%n@%m: %~ $ '
 
 export EDITOR=vim
 
-#Aliases
-alias ls='ls --color=auto'
-alias updatemirrors='sudo reflector --verbose --country 'Denmark' --age 12 --sort rate --save /etc/pacman.d/mirrorlist'
-alias i3conf='vim ~/.config/i3/config'
+source .aliases
 
 # Plugins
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
