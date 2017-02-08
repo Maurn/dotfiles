@@ -1,0 +1,47 @@
+#!/usr/bin/python
+
+import json
+import requests
+
+
+def fetch_data():
+    api_key = "4b7EuwNx"  # Should not commit keys. Deal with this sometime..
+    url = "https://api.torn.com/user/?selections=travel,bars,cooldowns&key=%s" % api_key
+
+    request = requests.get(url)
+    return json.loads(request.text)
+
+
+def get_status(data):
+    status = ''
+    destination = data['travel']['destination']
+    time_left = data['travel']['time_left']
+
+    if (destination == 'Torn') and (time_left == 0):
+        energy_bar = data['energy']['current']
+        nerve_bar = data['nerve']['current']
+        drug_cooldown = data['cooldowns']['drug']
+
+        energy = energy_bar if energy_bar < data['energy']['maximum'] else 'FULL'
+        nerve = nerve_bar if nerve_bar < data['nerve']['maximum'] else 'FULL'
+        drugs = format_time(drug_cooldown) if drug_cooldown > 0 else 'DRUGS'
+
+        status = 'E: {}, N: {} | {}'.format(energy, nerve, drugs)
+        return status
+
+    if time_left > 0:
+        status = '{} in {}'.format(destination, format_time(time_left))
+    else:
+        status = destination.upper()
+
+    return status
+
+
+def format_time(seconds):
+    minutes, seconds = divmod(seconds, 60)
+    hour, minutes = divmod(minutes, 60)
+
+    return '{}h {}m'.format(hour, minutes)
+
+
+print(get_status(fetch_data()))

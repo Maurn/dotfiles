@@ -1,7 +1,7 @@
 alias ls='ls --color=auto'
 alias reboot='sudo reboot'
 alias tree='tree -C'
-alias pacin='sudo pacman -S'
+alias pacin='pacaur -S'
 alias pacun='sudo pacman -Rs'
 alias update-mirrors='sudo reflector --verbose --country 'Denmark' --age 12 --sort rate --save /etc/pacman.d/mirrorlist'
 alias update-system='update-mirrors && pacaur -Syu'

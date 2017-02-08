@@ -161,9 +161,9 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 #Audio hardware keys
-bindsym $mod+F10 exec --no-startup-id amixer -q sset Master 1%+
-bindsym $mod+F9 exec --no-startup-id amixer -q sset Master 1%- 
-bindsym $mod+F11 exec --no-startup-id amixer -q sset Master toggle 
+bindsym $mod+F10 exec --no-startup-id "amixer -q sset Master 1%+"
+bindsym $mod+F9 exec --no-startup-id "amixer -q sset Master 1%-"
+bindsym $mod+F11 exec --no-startup-id "pactl set-sink-mute 0 toggle" 
 
 # Borders and window titles
 for_window [class="^.*"] border pixel 1
@@ -186,9 +186,12 @@ client.focused	$border	$bg	$text $border $border
 client.focused_inactive $bg $bg $text-inactive $border $bg
 client.unfocused	$bg		$bg	$text-inactive	$border	$bg
 
+# Screengrabs
+bindsym Print exec scrot '%d-%m-%Y_$wx$h.png' -e 'mv $f ~/pictures/screengrabs/'
+bindsym --release $mod+Print exec scrot '%d-%m-%Y_$wx$h.png' -s -b -e 'mv $f ~/pictures/screengrabs/'
+
 # Startup programs
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 exec --no-startup-id nitrogen --restore &
 exec --no-startup-id compton -b
-exec --no-startup-id unclutter &
