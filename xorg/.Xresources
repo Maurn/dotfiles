@@ -57,12 +57,12 @@ URxvt.internalBorder: 4
 ! Copyright: 2017 leofa
 ! ------------------------------------------------------------------------------
 ! "Color scheme for normal row" Set from: File
-rofi.color-normal:                   argb:cc1d1f21, #c4cbd4, argb:96404552, #4084d6, #f9f9f9
+rofi.color-normal:                   argb:001d1f21, argb:ccc4cbd4, argb:00404552, argb:cc0083ff, #f9f9f9
 ! "Color scheme for urgent row" Set from: File
-rofi.color-urgent:                   argb:cc1d1f21, #cc6666, argb:e54b5160, #a54242, #f9f9f9
+rofi.color-urgent:                   argb:001d1f21, argb:cccc6666, argb:004b5160, argb:00a54242, #f9f9f9
 ! "Color scheme for active row" Set from: File
-rofi.color-active:                   argb:cc1d1f21, #65acff, argb:e44b5160, #4491ed, #f9f9f9
+rofi.color-active:                   argb:001d1f21, #65acff, argb:004b5160, argb:004491ed, #f9f9f9
 ! "Color scheme window" Set from: File
-rofi.color-window:                   argb:cc2d303b, #7c8389, #1d1f21
+rofi.color-window:                   argb:cc1d1f21, argb:cc1d1f21, #1d1f21
 ! "Separator style (none, dash, solid)" Set from: XResources
-rofi.separator-style:                solid
+rofi.separator-style:                none
