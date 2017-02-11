@@ -1,12 +1,10 @@
-# Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
-setopt appendhistory autocd extendedglob HIST_IGNORE_DUPS
+
+setopt appendhistory autocd extendedglob prompt_subst HIST_IGNORE_DUPS
 unsetopt beep
 bindkey -e
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
 
 zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}'
 zstyle ':completion:*' menu select
@@ -14,9 +12,14 @@ zstyle :compinstall filename '/home/maurn/.config/zsh/.zshrc'
 
 autoload -Uz compinit
 compinit
-# End of lines added by compinstall
 
-PROMPT='%n@%m: %~ $ '
+source $ZDOTDIR/git-prompt
+
+function precmd(){
+    PROMPT='%F{blue}%n%f@%F{blue}%m%f %~ %F{blue}>%f '
+    RPROMPT=$(rprompt-git)
+}
+
 
 export EDITOR=vim
 

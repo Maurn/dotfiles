@@ -21,7 +21,7 @@
 *color11:   #FDD75A
 
 !blue
-*color4:    #0D68A8
+*color4:    #2ba7ff
 *color12:   #0F75BD
 
 !Magenta
@@ -46,7 +46,7 @@ URxvt.foreground: #ffffff
 URxvt.background: [80]#000000
 
 URxvt.font: xft:Source Code Pro Semibold:size=11
-URxvt.letterSpace: 0
+URxvt.letterSpace: a
 URxvt.internalBorder: 4
 
 *antialias:  true
