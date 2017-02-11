@@ -48,4 +48,7 @@ def color(string, hex_code):
     return '%{{F#{0}}}{1}%{{F-}}'.format(hex_code, string)
 
 
-print(get_status(fetch_data()))
+try:
+    print(get_status(fetch_data()))
+except requests.exceptions.RequestException:
+    pass
