@@ -20,7 +20,6 @@ function precmd(){
     RPROMPT=$(rprompt-git)
 }
 
-
 export EDITOR=vim
 
 source $ZDOTDIR/.aliases

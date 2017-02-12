@@ -1,5 +1,5 @@
 alias ls='ls --color=auto'
-alias reboot='sudo reboot'
+alias shutdown='shutdown now'
 alias tree='tree -C'
 alias pacin='pacaur -S'
 alias pacun='sudo pacman -Rs'

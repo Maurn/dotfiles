@@ -48,6 +48,8 @@ URxvt.background: [80]#000000
 URxvt.font: xft:Source Code Pro Semibold:size=11
 URxvt.letterSpace: a
 URxvt.internalBorder: 4
+URxvt.keysym.Shift-Up: command:\033]720;1\007
+URxvt.keysym.Shift-Down: command:\033]721;1\007
 
 *antialias:  true
 *autohint:   true
