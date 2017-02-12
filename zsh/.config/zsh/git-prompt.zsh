@@ -1,5 +1,3 @@
-#!/usr/bin/zsh
-
 function rprompt-git(){
     gitinfo=($(git rev-parse --is-inside-git-dir --abbrev-ref=loose HEAD 2> /dev/null))
 

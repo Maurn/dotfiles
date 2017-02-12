@@ -21,7 +21,7 @@ alert = #bd2c40
 success = #00ff00
 failure = #ff0000
 
-inactive = #cc111111
+inactive = #cc222222
 active = #cc003ea3
 
 [bar/bottom]
@@ -89,13 +89,13 @@ label-focused-background = ${colors.active}
 ;label-focused-underline = ${self.active}
 label-focused-padding = 4
 
-label-unfocused = %index%
-label-unfocused-background = ${colors.inactive}
-label-unfocused-padding = 4
-
 label-visible = %index%
 label-visible-background = ${colors.inactive}
 label-visible-padding = 4
+
+label-unfocused = %index%
+label-unfocused-background = ${colors.background}
+label-unfocused-padding = 4
 
 label-urgent = %index%
 label-urgent-background = #cc900000

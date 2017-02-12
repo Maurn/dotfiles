@@ -13,7 +13,7 @@ zstyle :compinstall filename '/home/maurn/.config/zsh/.zshrc'
 autoload -Uz compinit
 compinit
 
-source $ZDOTDIR/git-prompt
+source $ZDOTDIR/git-prompt.zsh
 
 function precmd(){
     PROMPT='%F{blue}%n%f@%F{blue}%m%f %~ %F{blue}>%f '
@@ -22,14 +22,15 @@ function precmd(){
 
 export EDITOR=vim
 
-source $ZDOTDIR/.aliases
-
-# Plugins
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $ZDOTDIR/aliases.zsh
+source $ZDOTDIR/keybindings.zsh
 
 if ! pgrep -u "$USER" ssh-agent > /dev/null; then
     ssh-agent > ~/.ssh-agent-thing
 fi
 if [[ "$SSH_AGENT_PID" == "" ]]; then
-    eval "$(<~/.ssh-agent-thing)"
+    eval "$(<~/.ssh-agent-thing)" > /dev/null
 fi
+
+# Plugins
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
