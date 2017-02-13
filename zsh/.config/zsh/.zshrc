@@ -20,7 +20,7 @@ function precmd(){
     RPROMPT=$(rprompt-git)
 }
 
-export EDITOR=vim
+export EDITOR=nvim
 
 source $ZDOTDIR/aliases.zsh
 source $ZDOTDIR/keybindings.zsh
