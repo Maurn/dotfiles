@@ -1,2 +1,3 @@
-bindkey ';5D' backward-word
-bindkey ';5C' forward-word
+bindkey '^B' backward-word
+bindkey '^F' forward-word
+bindkey '^[[Z' undo

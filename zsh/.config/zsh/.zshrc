@@ -23,7 +23,6 @@ function precmd(){
 export EDITOR=nvim
 
 source $ZDOTDIR/aliases.zsh
-source $ZDOTDIR/keybindings.zsh
 
 if ! pgrep -u "$USER" ssh-agent > /dev/null; then
     ssh-agent > ~/.ssh-agent-thing
@@ -34,3 +33,8 @@ fi
 
 # Plugins
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh/plugins/zsh-autopair/autopair.zsh
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+source $ZDOTDIR/color-man-pages.zsh
+source $ZDOTDIR/keybindings.zsh
