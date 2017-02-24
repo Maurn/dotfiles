@@ -1,43 +1,39 @@
-function rprompt-git(){
-    gitinfo=($(git rev-parse --is-inside-git-dir --abbrev-ref=loose HEAD 2> /dev/null))
+function git-prompt(){
+    local git_info=($(git rev-parse --is-inside-git-dir --abbrev-ref=loose HEAD 2> /dev/null))
 
-    if [ -z $gitinfo[1] ]; then
+    if [ -z $git_info[1] ] || [ $git_info[1] = 'true' ]; then
         return
     fi
 
-    if [ $gitinfo[1] = 'true' ]; then
-        return
-    fi
+    local branch=$git_info[2]
 
-    branch=$gitinfo[2]
-
-    color=''
-    gitstatus=$(git status --porcelain)
-    if [[ -z $gitstatus ]]; then
+    local color=''
+    local git_status=$(git status --porcelain)
+    if [[ -z $git_status ]]; then
         color='%F{green}'
-    elif [[ -n $(echo $gitstatus | grep '^MM') ]]; then
+    elif [[ -n $(echo $git_status | grep '^MM') ]]; then
         color='%F{red}'
-    elif [[ -n $(echo $gitstatus | grep '^[ \?MDA]') ]]; then
+    elif [[ -n $(echo $git_status | grep '^[ \?MDA]') ]]; then
         color='%F{yellow}'
     fi
 
-    sync=''
-    gitsync=$(git rev-list --left-right --count origin/$branch...HEAD 2> /dev/null)
-    if [[ -n $gitsync ]]; then
-        behind=$gitsync[1]
-        ahead=$gitsync[3]
+    local sync=''
+    local git_sync=$(git rev-list --left-right --count origin/$branch...HEAD 2> /dev/null)
+    if [[ -n $git_sync ]]; then
+        behind=$git_sync[1]
+        ahead=$git_sync[3]
 
-        scolor=''
+        sync_color=''
         if [ $behind -eq 0 ] && [ $ahead -eq 0 ]; then
-            scolor='%F{green}'
+            sync_color='%F{green}'
         elif [ $behind -ne 0 ] && [ $ahead -ne 0 ]; then
-            scolor='%F{red}'
+            sync_color='%F{red}'
         elif [ $behind -ne 0 ] || [ $ahead -ne 0 ]; then
-            scolor='%F{yellow}'
+            sync_color='%F{yellow}'
         fi
 
-        sync=" $scolor$behind↓ $ahead↑"
+        sync="$sync_color$behind↓ $ahead↑"
     fi
 
-    echo "$color\ue0a0 $branch%f$sync"
+    echo "$color $branch%f $sync"
 }

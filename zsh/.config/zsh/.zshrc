@@ -9,6 +9,7 @@ bindkey -e
 zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}'
 zstyle ':completion:*' menu select
 zstyle :compinstall filename '/home/maurn/.config/zsh/.zshrc'
+zstyle ':completion:*:*:mpv:*:*files' ignored-patterns '*.srt'
 
 autoload -Uz compinit
 compinit
@@ -16,8 +17,8 @@ compinit
 source $ZDOTDIR/git-prompt.zsh
 
 function precmd(){
-    PROMPT='%F{blue}%n%f@%F{blue}%m%f %~ %F{blue}>%f '
-    RPROMPT=$(rprompt-git)
+    PROMPT='%F{cyan}%n%f%F{green}@%F{cyan}%m%f %~ %F{cyan}>%f '
+    RPROMPT=$(git-prompt)
 }
 
 export EDITOR=nvim

@@ -21,7 +21,7 @@
 *color11:   #FDD75A
 
 !blue
-*color4:    #2ba7ff
+*color4:    #167fff
 *color12:   #0F75BD
 
 !Magenta
@@ -29,7 +29,7 @@
 *color13:   #9E5E83
 
 !Cyan
-*color6:    #288e9c
+*color6:    #00b7eb
 *color14:   #37c3d6
 
 !White
@@ -47,7 +47,7 @@ URxvt.background: [80]#000000
 
 URxvt.font: xft:Source Code Pro Semibold:size=11
 URxvt.letterSpace: a
-URxvt.internalBorder: 4
+URxvt.internalBorder: 3 
 URxvt.keysym.Shift-Up: command:\033]720;1\007
 URxvt.keysym.Shift-Down: command:\033]721;1\007
 
@@ -59,7 +59,7 @@ URxvt.keysym.Shift-Down: command:\033]721;1\007
 ! Copyright: 2017 leofa
 ! ------------------------------------------------------------------------------
 ! "Color scheme for normal row" Set from: File
-rofi.color-normal:                   argb:001d1f21, argb:ccc4cbd4, argb:00404552, argb:cc0083ff, #f9f9f9
+rofi.color-normal:                   argb:001d1f21, argb:ccc4cbd4, argb:00404552, argb:cc2ba7ff, #f9f9f9
 ! "Color scheme for urgent row" Set from: File
 rofi.color-urgent:                   argb:001d1f21, argb:cccc6666, argb:004b5160, argb:00a54242, #f9f9f9
 ! "Color scheme for active row" Set from: File
