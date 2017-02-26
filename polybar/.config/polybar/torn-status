@@ -5,7 +5,7 @@ import requests
 
 
 def fetch_data():
-    keyfile = open('api-key', 'r')
+    keyfile = open('/home/maurn/.config/polybar/api-key', 'r')
     api_key = keyfile.readline().rstrip('\n')
     url = "https://api.torn.com/user/?selections=travel,bars,cooldowns&key=%s" % api_key
 
