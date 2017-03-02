@@ -27,11 +27,11 @@ def get_status(data):
         nerve = nerve_bar if nerve_bar < data['nerve']['maximum'] else color('FULL', 'ff0')
         drugs = format_time(drug_cooldown) if drug_cooldown > 0 else color('DRUGS', 'f00')
 
-        status = 'E: {}, N: {} | {}'.format(energy, nerve, drugs)
+        status = 'E: {} | N: {} | {}'.format(energy, nerve, drugs)
         return status
 
     if time_left > 0:
-        status = '{} in {}'.format(destination, format_time(time_left))
+        status = ' {} in {}'.format(destination, format_time(time_left))
     else:
         status = color(destination.upper(), 'f00')
 
