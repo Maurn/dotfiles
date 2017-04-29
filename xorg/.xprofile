@@ -52,5 +52,4 @@ fi
 autocutsel -fork &
 autocutsel -selection PRIMARY -fork &
 
-setxkbmap dk
-exec i3
+setxkbmap -layout dk,us -option grp:ctrls_toggle -option caps:swapescape

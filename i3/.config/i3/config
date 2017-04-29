@@ -196,6 +196,5 @@ bindsym --release $mod+Print exec scrot '%d-%m-%Y_$wx$h.png' -s -b -e 'mv $f ~/p
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 exec --no-startup-id nitrogen --restore &
-exec --no-startup-id caffeine &
 exec --no-startup-id redshift &
 exec --no-startup-id compton -b
