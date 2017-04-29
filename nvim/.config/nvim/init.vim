@@ -1,18 +1,23 @@
 call plug#begin('~/.local/share/nvim/plugged')
-    Plug 'rbgrouleff/bclose.vim'
-    Plug 'tpope/vim-surround'
-    Plug 'francoiscabrol/ranger.vim'
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    " Colors
     Plug 'flazz/vim-colorschemes'
+
+    "Completion
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'ervandew/supertab'
 call plug#end()
 
 let g:deoplete#enable_at_startup = 1
+let g:SuperTabDefaultCompletionType = "<c-n>"
+
+colorscheme delek
 
 set number
+set relativenumber
 
-set expandtab
 set tabstop=4
 set shiftwidth=4
-set softtabstop=4
+set expandtab
 
-set completeopt+=noinsert
+set ignorecase
+set smartcase
