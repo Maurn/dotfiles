@@ -47,7 +47,7 @@ padding-left = 0
 padding-right = 2
 
 module-margin-left = 0
-module-margin-right = 4
+module-margin-right = 5
 
 
 font-0 = NotoSans-Regular:size=10;2
@@ -56,7 +56,7 @@ font-1 = FontAwesome:size=12;3
 
 modules-left = i3
 modules-center = 
-modules-right = volume torn eth date
+modules-right = volume keyboard torn eth date
 
 tray-position = right
 tray-padding = 0
@@ -66,6 +66,10 @@ tray-background = #cc000000
 ;wm-restack = 
 
 override-redirect = false
+
+[module/keyboard]
+type=internal/xkeyboard
+format =  <label-layout>
 
 [module/torn]
 type=custom/script
@@ -80,8 +84,6 @@ wrapping-scroll = false
 
 ; Only show workspaces on the same output as the bar
 pin-workspaces = true
-
-
 
 label-focused = %index%
 label-focused-foreground = #ffffff

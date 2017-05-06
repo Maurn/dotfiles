@@ -48,8 +48,4 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
  unset f
 fi
 
-# synchronize cliboards
-autocutsel -fork &
-autocutsel -selection PRIMARY -fork &
-
 setxkbmap -layout dk,us -option grp:ctrls_toggle -option caps:swapescape
