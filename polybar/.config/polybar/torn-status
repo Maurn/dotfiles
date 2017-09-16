@@ -25,9 +25,9 @@ def get_status(data):
 
         energy = energy_bar if energy_bar < data['energy']['maximum'] else color('FULL', 'f80')
         nerve = nerve_bar if nerve_bar < data['nerve']['maximum'] else color('FULL', 'ff0')
-        drugs = format_time(drug_cooldown) if drug_cooldown > 0 else color('DRUGS', 'f00')
+        drugs = format_time(drug_cooldown) if drug_cooldown > 0 else color('!DRUGS!', 'f00')
 
-        status = 'E: {} | N: {} | {}'.format(energy, nerve, drugs)
+        status = '{} {} {}'.format(energy, nerve, drugs)
         return status
 
     if time_left > 0:

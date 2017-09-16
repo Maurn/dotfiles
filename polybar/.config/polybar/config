@@ -51,12 +51,12 @@ module-margin-right = 5
 
 
 font-0 = NotoSans-Regular:size=10;2
-font-1 = FontAwesome:size=12;3
+font-1 = MaterialIcons-Regular:size=13;5
 
 
 modules-left = i3
 modules-center = 
-modules-right = volume keyboard torn battery wifi eth date
+modules-right = volume keyboard torn filesystem battery wifi eth date
 
 tray-position = right
 tray-padding = 0
@@ -69,7 +69,7 @@ override-redirect = false
 
 [module/keyboard]
 type=internal/xkeyboard
-format =  <label-layout>
+format =  <label-layout>
 
 [module/torn]
 type=custom/script
@@ -108,13 +108,13 @@ type = internal/network
 interface = enp3s0
 interval = 1
 
-format-connected-prefix = " "
+format-connected-prefix = ""
 ;format-connected-prefix-foreground = ${colors.foreground-alt}
 label-connected = %local_ip%
 label-connected-foreground = ${colors.success}
 
 format-disconnected = <label-disconnected>
-format-disconnected-prefix = " "
+format-disconnected-prefix = ""
 format-disconnected-prefix-foreground = ${colors.failure}
 label-disconnected = "%ifname% down"
 label-disconnected-foreground = #66
@@ -125,13 +125,13 @@ type = internal/network
 interface = wlp2s0
 interval = 1
 
-format-connected-prefix = " "
+format-connected-prefix = ""
 ;format-connected-prefix-foreground = ${colors.foreground-alt}
 label-connected = %local_ip%
 label-connected-foreground = ${colors.success}
 
 format-disconnected = <label-disconnected>
-format-disconnected-prefix = " "
+format-disconnected-prefix = ""
 format-disconnected-prefix-foreground = ${colors.failure}
 label-disconnected = "%ifname% down"
 label-disconnected-foreground = #66
@@ -157,12 +157,11 @@ type = internal/volume
 format-volume = <ramp-volume> <label-volume>
 format-muted = <label-muted>
 
-label-muted =  muted
+label-muted =  0%
 label-muted-foreground = #66
 
-ramp-volume-0 = 
-ramp-volume-1 = 
-ramp-volume-2 = 
+ramp-volume-0 = 
+ramp-volume-1 = 
 
 [module/battery]
 type = internal/battery
@@ -185,6 +184,15 @@ adapter = ADP1
 ;
 ; Default: 5
 poll-interval = 5
+
+[module/filesystem]
+type = internal/fs
+
+; Mountpoints to display
+mount-0 = /
+
+label-mounted = %used% / %total%
+
 
 [settings]
 screenchange-reload = true
