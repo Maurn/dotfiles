@@ -193,4 +193,4 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 exec --no-startup-id nitrogen --restore &
 exec --no-startup-id redshift &
-exec --no-startup-id compton -b
+exec --no-startup-id compton -b -o 0
