@@ -154,7 +154,7 @@ label = %date% - %time%
 [module/volume]
 type = internal/volume
 
-format-volume = <ramp-volume> <label-volume>
+format-volume = <ramp-volume><label-volume>
 format-muted = <label-muted>
 
 label-muted =  0%
