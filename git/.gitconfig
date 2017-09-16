@@ -1,0 +1,9 @@
+[user]
+	name = Maurn
+	email = maurn95@gmail.com
+[color]
+	diff = auto
+	status = auto
+	ui = auto
+[credential]
+	helper = cache
