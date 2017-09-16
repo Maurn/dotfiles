@@ -11,7 +11,7 @@ if [ "$HOST" == "spanden" ]; then
     MONITOR=DVI-D-0 polybar -r bottom &
     MONITOR=DVI-I-1 polybar -r bottom &
 else
-    polybar -r bottom &
+    MONITOR=LVDS-1 polybar -r bottom &
 fi
 
 echo "Bars launched..."
