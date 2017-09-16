@@ -67,10 +67,10 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+s split h
+bindsym $mod+v split h
 
 # split in vertical orientation
-bindsym $mod+v split v
+bindsym $mod+s split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -169,24 +169,20 @@ bindsym $mod+F11 exec --no-startup-id "pactl set-sink-mute 0 toggle"
 for_window [class="^.*"] border pixel 1
 smart_borders on
 
-# Gaps
-gaps inner 10
-gaps outer 2
-smart_gaps on
-
 # Loading colors from Xresources
-set_from_resource $bg i3wm.background #000000
-set_from_resource $border i3wm.blue #007bff
-set_from_resource $text i3wm.foreground #ffffff
-set_from_resource $text-inactive i3wm.gray #808080
-set $indicator #ffffff
+set_from_resource $bg            i3wm.background #000000
+set_from_resource $border        i3wm.blue       #007bff
+set_from_resource $text          i3wm.foreground #ffffff
+set_from_resource $text-inactive i3wm.gray       #808080
+set               $indicator     #ffffff
 
 # Setting window colors
-client.focused	$border	$bg	$text $border $border
-client.focused_inactive $bg $bg $text-inactive $bg $bg
-client.unfocused	$bg		$bg	$text-inactive	$bg	$bg
-client.urgent		$bg		$bg	$text-inactive	$bg	$bg
-client.placeholder	$bg		$bg	$text-inactive	$bg	$bg
+#class                  border  backgr. text           indicator child_border
+client.focused          $border	$bg     $text          $border   $border 
+client.focused_inactive $bg     $bg     $text-inactive $bg       $bg     
+client.unfocused        $bg     $bg     $text-inactive $bg       $bg     
+client.urgent           $bg     $bg     $text-inactive $bg       $bg     
+client.placeholder      $bg     $bg     $text-inactive $bg       $bg     
 
 # Screengrabs
 bindsym Print exec scrot '%d-%m-%Y_$wx$h.png' -e 'mv $f ~/pictures/screengrabs/'

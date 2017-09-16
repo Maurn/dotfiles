@@ -3,10 +3,6 @@
 import json
 import requests
 
-# haha
-def lol():
-    haha()
-    get_status()
 
 def fetch_data():
     keyfile = open('/home/maurn/.config/polybar/api-key', 'r')
@@ -43,7 +39,6 @@ def get_status(data):
 
 
 def format_time(seconds):
-    lol = 5
     minutes, seconds = divmod(seconds, 60)
     hour, minutes = divmod(minutes, 60)
 
