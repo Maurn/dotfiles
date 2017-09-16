@@ -56,7 +56,7 @@ font-1 = FontAwesome:size=12;3
 
 modules-left = i3
 modules-center = 
-modules-right = volume keyboard torn eth date
+modules-right = volume keyboard torn battery wifi eth date
 
 tray-position = right
 tray-padding = 0
@@ -120,6 +120,23 @@ label-disconnected = "%ifname% down"
 label-disconnected-foreground = #66
 ;format-disconnected-underline = ${colors.failure}
 
+[module/wifi]
+type = internal/network
+interface = wlp2s0
+interval = 1
+
+format-connected-prefix = " "
+;format-connected-prefix-foreground = ${colors.foreground-alt}
+label-connected = %local_ip%
+label-connected-foreground = ${colors.success}
+
+format-disconnected = <label-disconnected>
+format-disconnected-prefix = " "
+format-disconnected-prefix-foreground = ${colors.failure}
+label-disconnected = "%ifname% down"
+label-disconnected-foreground = #66
+;format-disconnected-underline = ${colors.failure}
+
 [module/date]
 type = internal/date
 interval = 5
@@ -146,6 +163,28 @@ label-muted-foreground = #66
 ramp-volume-0 = 
 ramp-volume-1 = 
 ramp-volume-2 = 
+
+[module/battery]
+type = internal/battery
+
+; This is useful in case the battery never reports 100% charge
+full-at = 99
+
+; Use the following command to list batteries and adapters:
+; $ ls -1 /sys/class/power_supply/
+battery = BAT0
+adapter = ADP1
+
+; If an inotify event haven't been reported in this many
+; seconds, manually poll for new values.
+;
+; Needed as a fallback for systems that don't report events
+; on sysfs/procfs.
+;
+; Disable polling by setting the interval to 0.
+;
+; Default: 5
+poll-interval = 5
 
 [settings]
 screenchange-reload = true
