@@ -7,7 +7,8 @@ alias systemupdate='updatemirrors && pacaur -Syu && sudo updatedb'
 alias removeorphans='sudo pacman -Rns $(pacman -Qtdq)'
 alias v='nvim'
 alias vim='nvim'
-e (){ emacsclient -cn }
+alias e='emacsclient -cn'
+alias z='zathura --fork'
 alias irc='irssi'
 alias feh='feh -.B black'
 alias sudo='sudo ' # need this for sudo aliases to work
