@@ -6,4 +6,4 @@
 	status = auto
 	ui = auto
 [credential]
-	helper = cache
+	helper = cache --timeout=3600

@@ -1,33 +1,10 @@
 call plug#begin('~/.local/share/nvim/plugged')
-    " Colors
     Plug 'flazz/vim-colorschemes'
-
-    " Statusline
     Plug 'itchyny/lightline.vim'
-
-    " File browsing
-    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-    Plug 'junegunn/fzf.vim'
-    
-    " Completion
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'ervandew/supertab'
     Plug 'jiangmiao/auto-pairs' 
-    Plug 'zchee/deoplete-zsh'
-    Plug 'vimwiki/vimwiki'
-
-    " Syntax highlighting
     Plug 'sheerun/vim-polyglot'
-
-    " Syntax checking
-    Plug 'neomake/neomake'
-
-    " Git
     Plug 'airblade/vim-gitgutter'
 call plug#end()
-
-let g:deoplete#enable_at_startup = 1
-let g:SuperTabDefaultCompletionType = "<c-n>"
 
 colorscheme delek
 
