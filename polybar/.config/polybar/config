@@ -141,7 +141,7 @@ label-disconnected-foreground = #66
 type = internal/date
 interval = 5
 
-date = "%a - %d/%m/%Y"
+date = " %a - %d/%m/%Y"
 
 time = %H:%M
 

@@ -31,7 +31,7 @@ def get_status(data):
         return status
 
     if time_left > 0:
-        status = ' {} in {}'.format(destination, format_time(time_left))
+        status = ' {} in {}'.format(destination, format_time(time_left))
     else:
         status = color(destination.upper(), 'f00')
 
