@@ -54,6 +54,12 @@ URxvt.keysym.Shift-Down: command:\033]721;1\007
 *antialias:  true
 *autohint:   true
 
+Xft.antialias:  true
+Xft.rgba:       rgb
+Xft.hinting:    true
+Xft.hintstyle:  hintslight
+
+
 ! ------------------------------------------------------------------------------
 ! ROFI Color theme
 ! Copyright: 2017 leofa
