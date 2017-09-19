@@ -27,8 +27,8 @@ export EDITOR=nvim
 
 source $ZDOTDIR/aliases.zsh
 
-typeset -U path
-path+=(~/.npm-global/bin/)
+#typeset -U path
+#path+=(~/.npm-global/bin/)
 
 # Plugins
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
