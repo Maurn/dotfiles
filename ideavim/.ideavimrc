@@ -1,0 +1,16 @@
+set ignorecase
+set smartcase
+set hlsearch
+set number
+set relativenumber
+
+let mapleader = ' '
+nnoremap <leader>feR :source ~/.ideavimrc<CR>
+nnoremap <leader>pf :find<cr>
+nnoremap <leader>m= :action ReformatCode<CR>
+nnoremap <leader>fR :action RenameFile<CR>
+nnoremap <leader><tab> :action VimFilePrevious<CR>
+nnoremap <leader>mrr :action RenameElement<CR>
+nnoremap <leader>cr :action Run<CR>
+nnoremap <leader>cR :action RunConfiguration<CR>
+nnoremap <leader>cd :action Debug<CR>
