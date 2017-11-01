@@ -184,13 +184,9 @@ client.unfocused        $bg     $bg     $text-inactive $bg       $bg
 client.urgent           $bg     $bg     $text-inactive $bg       $bg     
 client.placeholder      $bg     $bg     $text-inactive $bg       $bg     
 
-# Screengrabs
-bindsym Print exec scrot '%d-%m-%Y_$wx$h.png' -e 'mv $f ~/pictures/screengrabs/'
-bindsym --release $mod+Print exec scrot '%d-%m-%Y_$wx$h.png' -s -b -e 'mv $f ~/pictures/screengrabs/'
-
 # Startup programs
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 exec --no-startup-id nitrogen --restore &
 exec --no-startup-id redshift &
-exec --no-startup-id compton -b -o 0
+exec --no-startup-id compton -b -o 0 --no-fading-openclose
