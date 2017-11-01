@@ -145,10 +145,6 @@ date = " %a - %d/%m/%Y"
 
 time = %H:%M
 
-;format-prefix = 
-;format-prefix-foreground = ${colors.foreground-alt}
-;format-underline = #0a6cf5
-
 label = %date% - %time%
 
 [module/volume]
@@ -176,6 +172,7 @@ adapter = ADP1
 
 label-discharging =%percentage%%
 label-charging =%percentage%%
+label-full =%percentage%%
 
 [module/filesystem]
 type = internal/fs

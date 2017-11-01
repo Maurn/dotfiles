@@ -370,6 +370,8 @@ before packages are loaded."
     (TeX-PDF-mode 1))
   )
 
+  (setq vc-follow-symlinks t)
+
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
 (defun dotspacemacs/emacs-custom-settings ()
