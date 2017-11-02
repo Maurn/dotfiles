@@ -61,7 +61,7 @@ modules-right = volume keyboard torn filesystem battery wifi eth date
 tray-position = right
 tray-padding = 0
 tray-transparent = false
-tray-background = #cc000000
+tray-background = #000000
 
 ;wm-restack = 
 
@@ -100,7 +100,7 @@ label-unfocused-background = ${colors.background}
 label-unfocused-padding = 4
 
 label-urgent = %index%
-label-urgent-background = #cc900000
+label-urgent-background = #900000
 label-urgent-padding = 4
 
 [module/eth]
