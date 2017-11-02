@@ -21,8 +21,8 @@ alert = #bd2c40
 success = #00ff00
 failure = #ff0000
 
-inactive = #cc222222
-active = #cc003ea3
+inactive = #222222
+active = #003ea3
 
 [bar/bottom]
 monitor = ${env:MONITOR}

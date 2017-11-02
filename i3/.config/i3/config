@@ -184,9 +184,10 @@ client.unfocused        $bg     $bg     $text-inactive $bg       $bg
 client.urgent           $bg     $bg     $text-inactive $bg       $bg     
 client.placeholder      $bg     $bg     $text-inactive $bg       $bg     
 
+focus_follows_mouse no
+
 # Startup programs
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
-exec --no-startup-id nitrogen --restore &
 exec --no-startup-id redshift &
-exec --no-startup-id compton -b -o 0 --no-fading-openclose
+exec --no-startup-id compton -b -o 0
