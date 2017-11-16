@@ -3,14 +3,40 @@ set smartcase
 set hlsearch
 set number
 set relativenumber
+set surround
 
 let mapleader = ' '
-nnoremap <leader>feR :source ~/.ideavimrc<CR>
-nnoremap <leader>pf :find<cr>
+
+" Major mode commands
+nmap , <leader>m
 nnoremap <leader>m= :action ReformatCode<CR>
-nnoremap <leader>fR :action RenameFile<CR>
-nnoremap <leader><tab> :action VimFilePrevious<CR>
 nnoremap <leader>mrr :action RenameElement<CR>
+nnoremap <leader>mig :action Generate<CR><ESC>
+nnoremap <leader>mit :action InsertLiveTemplate<CR>
+
+" Files
+nnoremap <leader>feR :source ~/.ideavimrc<CR>
+nnoremap <leader>pf :find<CR>
+nnoremap <leader>/ :action SearchEverywhere<CR>
+nnoremap <leader>fr :action RecentFiles<CR>
+nnoremap <leader>fR :action RenameFile<CR>
+nnoremap <leader>fD :action SafeDelete<CR>
+nnoremap <leader><tab> :action VimFilePrevious<CR>
+
+" Windows
+nnoremap <leader>wV :action VimWindowSplitVertical<CR>
+nnoremap <leader>wS :action VimWindowSplitHorizontal<CR>
+nnoremap <leader>wd :action VimWindowClose<CR>
+nnoremap <leader>wj :action VimWindowDown<CR>
+nnoremap <leader>wh :action VimWindowLeft<CR>
+nnoremap <leader>wl :action VimWindowRight<CR>
+nnoremap <leader>wk :action VimWindowUp<CR>
+
+" Compiling
 nnoremap <leader>cr :action Run<CR>
-nnoremap <leader>cR :action RunConfiguration<CR>
+nnoremap <leader>cR :action ChooseRunConfiguration<CR>
 nnoremap <leader>cd :action Debug<CR>
+nnoremap <leader>cD :action ChooseDebugConfiguration<CR>
+
+" Misc.
+map <leader>; <C-/>
