@@ -2,7 +2,7 @@ HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
 
-setopt appendhistory autocd extendedglob prompt_subst HIST_IGNORE_DUPS
+setopt share_history autocd extendedglob prompt_subst hist_ignore_dups
 unsetopt beep
 bindkey -e
 

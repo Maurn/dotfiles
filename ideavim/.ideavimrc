@@ -13,6 +13,7 @@ nnoremap <leader>m= :action ReformatCode<CR>
 nnoremap <leader>mrr :action RenameElement<CR>
 nnoremap <leader>mig :action Generate<CR><ESC>
 nnoremap <leader>mit :action InsertLiveTemplate<CR>
+nnoremap <leader>mD :action SafeDelete<CR>
 
 " Files
 nnoremap <leader>feR :source ~/.ideavimrc<CR>
@@ -20,7 +21,6 @@ nnoremap <leader>pf :find<CR>
 nnoremap <leader>/ :action SearchEverywhere<CR>
 nnoremap <leader>fr :action RecentFiles<CR>
 nnoremap <leader>fR :action RenameFile<CR>
-nnoremap <leader>fD :action SafeDelete<CR>
 nnoremap <leader><tab> :action VimFilePrevious<CR>
 
 " Windows
