@@ -9,7 +9,6 @@ bindkey -e
 zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}'
 zstyle ':completion:*' menu select
 zstyle :compinstall filename '/home/maurn/.config/zsh/.zshrc'
-zstyle ':completion:*:*:mpv:*:*files' ignored-patterns '*.srt'
 
 autoload -Uz compinit
 compinit
@@ -38,6 +37,8 @@ source /usr/share/doc/pkgfile/command-not-found.zsh
 
 source $ZDOTDIR/color-man-pages.zsh
 source $ZDOTDIR/keybindings.zsh
+
+export ANDROID_HOME=/home/maurn/android/sdk
 
 # export NVM_DIR="$HOME/.nvm"
 # [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"

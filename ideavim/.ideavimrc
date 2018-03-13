@@ -34,9 +34,9 @@ nnoremap <leader>wk :action VimWindowUp<CR>
 
 " Compiling
 nnoremap <leader>cr :action Run<CR>
-nnoremap <leader>cR :action ChooseRunConfiguration<CR>
+nnoremap <leader>cR :action RunClass<CR>
 nnoremap <leader>cd :action Debug<CR>
-nnoremap <leader>cD :action ChooseDebugConfiguration<CR>
+nnoremap <leader>cD :action DebugClass<CR>
 
 " Misc.
 map <leader>; <C-/>
