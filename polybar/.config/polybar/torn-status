@@ -24,11 +24,18 @@ def get_summary(data):
         nerve_bar = data['nerve']['current']
         drug_cooldown = data['cooldowns']['drug']
 
-        status_icons = {'okay': color('', '0f0'),
-                        'in hospital': '',
-                        'in jail': ''}
+        status_words = current_status.split()
+        final_status = ''
+        if(len(status_words) > 1):
+            final_status = status_words[1]
+        else:
+            final_status = status_words[0];
 
-        stat = status_icons[current_status.lower()]
+        status_icons = {'okay': color('', '0f0'),
+                        'hospital': '',
+                        'jail': ''}
+
+        stat = status_icons[final_status.lower()]
         energy = energy_bar if energy_bar < data['energy']['maximum'] else color('FULL', 'f80')
         nerve = nerve_bar if nerve_bar < data['nerve']['maximum'] else color('FULL', 'ff0')
         drugs = format_time(drug_cooldown) if drug_cooldown > 0 else color(' DRUGS', 'f00')

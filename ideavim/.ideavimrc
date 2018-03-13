@@ -31,6 +31,13 @@ nnoremap <leader>wj :action VimWindowDown<CR>
 nnoremap <leader>wh :action VimWindowLeft<CR>
 nnoremap <leader>wl :action VimWindowRight<CR>
 nnoremap <leader>wk :action VimWindowUp<CR>
+map <leader>w<tab> :action VimWindowPrev<CR>
+
+" Buffers (tabs)
+map <leader>bb :action RecentFiles<CR>
+map <leader>bd :action CloseContent<CR>
+map <leader>bn :action VimMotionNextTab<CR>
+map <leader>bp :action VimMotionPreviousTab<CR>
 
 " Compiling
 nnoremap <leader>cr :action Run<CR>
@@ -40,3 +47,4 @@ nnoremap <leader>cD :action ChooseDebugConfiguration<CR>
 
 " Misc.
 map <leader>; <C-/>
+map <leader><space> <c-s-a>
