@@ -161,8 +161,8 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 #Audio hardware keys
-bindsym $mod+F10 exec --no-startup-id "amixer -q sset Master 1%+"
-bindsym $mod+F9 exec --no-startup-id "amixer -q sset Master 1%-"
+bindsym $mod+F10 exec --no-startup-id "pactl set-sink-volume 0 +1%"
+bindsym $mod+F9 exec --no-startup-id "pactl set-sink-volume 0 -1%"
 bindsym $mod+F11 exec --no-startup-id "pactl set-sink-mute 0 toggle" 
 
 # Borders and window titles
