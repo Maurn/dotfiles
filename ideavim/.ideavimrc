@@ -17,8 +17,8 @@ nnoremap <leader>mD :action SafeDelete<CR>
 
 " Files
 nnoremap <leader>feR :source ~/.ideavimrc<CR>
-nnoremap <leader>pf :find<CR>
-nnoremap <leader>/ :action SearchEverywhere<CR>
+map <leader>pf :action SearchEverywhere<CR>
+nnoremap <leader>/ :action FindInPath<CR>
 nnoremap <leader>fr :action RecentFiles<CR>
 nnoremap <leader>fR :action RenameFile<CR>
 nnoremap <leader><tab> :action VimFilePrevious<CR>
@@ -46,5 +46,5 @@ nnoremap <leader>cd :action Debug<CR>
 nnoremap <leader>cD :action DebugClass<CR>
 
 " Misc.
-map <leader>; <C-/>
+map <leader>;; :action CommentByLineComment<CR>
 map <leader><space> <c-s-a>
