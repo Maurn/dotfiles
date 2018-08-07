@@ -56,7 +56,7 @@ font-1 = MaterialIcons-Regular:size=13;5
 
 modules-left = i3
 modules-center = 
-modules-right = volume keyboard torn filesystem battery wifi eth date
+modules-right = volume keyboard torn filesystem backlight battery wifi eth date
 
 tray-position = right
 tray-padding = 0
@@ -122,7 +122,7 @@ label-disconnected-foreground = #66
 
 [module/wifi]
 type = internal/network
-interface = wlp2s0
+interface = wlp6s0
 interval = 1
 
 format-connected-prefix = " "
@@ -158,6 +158,12 @@ label-muted-foreground = #66
 
 ramp-volume-0 = 
 ramp-volume-1 = 
+
+[module/backlight]
+type = internal/backlight
+card = intel_backlight
+
+label =  %percentage%%
 
 [module/battery]
 type = internal/battery
