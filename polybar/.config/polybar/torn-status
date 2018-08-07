@@ -64,5 +64,5 @@ def color(string, hex_code):
 
 try:
     print(get_summary(fetch_data()))
-except requests.exceptions.RequestException:
+except:
     print('')

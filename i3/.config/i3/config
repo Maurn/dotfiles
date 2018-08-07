@@ -160,6 +160,10 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+# Brightness
+bindsym $mod+F5 exec --no-startup-id "light -U 5%"
+bindsym $mod+F6 exec --no-startup-id "light -A 5%"
+
 #Audio hardware keys
 bindsym $mod+F10 exec --no-startup-id "pactl set-sink-volume 0 +1%"
 bindsym $mod+F9 exec --no-startup-id "pactl set-sink-volume 0 -1%"
