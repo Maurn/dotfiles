@@ -18,3 +18,11 @@ alias stream='peerflix --mpv'
 alias nvm='unalias nvm && source "$HOME"/.nvm/nvm.sh && nvm'
 alias pip='pip --user'
 mkcd () { mkdir "$1"; cd "$1" }
+
+earth-background () {
+    local metadata=$(curl --silent https://epic.gsfc.nasa.gov/api/natural | jq '.[0]')
+    local img=$(echo $metadata | jq -r '.image')
+    local date=$(date --date="$(echo $metadata | jq -r '.date')" +%Y/%m/%d)
+
+    curl "https://epic.gsfc.nasa.gov/archive/natural/$date/png/$img.png" | feh -.B black --bg-max -
+}
