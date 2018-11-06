@@ -1086,5 +1086,7 @@
     "keyboard.dispatch": "keyCode",
     "editor.lineNumbers": "relative",
     "vim.useSystemClipboard": true,
-    "window.menuBarVisibility": "toggle"
+    "window.menuBarVisibility": "toggle",
+    "workbench.activityBar.visible": false,
+    "tslint.alwaysShowRuleFailuresAsWarnings": true,
 }

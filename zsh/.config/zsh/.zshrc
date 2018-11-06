@@ -23,6 +23,7 @@ function precmd(){
 }
 
 export EDITOR=nvim
+export TERM=xterm-termite
 
 source $ZDOTDIR/aliases.zsh
 
