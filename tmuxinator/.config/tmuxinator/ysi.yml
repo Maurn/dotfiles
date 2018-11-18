@@ -1,0 +1,17 @@
+name: ysi
+root: ~/entropyfox/YSI/
+
+pre_window: nvm use --delete-prefix v8.9.4
+
+windows:
+  - editor:
+      layout: main-vertical
+      panes:
+        - git:
+            - emacs -nw readme.md
+        - frontend:
+            - cd services/frontend
+            - npm run local
+        - server:
+            - cd services/api
+            - npm start

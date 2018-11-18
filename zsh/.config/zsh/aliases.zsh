@@ -15,7 +15,7 @@ alias sudo='sudo ' # need this for sudo aliases to work
 alias music='ncmpcpp'
 alias subdl='subliminal download -l en'
 alias stream='peerflix --mpv'
-alias nvm='unalias nvm && source "$HOME"/.nvm/nvm.sh && nvm'
+alias nvm='unalias nvm && source /usr/share/nvm/init-nvm.sh && nvm'
 alias pip='pip --user'
 mkcd () { mkdir "$1"; cd "$1" }
 
