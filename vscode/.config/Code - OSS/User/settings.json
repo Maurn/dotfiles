@@ -1003,7 +1003,7 @@
             "before": [
                 "<leader>",
                 "w",
-                "v"
+                "V"
             ],
             "after": [],
             "commands": [
@@ -1086,5 +1086,18 @@
     "keyboard.dispatch": "keyCode",
     "editor.lineNumbers": "relative",
     "vim.useSystemClipboard": true,
-    "window.menuBarVisibility": "toggle"
+    "window.menuBarVisibility": "toggle",
+    "breadcrumbs.enabled": true,
+    "workbench.activityBar.visible": false,
+    "mssql.connections": [
+        {
+            "server": "localhost",
+            "database": "",
+            "authenticationType": "SqlLogin",
+            "user": "sa",
+            "password": "",
+            "emptyPasswordInput": false,
+            "savePassword": true
+        }
+    ]
 }
