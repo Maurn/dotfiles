@@ -1089,4 +1089,5 @@
     "window.menuBarVisibility": "toggle",
     "workbench.activityBar.visible": false,
     "tslint.alwaysShowRuleFailuresAsWarnings": true,
+    "search.location": "panel",
 }
