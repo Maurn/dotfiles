@@ -56,7 +56,7 @@ This function should only modify configuration layer settings."
      gpu
      (typescript :variables
                  tide-completion-ignore-case t
-                 typescript-fmt-on-save nil
+                 typescript-fmt-on-save t
                  tide-tsserver-executable "/home/maurn/.npm-global/bin/tsserver")
      javascript
      html
