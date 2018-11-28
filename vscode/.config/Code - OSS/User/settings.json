@@ -1003,7 +1003,7 @@
             "before": [
                 "<leader>",
                 "w",
-                "v"
+                "V"
             ],
             "after": [],
             "commands": [
@@ -1087,7 +1087,8 @@
     "editor.lineNumbers": "relative",
     "vim.useSystemClipboard": true,
     "window.menuBarVisibility": "toggle",
+    "breadcrumbs.enabled": true,
     "workbench.activityBar.visible": false,
     "tslint.alwaysShowRuleFailuresAsWarnings": true,
-    "search.location": "panel",
+    "search.location": "panel"
 }
