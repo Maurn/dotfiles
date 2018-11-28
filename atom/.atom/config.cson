@@ -1,0 +1,25 @@
+"*":
+  "atom-beautify":
+    js:
+      beautify_on_save: true
+    typescript:
+      beautify_on_save: true
+  "atom-typescript":
+    allowJS: true
+  "autoupdate-packages":
+    handling: "Update automatically and silently"
+    lastUpdateTimestamp: 1543429771008
+  core:
+    automaticallyUpdate: false
+    closeDeletedFileTabs: true
+    telemetryConsent: "limited"
+  editor:
+    fontFamily: "Source Code Pro SemiBold, Menlo, Consolas, DejaVu Sans Mono, monospace"
+  "exception-reporting":
+    userId: "d8bce870-3f78-4b88-ad49-0ae6cb82db93"
+  "package-sync":
+    forceOverwrite: true
+  pigments:
+    notifyReloads: false
+  "vim-mode-plus":
+    useSmartcaseForSearch: true
