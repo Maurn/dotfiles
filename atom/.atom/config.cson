@@ -1,5 +1,7 @@
 "*":
   "atom-beautify":
+    html:
+      wrap_line_length: 140
     js:
       beautify_on_save: true
       brace_style: "collapse-preserve-inline"
@@ -11,6 +13,7 @@
     handling: "Update automatically and silently"
     lastUpdateTimestamp: 1543429771008
   core:
+    autoHideMenuBar: true
     automaticallyUpdate: false
     closeDeletedFileTabs: true
     disabledPackages: [
@@ -32,6 +35,8 @@
   pigments:
     notifyReloads: false
   "vim-mode-plus":
+    keymapYToYankToLastCharacterOfLine: true
+    useSmartcaseForFind: true
     useSmartcaseForSearch: true
   welcome:
     showOnStartup: false
