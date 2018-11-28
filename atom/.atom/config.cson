@@ -2,6 +2,7 @@
   "atom-beautify":
     js:
       beautify_on_save: true
+      brace_style: "collapse-preserve-inline"
     typescript:
       beautify_on_save: true
   "atom-typescript":
@@ -10,6 +11,7 @@
     handling: "Update automatically and silently"
     lastUpdateTimestamp: 1543429771008
   core:
+    autoHideMenuBar: true
     automaticallyUpdate: false
     closeDeletedFileTabs: true
     disabledPackages: [
