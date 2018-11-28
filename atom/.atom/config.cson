@@ -12,7 +12,16 @@
   core:
     automaticallyUpdate: false
     closeDeletedFileTabs: true
-    telemetryConsent: "limited"
+    disabledPackages: [
+      "about"
+      "autoflow"
+      "background-tips"
+      "github"
+      "metrics"
+      "open-on-github"
+      "welcome"
+    ]
+    telemetryConsent: "no"
   editor:
     fontFamily: "Source Code Pro SemiBold, Menlo, Consolas, DejaVu Sans Mono, monospace"
   "exception-reporting":
@@ -23,3 +32,5 @@
     notifyReloads: false
   "vim-mode-plus":
     useSmartcaseForSearch: true
+  welcome:
+    showOnStartup: false
