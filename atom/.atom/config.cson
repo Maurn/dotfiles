@@ -11,7 +11,7 @@
     allowJS: true
   "autoupdate-packages":
     handling: "Update automatically and silently"
-    lastUpdateTimestamp: 1543429771008
+    lastUpdateTimestamp: 1544890756572
   core:
     autoHideMenuBar: true
     automaticallyUpdate: false
@@ -30,6 +30,8 @@
     fontFamily: "Source Code Pro SemiBold, Menlo, Consolas, DejaVu Sans Mono, monospace"
   "exception-reporting":
     userId: "d8bce870-3f78-4b88-ad49-0ae6cb82db93"
+  "linter-ui-default":
+    panelHeight: 300
   "package-sync":
     forceOverwrite: true
   pigments:
