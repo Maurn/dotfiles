@@ -1,6 +1,14 @@
 {
     "html": {
         "indent_size": 2,
-        "wrap_line_length": 120
+        "wrap_line_length": 120,
+        "indent_inner_html": false
+    },
+    "css": {
+        "selector_separator": " ",
+        "selector_separator_newline": false
+    },
+    "js": {
+        "brace_style": "collapse-preserve-inline"
     }
 }
