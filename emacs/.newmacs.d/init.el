@@ -55,9 +55,9 @@
   ;; tells emacs not to load any packages before starting up
   ;; the following lines tell emacs where on the internet to look up
   ;; for new packages.
-  (setq package-archives '(("melpa"     . "https://melpa.org/packages/")
-                           ("elpa"      . "https://elpa.gnu.org/packages/")
-                           ("org"  . "https://orgmode.org/elpa/")))
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("elpa"  . "https://elpa.gnu.org/packages/")
+                           ("org"   . "https://orgmode.org/elpa/")))
   ;; (package-initialize)
   (unless package--initialized (package-initialize t))
 
@@ -144,10 +144,10 @@
     :prefix "SPC"
     :non-normal-prefix "C-SPC")
 
-  (general-create-definer despot-def
-    :states '(normal insert)
-    :prefix "SPC"
-    :non-normal-prefix "C-SPC")
+  (general-create-definer major-def
+    :states '(normal visual insert motion emacs)
+    :prefix "SPC m"
+    :non-normal-prefix "C-SPC m")
 
   (general-define-key
     :keymaps 'key-translation-map
@@ -156,6 +156,9 @@
   (general-def
     "C-x x" 'eval-defun)
 
+  (general-def
+    "æ" (general-simulate-key "SPC m"))
+
   (tyrant-def
     ""     nil
     "c"   (general-simulate-key "C-c")
@@ -163,7 +166,8 @@
     "u"   (general-simulate-key "C-u")
     "x"   (general-simulate-key "C-x")
     "TAB" 'alternate-buffer
-    "/"   'counsel-rg
+
+    "m" '(:ignore t :which-key "major mode")
 
     ;; Quit operations
     "q"	  '(:ignore t :which-key "quit")
@@ -242,7 +246,11 @@
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
 
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
 (use-package evil
+  :init (setq evil-want-C-u-scroll t)
   :hook (after-init . evil-mode)
   :config
   (evil-set-initial-state 'shell-mode 'normal)
@@ -315,6 +323,7 @@
   :general
   (tyrant-def
     "SPC" 'counsel-M-x
+    "/"   'counsel-rg
     "ff"  'counsel-find-file
     "fr"  'counsel-recentf
     "fL"  'counsel-locate))
@@ -352,77 +361,6 @@
 (use-package evil-magit
   :hook (magit-mode . evil-magit-init))
 
-(use-package treemacs
-  :defer t
-  :init
-  (with-eval-after-load 'winum
-    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
-  :config
-  (progn
-    (setq treemacs-collapse-dirs              (if (executable-find "python") 3 0)
-          treemacs-deferred-git-apply-delay   0.5
-          treemacs-display-in-side-window     t
-          treemacs-file-event-delay           5000
-          treemacs-file-follow-delay          0.2
-          treemacs-follow-after-init          t
-          treemacs-follow-recenter-distance   0.1
-          treemacs-git-command-pipe           ""
-          treemacs-goto-tag-strategy          'refetch-index
-          treemacs-indentation                2
-          treemacs-indentation-string         " "
-          treemacs-is-never-other-window      nil
-          treemacs-max-git-entries            5000
-          treemacs-no-png-images              nil
-          treemacs-no-delete-other-windows    t
-          treemacs-project-follow-cleanup     nil
-          treemacs-persist-file               (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
-          treemacs-recenter-after-file-follow nil
-          treemacs-recenter-after-tag-follow  nil
-          treemacs-show-cursor                nil
-          treemacs-show-hidden-files          t
-          treemacs-silent-filewatch           nil
-          treemacs-silent-refresh             nil
-          treemacs-sorting                    'alphabetic-desc
-          treemacs-space-between-root-nodes   t
-          treemacs-tag-follow-cleanup         t
-          treemacs-tag-follow-delay           1.5
-          treemacs-width                      35)
-
-    ;; The default width and height of the icons is 22 pixels. If you are
-    ;; using a Hi-DPI display, uncomment this to double the icon size.
-    ;;(treemacs-resize-icons 44)
-
-    (treemacs-follow-mode t)
-    (treemacs-filewatch-mode t)
-    (treemacs-fringe-indicator-mode t)
-    (pcase (cons (not (null (executable-find "git")))
-                 (not (null (executable-find "python3"))))
-      (`(t . t)
-       (treemacs-git-mode 'deferred))
-      (`(t . _)
-       (treemacs-git-mode 'simple))))
-  :bind
-  (:map global-map
-        ("M-0"       . treemacs-select-window)
-        ("C-x t 1"   . treemacs-delete-other-windows)
-        ("C-x t t"   . treemacs)
-        ("C-x t B"   . treemacs-bookmark)
-        ("C-x t C-t" . treemacs-find-file)
-        ("C-x t M-t" . treemacs-find-tag)))
-
-(use-package treemacs-evil
-  :after treemacs evil
-  :ensure t)
-
-(use-package treemacs-projectile
-  :after treemacs projectile
-  :ensure t)
-
-(use-package treemacs-icons-dired
-  :after treemacs dired
-  :ensure t
-  :config (treemacs-icons-dired-mode))
-
 (use-package typescript-mode
   :mode (("\\.ts\\'" . typescript-mode)))
 
@@ -431,10 +369,38 @@
   :hook ((typescript-mode . tide-setup)
          (typescript-mode . tide-hl-identifier-mode)
          (before-save . tide-format-before-save))
-  :config ((setq flycheck-check-syntax-automatically '(save mode-enabled))
+  :config
+    (setq flycheck-check-syntax-automatically '(save mode-enabled))
     (company-mode +1)
     (setq company-tooltip-align-annotations t)
-    (setq tide-completion-ignore-case t)))
+    (setq tide-completion-ignore-case t)
+  :general
+  (general-def '(normal visual) typescript-mode-map
+      "gd" 'tide-jump-to-definition)
+  (major-def
+      :keymaps 'typescript-mode-map
+      "d" 'tide-jump-to-definition))
+
+(use-package web-mode
+  :mode "\\.html\\'"
+  :general
+  (major-def
+    :keymaps 'web-mode-map
+    "z" 'web-mode-fold-or-unfold))
+
+(use-package emmet-mode
+  :hook web-mode
+  :bind (:map emmet-mode-keymap
+         ("TAB" . emmet-expand-line)))
+
+(use-package csharp-mode
+  :mode "\\.cs\\'")
+
+(use-package omnisharp
+  :hook (csharp-mode . omnisharp-mode)
+  :config
+  (add-to-list 'company-backends 'company-omnisharp)
+  (setq omnisharp-server-executable-path "/home/maurn/Downloads/omniomni/run"))
 
 (eval-when-compile
 (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
