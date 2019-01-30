@@ -40,7 +40,7 @@
 ;;;We’re going to set the load-path ourselves and avoid calling (package-initilize) (for performance reasons) so we need to set package--init-file-ensured to true to tell package.el to not automatically call it on our behalf. Additionally we’re setting package-enable-at-startup to nil so that packages will not automatically be loaded for us since use-package will be handling that.
 (eval-and-compile
   (setq load-prefer-newer t
-        package-user-dir "~/.newmacs.d/elpa"
+        package-user-dir "~/.emacs.d/elpa"
         package--init-file-ensured t
         package-enable-at-startup nil)
 
@@ -244,7 +244,12 @@
   (load-theme 'doom-one t))
 
 (use-package doom-modeline
-  :hook (after-init . doom-modeline-mode))
+  :hook (after-init . doom-modeline-mode)
+  :config
+  (doom-modeline-def-modeline 'my-simple-line
+    '(bar matches buffer-info remote-host buffer-position parrot selection-info)
+    '(checker))
+  (doom-modeline-set-modeline 'my-simple-line 'default))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -392,15 +397,6 @@
   :hook web-mode
   :bind (:map emmet-mode-keymap
          ("TAB" . emmet-expand-line)))
-
-(use-package csharp-mode
-  :mode "\\.cs\\'")
-
-(use-package omnisharp
-  :hook (csharp-mode . omnisharp-mode)
-  :config
-  (add-to-list 'company-backends 'company-omnisharp)
-  (setq omnisharp-server-executable-path "/home/maurn/Downloads/omniomni/run"))
 
 (eval-when-compile
 (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))

@@ -40,30 +40,27 @@ This function should only modify configuration layer settings."
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      ivy
-     auto-completion
+     (auto-completion :variables
+                      auto-completion-idle-delay 0.0001)
      neotree
      emacs-lisp
      (git :variables
          magit-save-repository-buffers nil)
      version-control
-     csv
      markdown
      org
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
      python
-     gpu
      (typescript :variables
                  tide-completion-ignore-case t
                  typescript-fmt-on-save t
-                 tide-tsserver-executable "/home/maurn/.npm-global/bin/tsserver")
-     javascript
+                 tide-tsserver-executable "/usr/bin/tsserver")
      html
      restclient
      latex
      shell-scripts
-     semantic
      syntax-checking
      vimscript
      )
@@ -510,7 +507,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (yasnippet-snippets winum web-mode tide typescript-mode request pyvenv orgit org-brain neotree live-py-mode ivy-hydra highlight-indentation google-translate git-timemachine evil-nerd-commenter evil-magit evil-goggles dumb-jump doom-modeline diff-hl counsel-projectile browse-at-remote auto-yasnippet ace-link anaconda-mode company counsel swiper smartparens flycheck helm helm-core ivy avy magit magit-popup git-commit ghub markdown-mode projectile use-package evil goto-chg org-plus-contrib hydra yapfify xterm-color ws-butler writeroom-mode with-editor which-key wgrep web-beautify volatile-highlights vimrc-mode uuidgen undo-tree treepy toc-org tagedit symon string-inflection stickyfunc-enhance srefactor spaceline-all-the-icons smex smeargle slim-mode shrink-path shell-pop scss-mode sass-mode restart-emacs rainbow-delimiters pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox overseer org-projectile org-present org-pomodoro org-mime org-download org-bullets opencl-mode open-junk-file ob-restclient ob-http nameless multi-term move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum livid-mode link-hint json-navigator json-mode js2-refactor js-doc ivy-yasnippet ivy-xref ivy-purpose insert-shebang indent-guide importmagic impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers helm-make graphql golden-ratio gnuplot glsl-mode gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy font-lock+ flycheck-pos-tip flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav eldoc-eval editorconfig dotenv-mode diminish define-word dactyl-mode cython-mode cuda-mode csv-mode counsel-css company-web company-tern company-statistics company-shell company-restclient company-glsl company-auctex company-anaconda column-enforce-mode clean-aindent-mode centered-cursor-mode bind-key auto-highlight-symbol auto-compile aggressive-indent ace-window ac-ispell))))
+    (yasnippet-snippets yapfify xterm-color ws-butler writeroom-mode visual-fill-column winum wgrep web-mode web-beautify volatile-highlights vimrc-mode uuidgen toc-org tide typescript-mode tagedit symon string-inflection stickyfunc-enhance srefactor spaceline-all-the-icons spaceline powerline smex smeargle slim-mode shell-pop scss-mode sass-mode restart-emacs request rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin pippel pipenv pip-requirements persp-mode password-generator paradox spinner overseer orgit org-ref pdf-tools key-chord helm-bibtex parsebib tablist org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-bullets org-brain opencl-mode open-junk-file ob-restclient ob-http neotree nameless multi-term move-text mmm-mode markdown-toc markdown-mode magit-svn magit-gitflow macrostep lorem-ipsum livid-mode skewer-mode live-py-mode link-hint json-navigator hierarchy json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc ivy-yasnippet ivy-xref ivy-purpose window-purpose imenu-list ivy-hydra insert-shebang indent-guide importmagic epc ctable concurrent deferred impatient-mode simple-httpd hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make helm helm-core haskell-snippets haml-mode google-translate golden-ratio gnuplot glsl-mode gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flycheck-pos-tip pos-tip flycheck-haskell flycheck-bashate flycheck flx-ido flx fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit magit magit-popup git-commit with-editor evil-lisp-state evil-lion evil-indent-plus evil-iedit-state iedit evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens smartparens paredit evil-args evil-anzu anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav editorconfig dumb-jump doom-modeline eldoc-eval shrink-path all-the-icons memoize diff-hl define-word dactyl-mode cython-mode cuda-mode csv-mode counsel-projectile projectile pkg-info epl counsel-css counsel swiper ivy company-web web-completion-data company-tern dash-functional tern company-statistics company-shell company-restclient restclient know-your-http-well company-glsl company-ghci haskell-mode company-cabal company-auctex company-anaconda company column-enforce-mode cmm-mode clean-aindent-mode centered-cursor-mode browse-at-remote biblio biblio-core auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed auctex-latexmk auctex anaconda-mode pythonic f dash s aggressive-indent ace-window ace-link avy ac-ispell auto-complete popup which-key use-package pcre2el org-plus-contrib hydra font-lock+ evil goto-chg undo-tree dotenv-mode diminish bind-map bind-key async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
