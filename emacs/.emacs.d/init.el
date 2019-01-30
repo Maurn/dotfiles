@@ -23,6 +23,13 @@
 (defvar show-paren-delay 0)
 (show-paren-mode 1)
 (electric-pair-mode 1)
+(setq vc-follow-symlinks t)
+
+(setq help-window-select 't)
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+(setq ring-bell-function 'ignore
+      visible-bell nil)
 
 ;; Disable backup files
 (setq make-backup-files nil) ; stop creating backup~ files
@@ -88,7 +95,7 @@
     (interactive)
     (load-file user-init-file))
 
-    (defun last-buffer (&optional buffer visible-ok frame)
+  (defun last-buffer (&optional buffer visible-ok frame)
     "Return the last buffer in FRAME's buffer list.
     If BUFFER is the last buffer, return the preceding buffer
     instead.  Buffers not visible in windows are preferred to visible
@@ -98,11 +105,11 @@
     the buffer `*scratch*', creating it if necessary."
     (setq frame (or frame (selected-frame)))
     (or (get-next-valid-buffer (nreverse (buffer-list frame))
-                                buffer visible-ok frame)
+                               buffer visible-ok frame)
         (get-buffer "*scratch*")
         (let ((scratch (get-buffer-create "*scratch*")))
-            (set-buffer-major-mode scratch)
-            scratch)))
+          (set-buffer-major-mode scratch)
+          scratch)))
 
 
   ;;Taken from http://emacsredux.com/blog/2013/05/04/rename-file-and-buffer/
@@ -118,26 +125,26 @@
   ;;          (t
   ;;           (rename-file filename new-name t)
   ;;           (set-visited-file-name new-name t t)))))))
-(defun alternate-buffer (&optional window)
-  "Switch back and forth between current and last buffer in the current WINDOW."
-  (interactive)
-  (let ((current-buffer (window-buffer window)))
-    ;; if no window is found in the windows history, `switch-to-buffer' will
-    ;; default to calling `other-buffer'.
-    (switch-to-buffer
-     (cl-find-if (lambda (buffer)
-                   (not (eq buffer current-buffer)))
-                 (mapcar #'car (window-prev-buffers window)))
-     nil t)))
+  (defun alternate-buffer (&optional window)
+    "Switch back and forth between current and last buffer in the current WINDOW."
+    (interactive)
+    (let ((current-buffer (window-buffer window)))
+      ;; if no window is found in the windows history, `switch-to-buffer' will
+      ;; default to calling `other-buffer'.
+      (switch-to-buffer
+       (cl-find-if (lambda (buffer)
+                     (not (eq buffer current-buffer)))
+                   (mapcar #'car (window-prev-buffers window)))
+       nil t)))
 
-(defun alternate-window ()
-  "Switch back and forth between current and last window in the current frame."
-  (interactive)
-  (let (;; switch to first window previously shown in this frame
-        (prev-window (get-mru-window nil t t)))
-    ;; Check window was not found successfully
-    (unless prev-window (user-error "Last window not found"))
-    (select-window prev-window)))
+  (defun alternate-window ()
+    "Switch back and forth between current and last window in the current frame."
+    (interactive)
+    (let (;; switch to first window previously shown in this frame
+          (prev-window (get-mru-window nil t t)))
+      ;; Check window was not found successfully
+      (unless prev-window (user-error "Last window not found"))
+      (select-window prev-window)))
 
   (general-create-definer tyrant-def
     :states '(normal visual insert motion emacs)
@@ -150,14 +157,14 @@
     :non-normal-prefix "C-SPC m")
 
   (general-define-key
-    :keymaps 'key-translation-map
-    "ESC" (kbd "C-g"))
+   :keymaps 'key-translation-map
+   "ESC" (kbd "C-g"))
 
   (general-def
     "C-x x" 'eval-defun)
 
-  (general-def
-    "æ" (general-simulate-key "SPC m"))
+  (general-def '(normal visual)
+    "RET" (general-simulate-key "SPC m"))
 
   (tyrant-def
     ""     nil
@@ -299,6 +306,7 @@
   (define-key company-active-map (kbd "C-k") #'company-select-previous-or-abort)
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 1)
+  (setq company-tooltip-align-annotations t)
   (defvar company-dabbrev-ignore-case t)
   (setq company-frontends '(company-echo-metadata-frontend
                             company-pseudo-tooltip-unless-just-one-frontend
@@ -366,6 +374,10 @@
 (use-package evil-magit
   :hook (magit-mode . evil-magit-init))
 
+(use-package editorconfig
+  :config
+  (editorconfig-mode 1))
+
 (use-package typescript-mode
   :mode (("\\.ts\\'" . typescript-mode)))
 
@@ -377,14 +389,15 @@
   :config
     (setq flycheck-check-syntax-automatically '(save mode-enabled))
     (company-mode +1)
-    (setq company-tooltip-align-annotations t)
     (setq tide-completion-ignore-case t)
+    (setq tide-tsserver-executable "/usr/bin/tsserver")
   :general
   (general-def '(normal visual) typescript-mode-map
       "gd" 'tide-jump-to-definition)
   (major-def
       :keymaps 'typescript-mode-map
-      "d" 'tide-jump-to-definition))
+      "d" 'tide-jump-to-definition
+      "=" 'tide-format))
 
 (use-package web-mode
   :mode "\\.html\\'"
