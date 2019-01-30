@@ -1,4 +1,4 @@
-(defun fuco/lisp-indent-function (indent-point state)
+(defun Fuco1/lisp-indent-function (indent-point state)
      "This function is the normal value of the variable `lisp-indent-function'.
 The function `calculate-lisp-indent' calls this to determine
 if the arguments of a Lisp function call should be indented specially.
@@ -67,3 +67,6 @@ Lisp function does not specify a special indentation."
                                         indent-point normal-indent))
                  (method
 (funcall method indent-point state))))))))
+
+(provide 'fuco1-indent)
+;;; fuco1-indent ends here

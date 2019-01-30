@@ -24,6 +24,8 @@
 (show-paren-mode 1)
 (electric-pair-mode 1)
 (setq vc-follow-symlinks t)
+(set-default 'truncate-lines t)
+(setq fill-column 80)
 
 (setq help-window-select 't)
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -44,7 +46,13 @@
 
 (add-hook 'prog-mode-hook 'my-prog-mode-hook)
 
-;;;We’re going to set the load-path ourselves and avoid calling (package-initilize) (for performance reasons) so we need to set package--init-file-ensured to true to tell package.el to not automatically call it on our behalf. Additionally we’re setting package-enable-at-startup to nil so that packages will not automatically be loaded for us since use-package will be handling that.
+;;; We’re going to set the load-path ourselves and avoid calling
+;;; (package-initilize) (for performance reasons) so we need to set
+;;; package--init-file-ensured to true to tell package.el to not
+;;; automatically call it on our behalf. Additionally we’re setting
+;;; package-enable-at-startup to nil so that packages will not
+;;; automatically be loaded for us since use-package will be handling
+;;; that.
 (eval-and-compile
   (setq load-prefer-newer t
         package-user-dir "~/.emacs.d/elpa"
@@ -111,20 +119,20 @@
           (set-buffer-major-mode scratch)
           scratch)))
 
-
   ;;Taken from http://emacsredux.com/blog/2013/05/04/rename-file-and-buffer/
-  ;; (defun rename-file-and-buffer ()
-  ;;   "Rename the current buffer and file it is visiting."
-  ;;   (interactive)
-  ;;   (let ((filename (buffer-file-name)))
-  ;;     (if (not (and filename (file-exists-p filename)))
-  ;;         (message "Buffer is not visiting a file!")
-  ;;       (let ((new-name (read-file-name "New name: " filename)))
-  ;;         (cond
-  ;;          ((vc-backend filename) (vc-rename-file filename new-name))
-  ;;          (t
-  ;;           (rename-file filename new-name t)
-  ;;           (set-visited-file-name new-name t t)))))))
+  (defun rename-file-and-buffer ()
+    "Rename the current buffer and file it is visiting."
+    (interactive)
+    (let ((filename (buffer-file-name)))
+      (if (not (and filename (file-exists-p filename)))
+          (message "Buffer is not visiting a file!")
+        (let ((new-name (read-file-name "New name: " filename)))
+          (cond
+           ((vc-backend filename) (vc-rename-file filename new-name))
+           (t
+            (rename-file filename new-name t)
+            (set-visited-file-name new-name t t)))))))
+
   (defun alternate-buffer (&optional window)
     "Switch back and forth between current and last buffer in the current WINDOW."
     (interactive)
@@ -248,15 +256,16 @@
 
 (use-package doom-themes
   :config
-  (load-theme 'doom-one t))
+  (load-theme 'doom-one t)
+  (set-face-foreground 'highlight nil)
+  (set-face-background 'highlight nil)
+  (set-face-attribute 'highlight nil :underline t))
 
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode)
   :config
-  (doom-modeline-def-modeline 'my-simple-line
-    '(bar matches buffer-info remote-host buffer-position parrot selection-info)
-    '(checker))
-  (doom-modeline-set-modeline 'my-simple-line 'default))
+  (setq doom-modeline-buffer-file-name-style 'truncate-upto-root)
+  (setq doom-modeline-icon nil))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
@@ -324,6 +333,10 @@
                 ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
                 (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-next-line)
                 (define-key ivy-minibuffer-map (kbd "C-k") 'ivy-previous-line)
+                (set-face-attribute 'ivy-current-match nil
+                                    :underline t
+                                    :background nil
+                                    :weight 'semi-bold)
 
     :commands (ivy-switch-buffer)
     :general
@@ -378,6 +391,13 @@
   :config
   (editorconfig-mode 1))
 
+(use-package markdown-mode
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+
 (use-package typescript-mode
   :mode (("\\.ts\\'" . typescript-mode)))
 
@@ -387,17 +407,16 @@
          (typescript-mode . tide-hl-identifier-mode)
          (before-save . tide-format-before-save))
   :config
-    (setq flycheck-check-syntax-automatically '(save mode-enabled))
-    (company-mode +1)
-    (setq tide-completion-ignore-case t)
-    (setq tide-tsserver-executable "/usr/bin/tsserver")
+  (company-mode +1)
+  (setq tide-completion-ignore-case t)
+  (setq tide-tsserver-executable "/usr/bin/tsserver")
   :general
   (general-def '(normal visual) typescript-mode-map
-      "gd" 'tide-jump-to-definition)
+    "gd" 'tide-jump-to-definition)
   (major-def
-      :keymaps 'typescript-mode-map
-      "d" 'tide-jump-to-definition
-      "=" 'tide-format))
+    :keymaps 'typescript-mode-map
+    "d" 'tide-jump-to-definition
+    "=" 'tide-format))
 
 (use-package web-mode
   :mode "\\.html\\'"
