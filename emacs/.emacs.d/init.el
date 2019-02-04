@@ -25,15 +25,13 @@
 (electric-pair-mode 1)
 (setq vc-follow-symlinks t)
 (set-default 'truncate-lines t)
-(setq fill-column 80)
+(setq fill-column 100)
 
 (setq help-window-select 't)
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (setq ring-bell-function 'ignore
       visible-bell nil)
-
-(setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
 
 ;; Disable backup files
 (setq make-backup-files nil) ; stop creating backup~ files
@@ -173,7 +171,7 @@
   (general-def
     "C-x x" 'eval-defun)
 
-  (general-def '(normal visual)
+  (general-def '(normal visual) prog-mode-map
     "RET" (general-simulate-key "SPC m"))
 
   (tyrant-def
