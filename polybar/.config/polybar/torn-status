@@ -26,10 +26,10 @@ def get_summary(data):
 
         status_words = current_status.split()
         final_status = ''
-        if(len(status_words) > 1):
+        if len(status_words) > 1:
             final_status = status_words[1]
         else:
-            final_status = status_words[0];
+            final_status = status_words[0]
 
         status_icons = {'okay': color('', '0f0'),
                         'hospital': '',
@@ -64,5 +64,6 @@ def color(string, hex_code):
 
 try:
     print(get_summary(fetch_data()))
+#pylint: disable=bare-except
 except:
     print('')

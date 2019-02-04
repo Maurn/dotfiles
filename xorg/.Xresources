@@ -59,6 +59,12 @@ Xft.rgba:       rgb
 Xft.hinting:    true
 Xft.hintstyle:  hintslight
 
+Emacs.bitmapIcon:         off
+Emacs.menuBar:            off
+Emacs.verticalScrollBars: off
+Emacs.toolBar:            off
+Emacs.cursorBlink:        off
+Emacs.background:         #282c34
 
 ! ------------------------------------------------------------------------------
 ! ROFI Color theme

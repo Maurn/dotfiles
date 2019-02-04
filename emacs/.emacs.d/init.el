@@ -33,6 +33,8 @@
 (setq ring-bell-function 'ignore
       visible-bell nil)
 
+(setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
+
 ;; Disable backup files
 (setq make-backup-files nil) ; stop creating backup~ files
 (setq auto-save-default nil) ; stop creating #autosave# files
@@ -306,6 +308,12 @@
   (defvar evilmi-always-simple-jump t)
   (global-evil-visualstar-mode 1))
 
+(use-package evil-args
+  :after evil
+  :config
+  (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
+  (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
+
 (use-package company
   :hook (after-init . global-company-mode)
   :config
@@ -354,7 +362,8 @@
     "fr"  'counsel-recentf
     "fL"  'counsel-locate))
 
-(use-package projectile)
+(use-package projectile
+  :config (projectile-mode +1))
 
 (use-package counsel-projectile
   :after (projectile ivy)
@@ -387,9 +396,25 @@
 (use-package evil-magit
   :hook (magit-mode . evil-magit-init))
 
+(use-package shell-pop
+  :config
+  (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
+  (setq shell-pop-term-shell "/bin/zsh")
+  ;; need to do this manually or not picked up by `shell-pop'
+  (shell-pop--set-shell-type 'shell-pop-shell-type shell-pop-shell-type)
+  (evil-define-key 'insert term-raw-map
+    (kbd "C-k") 'term-send-up
+    (kbd "C-j") 'term-send-down)
+  :general
+  (tyrant-def
+    "'" 'shell-pop))
+
 (use-package editorconfig
   :config
   (editorconfig-mode 1))
+
+(use-package yasnippet
+  :config (yas-global-mode 1))
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
@@ -410,6 +435,7 @@
   (company-mode +1)
   (setq tide-completion-ignore-case t)
   (setq tide-tsserver-executable "/usr/bin/tsserver")
+  (setq eldoc-echo-area-use-multiline-p t)
   :general
   (general-def '(normal visual) typescript-mode-map
     "gd" 'tide-jump-to-definition)
@@ -430,14 +456,31 @@
   :bind (:map emmet-mode-keymap
          ("TAB" . emmet-expand-line)))
 
+(use-package anaconda-mode
+  :hook ((python-mode . anaconda-mode)
+         (python-mode . anaconda-eldoc-mode)))
+
+(use-package company-anaconda
+  :after anaconda-mode
+  :config (add-to-list 'company-backends 'company-anaconda))
+
+;; (use-package eglot)
+
+(use-package lsp-mode :commands lsp)
+(use-package company-lsp :commands company-lsp)
+
+(use-package ccls
+  :hook ((c-mode c++-mode objc-mode) .
+         (lambda () (require 'ccls) (lsp))))
+
 (eval-when-compile
-(setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
-(when (file-exists-p custom-file)
-(load custom-file)))
+  (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (when (file-exists-p custom-file)
+    (load custom-file)))
 
 (eval-and-compile
-(add-hook 'emacs-startup-hook '(lambda ()
-                (setq gc-cons-threshold 16777216
-                        gc-cons-percentage 0.1))))
+  (add-hook 'emacs-startup-hook '(lambda ()
+                                   (setq gc-cons-threshold 16777216
+                                         gc-cons-percentage 0.1))))
 (provide 'init)
 ;;; init.el ends here
