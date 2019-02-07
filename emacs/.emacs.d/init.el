@@ -312,6 +312,10 @@
   (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
   (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
 
+(use-package evil-matchit
+  :after evil
+  :config (global-evil-matchit-mode 1))
+
 (use-package company
   :hook (after-init . global-company-mode)
   :config
@@ -394,6 +398,15 @@
 (use-package evil-magit
   :hook (magit-mode . evil-magit-init))
 
+(use-package git-timemachine
+  :commands (git-timemachine)
+  :general
+  (tyrant-def
+    "gt" 'git-timemachine))
+
+(use-package git-gutter
+  :hook (prog-mode . global-git-gutter-mode))
+
 (use-package shell-pop
   :config
   (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
@@ -413,6 +426,9 @@
 
 (use-package yasnippet
   :config (yas-global-mode 1))
+
+(use-package yasnippet-snippets
+  :after yasnippet)
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
@@ -436,7 +452,8 @@
   (setq eldoc-echo-area-use-multiline-p t)
   :general
   (general-def '(normal visual) typescript-mode-map
-    "gd" 'tide-jump-to-definition)
+    "gd" 'tide-jump-to-definition
+    "K" 'tide-documentation-at-point)
   (major-def
     :keymaps 'typescript-mode-map
     "d" 'tide-jump-to-definition
