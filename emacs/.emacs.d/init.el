@@ -327,6 +327,10 @@
   (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
   (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
 
+(use-package evil-matchit
+  :after evil
+  :config (global-evil-matchit-mode 1))
+
 (use-package company
   :hook (after-init . global-company-mode)
   :config
@@ -433,6 +437,9 @@
   (tyrant-def
     "gt" 'git-timemachine))
 
+(use-package git-gutter
+  :hook (prog-mode . global-git-gutter-mode))
+
 (use-package shell-pop
   :config
   (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
@@ -452,6 +459,9 @@
 
 (use-package yasnippet
   :config (yas-global-mode 1))
+
+(use-package yasnippet-snippets
+  :after yasnippet)
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
