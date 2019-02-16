@@ -11,7 +11,7 @@
     allowJS: true
   "autoupdate-packages":
     handling: "Update automatically and silently"
-    lastUpdateTimestamp: 1544890756572
+    lastUpdateTimestamp: 1549311568833
   core:
     autoHideMenuBar: true
     automaticallyUpdate: false

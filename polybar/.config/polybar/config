@@ -74,7 +74,7 @@ format =  <label-layout>
 [module/torn]
 type=custom/script
 exec = ~/.config/polybar/torn-status
-interval = 5
+interval = 30
 
 [module/i3]
 type = internal/i3

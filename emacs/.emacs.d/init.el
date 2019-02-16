@@ -24,8 +24,13 @@
 (show-paren-mode 1)
 (electric-pair-mode 1)
 (setq vc-follow-symlinks t)
-(set-default 'truncate-lines t)
 (setq fill-column 100)
+
+;; scroll one line at a time (less "jumpy" than defaults)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+(setq scroll-step 1) ;; keyboard scroll one line at a time
 
 (setq help-window-select 't)
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -42,7 +47,8 @@
 (defun my-prog-mode-hook ()
   "Prog hook!"
   (flycheck-mode)
-  (display-line-numbers-mode))
+  (display-line-numbers-mode)
+  (setq truncate-lines t))
 
 (add-hook 'prog-mode-hook 'my-prog-mode-hook)
 
@@ -93,6 +99,7 @@
   :after which-key
   :config
   (general-override-mode 1)
+  (general-evil-setup)
 
   (defun find-user-init-file ()
     "Edit the `user-init-file', in same window."
@@ -207,7 +214,9 @@
     "wV"  (lambda () (interactive)(split-window-horizontally) (other-window 1))
     "wS"  (lambda () (interactive)(split-window-vertically) (other-window 1))
     "wm"  'maximize-window
+    "w="  'balance-windows
     "wu"  'winner-undo
+    "wr"  'winner-redo
     "ww"  'other-window
     "wd"  'delete-window
     "wD"  'delete-other-windows
@@ -223,12 +232,13 @@
     "fR"  'rename-file-and-buffer
     "fs"  'save-buffer
 
-    ;; Applications
-    "a"   '(:ignore t :which-key "Applications")
+    ;; applications
+    "a"   '(:ignore t :which-key "applications")
     "ad"  'dired
     ":"   'shell-command
     ";"   'eval-expression
     "ac"  'calendar
+    "aq"  'quick-calc
     "oa"  'org-agenda)
 
   (general-def 'normal doc-view-mode-map
@@ -306,6 +316,11 @@
   (defvar evilmi-always-simple-jump t)
   (global-evil-visualstar-mode 1))
 
+(use-package evil-matchit
+  :after evil
+  :config
+  (global-evil-matchit-mode 1))
+
 (use-package evil-args
   :after evil
   :config
@@ -372,8 +387,7 @@
    "po"  'counsel-projectile-find-other-file
    "pf"  'counsel-projectile-find-file
    "pp"  'counsel-projectile-switch-project
-   "pb"  'counsel-projectile-switch-to-buffer
-   "bp"  'counsel-projectile-switch-to-buffer))
+   "pb"  'counsel-projectile-switch-to-buffer))
 
 
 (use-package flycheck
@@ -389,10 +403,35 @@
   :general
   (tyrant-def
    "g"   '(:ignore t :which-key "git")
-   "gs"  'magit-status))
+   "gs"  'magit-status
+   "gf"  'magit-log-buffer-file
+   "gb"  'magit-blame-addition))
 
 (use-package evil-magit
   :hook (magit-mode . evil-magit-init))
+
+(use-package git-timemachine
+  :commands (git-timemachine)
+  :config
+  (evil-define-minor-mode-key 'normal 'git-timemachine-mode
+    "\C-k" 'git-timemachine-show-previous-revision
+    "\C-j" 'git-timemachine-show-next-revision
+    "q"    'git-timemachine-quit)
+    ;; "gtg"  'git-timemachine-show-nth-revision
+    ;; "gtt"  'git-timemachine-show-revision-fuzzy
+    ;; "gty"  'git-timemachine-kill-abbreviated-revision
+    ;; "gtY"  'git-timemachine-kill-revision
+    ;; "gtb" 'git-timemachine-blame)
+  :general
+  ;; (general-def
+  ;;   :definer 'minor-mode
+  ;;   :states 'normal
+  ;;   :keymaps 'git-timemachine-mode
+  ;;   "\C-k" 'git-timemachine-show-previous-revision
+  ;;   "\C-j" 'git-timemachine-show-next-revision
+  ;;   "q"    'git-timemachine-quit)
+  (tyrant-def
+    "gt" 'git-timemachine))
 
 (use-package shell-pop
   :config
@@ -435,8 +474,9 @@
   (setq tide-tsserver-executable "/usr/bin/tsserver")
   (setq eldoc-echo-area-use-multiline-p t)
   :general
-  (general-def '(normal visual) typescript-mode-map
-    "gd" 'tide-jump-to-definition)
+  (general-nmap typescript-mode-map
+    "gd" 'tide-jump-to-definition
+    "K"  'tide-documentation-at-point)
   (major-def
     :keymaps 'typescript-mode-map
     "d" 'tide-jump-to-definition
