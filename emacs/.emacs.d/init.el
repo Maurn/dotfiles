@@ -13,6 +13,7 @@
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
 (setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
 (global-hl-line-mode 1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
@@ -489,8 +490,10 @@
     "K"  'tide-documentation-at-point)
   (major-def
     :keymaps 'typescript-mode-map
-    "d" 'tide-jump-to-definition
-    "=" 'tide-format))
+    "f" 'tide-fix
+    "r" 'tide-rename-symbol
+    "=" 'tide-format
+    "o" 'tide-organize-imports))
 
 (use-package web-mode
   :mode "\\.html\\'"
@@ -506,7 +509,16 @@
 
 (use-package anaconda-mode
   :hook ((python-mode . anaconda-mode)
-         (python-mode . anaconda-eldoc-mode)))
+         (python-mode . anaconda-eldoc-mode))
+  :general
+  (general-nmap python-mode-map
+    "gd" 'anaconda-mode-find-definitions
+    "K"  'anaconda-mode-show-doc)
+  (major-def
+    :keymaps 'python-mode-map
+    "ss" 'run-python
+    "sb" 'python-shell-send-buffer
+    "sf" 'python-shell-send-defun))
 
 (use-package company-anaconda
   :after anaconda-mode
@@ -514,12 +526,26 @@
 
 ;; (use-package eglot)
 
-(use-package lsp-mode :commands lsp)
+(use-package lsp-mode
+  :init (setq lsp-prefer-flymake nil)
+  :commands lsp)
 (use-package company-lsp :commands company-lsp)
 
 (use-package ccls
   :hook ((c-mode c++-mode objc-mode) .
-         (lambda () (require 'ccls) (lsp))))
+         (lambda () (require 'ccls) (lsp)))
+  :custom
+  (c-basic-offset 4)
+  (c-default-style "linux")
+  :general
+  (general-nmap (c-mode-map c++-mode-map)
+    "gd" 'lsp-find-definition)
+  (major-def
+    :keymaps '(c-mode-map c++-mode-map)
+    "r" 'lsp-rename
+    "=" 'lsp-format-buffer))
+
+  
 
 (eval-when-compile
   (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
