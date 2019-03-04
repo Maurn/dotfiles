@@ -281,6 +281,10 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
+(use-package keychain-environment
+  :config
+  (keychain-refresh-environment))
+
 (use-package evil
   :init (setq evil-want-C-u-scroll t)
   :hook (after-init . evil-mode)
