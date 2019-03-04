@@ -534,9 +534,9 @@
 (use-package ccls
   :hook ((c-mode c++-mode objc-mode) .
          (lambda () (require 'ccls) (lsp)))
-  :custom
-  (c-basic-offset 4)
-  (c-default-style "linux")
+  ;; :custom
+  ;; (c-basic-offset 4)
+  ;; (c-default-style "linux")
   :general
   (general-nmap (c-mode-map c++-mode-map)
     "gd" 'lsp-find-definition)
