@@ -148,7 +148,7 @@ time = %H:%M
 label = %date% - %time%
 
 [module/volume]
-type = internal/volume
+type = internal/alsa
 
 format-volume = <ramp-volume><label-volume>
 format-muted = <label-muted>
