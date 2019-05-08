@@ -286,7 +286,10 @@
   (keychain-refresh-environment))
 
 (use-package evil
-  :init (setq evil-want-C-u-scroll t)
+  :init
+  (setq evil-want-C-u-scroll t)
+  (setq evil-want-minibuffer t)
+  (defvar evil-want-Y-yank-to-eol t)
   :hook (after-init . evil-mode)
   :config
   (evil-set-initial-state 'shell-mode 'normal)
@@ -398,6 +401,14 @@
    "pp"  'counsel-projectile-switch-project
    "pb"  'counsel-projectile-switch-to-buffer))
 
+(use-package treemacs
+  :commands treemacs)
+
+(use-package treemacs-evil
+  :after treemacs evil)
+
+(use-package treemacs-projectile
+  :after treemacs projectile)
 
 (use-package flycheck
   :commands (flycheck-mode)
@@ -502,10 +513,11 @@
     "K"  'tide-documentation-at-point)
   (major-def
     :keymaps 'typescript-mode-map
-    "f" 'tide-fix
-    "r" 'tide-rename-symbol
     "=" 'tide-format
-    "o" 'tide-organize-imports))
+    "r" '(:ignore t :which-key "refactor")
+    "rf" 'tide-fix
+    "rr" 'tide-rename-symbol
+    "ro" 'tide-organize-imports))
 
 (use-package web-mode
   :mode "\\.html\\'"
@@ -546,7 +558,8 @@
     "gd" 'lsp-find-definition)
   (major-def
     :keymaps '(c-mode-map c++-mode-map rust-mode-map)
-    "r" 'lsp-rename
+    "r" '(:ignore t :which-key "refactor")
+    "rr" 'lsp-rename
     "=" 'lsp-format-buffer))
 
 (use-package company-lsp :commands company-lsp)

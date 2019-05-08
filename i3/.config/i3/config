@@ -193,7 +193,7 @@ client.placeholder      $bg     $bg     $text-inactive $bg       $bg
 focus_follows_mouse no
 
 # Startup programs
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh &> /dev/null
 
 exec --no-startup-id feh --bg-scale ~/Dropbox/billeder/sierpinski.png
 exec --no-startup-id redshift &
