@@ -418,9 +418,6 @@
    "en"  'flycheck-next-error
    "ep"  'flycheck-previous-error))
 
-(use-package flycheck-pos-tip
-  :hook (flycheck-mode . flycheck-pos-tip-mode))
-
 (use-package eldoc-box
   :hook
   (eldoc-mode . eldoc-box-hover-mode)
@@ -500,8 +497,7 @@
 (use-package tide
   :after (typescript-mode company flycheck)
   :hook ((typescript-mode . tide-setup)
-         (typescript-mode . tide-hl-identifier-mode)
-         (before-save . tide-format-before-save))
+         (typescript-mode . tide-hl-identifier-mode))
   :config
   (company-mode +1)
   (setq tide-completion-ignore-case t)
@@ -574,7 +570,28 @@
 
 (use-package flycheck-rust
   :hook (rust-mode . flycheck-rust-setup))
-  
+
+;; (use-package latex
+;;   ;; :mode ("\\.tex\\'" . latex-mode)
+;;   :ensure auctex
+;;   :config
+;;     (add-to-list 'TeX-view-program-list
+;;                  '("Zathura"
+;;                    ("zathura "
+;;                     (mode-io-correlate " --synctex-forward %n:0:%b   -x \"emacsclient +%{line} %{input}\" ")
+;;                     " %o")
+;;                    "zathura"))
+;;     (add-to-list 'TeX-view-program-selection
+;;                  '(output-pdf "Zathura"))
+;;     (TeX-PDF-mode 1))
+
+;; (use-package company-auctex
+;;   ;; :after (auctex company)
+;;   :config (company-auctex-init))
+
+;; (use-package auctex-latexmk
+;;   ;; :after (auctex company)
+;;   :config (auctex-latexmk-setup))
 
 (eval-when-compile
   (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
