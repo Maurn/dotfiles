@@ -571,6 +571,9 @@
 (use-package flycheck-rust
   :hook (rust-mode . flycheck-rust-setup))
 
+(use-package restclient
+  :mode ("\\.http\\'" . restclient-mode))
+
 ;; (use-package latex
 ;;   ;; :mode ("\\.tex\\'" . latex-mode)
 ;;   :ensure auctex
