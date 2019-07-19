@@ -55,7 +55,7 @@ font-1 = MaterialIcons-Regular:size=13;5
 
 
 modules-left = i3
-modules-center = 
+modules-center =
 modules-right = volume keyboard torn filesystem backlight battery wifi eth date
 
 tray-position = right
@@ -63,7 +63,7 @@ tray-padding = 0
 tray-transparent = false
 tray-background = #000000
 
-;wm-restack = 
+;wm-restack =
 
 override-redirect = false
 
@@ -122,7 +122,7 @@ label-disconnected-foreground = #66
 
 [module/wifi]
 type = internal/network
-interface = wlp6s0
+interface = wlan0
 interval = 1
 
 format-connected-prefix = " "
