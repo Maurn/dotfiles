@@ -349,7 +349,6 @@
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 1)
   (setq company-tooltip-align-annotations t)
-  (defvar company-dabbrev-ignore-case t)
   (setq company-frontends '(company-echo-metadata-frontend
                             company-pseudo-tooltip-unless-just-one-frontend
                             company-preview-frontend))
@@ -418,10 +417,53 @@
    "en"  'flycheck-next-error
    "ep"  'flycheck-previous-error))
 
+
 (use-package eldoc-box
+  :init
+  (setq eldoc-idle-delay 0)
+
+  (defun eldoc-message-now ()
+    (interactive))
+
+  (defun eldoc--message-command-p (command)
+    ;; Should be using advice, but I'm lazy
+    ;; One can also loop through `eldoc-message-commands' and empty it out
+    (eq command 'eldoc-message-now))
+
+  (eldoc-add-command 'eldoc-message-now)
+  (tyrant-def "t" 'eldoc-message-now)
   :hook
   (eldoc-mode . eldoc-box-hover-mode)
-  (eldoc-box-hover-mode . eldoc-box-hover-at-point-mode))
+  (eldoc-box-hover-mode . eldoc-box-hover-at-point-mode)
+  :config
+  (define-advice eldoc-box--default-at-point-position-function
+    (:override (width height) display-above-point)
+    "Set `eldoc-box-position-function' to this function to have
+     childframe appear above point.  Position is calculated base on WIDTH
+     and HEIGHT of childframe text window"
+    (let* ((point-pos (eldoc-box--point-position-relative-to-native-frame))
+            ;; calculate point coordinate relative to native frame
+            ;; because childframe coordinate is relative to native frame
+            (x (car point-pos))
+            (y (cdr point-pos))
+            ;; (en (frame-char-width))
+            (em (frame-char-height))
+            (frame-geometry (frame-geometry)))
+      (cons (if (< (- (frame-inner-width) width) x)
+              ;; space on the right of the pos is not enough
+              ;; put to left
+              (max 0 (- x width))
+              ;; normal, just return x
+              x)
+        (if (let ((pos (point)))
+              (goto-char (line-beginning-position))
+              (prog1 (bobp)
+                (goto-char pos)))
+          ;; space under the pos is not enough
+          ;; put above
+          (+ y em)
+          ;; normal, just return y + em
+          (max 0 (- y height)))))))
 
 (use-package magit
   :commands (magit-status)
@@ -500,7 +542,6 @@
          (typescript-mode . tide-hl-identifier-mode))
   :config
   (company-mode +1)
-  (setq tide-completion-ignore-case t)
   (setq tide-tsserver-executable "/usr/bin/tsserver")
   (setq eldoc-echo-area-use-multiline-p t)
   :general
