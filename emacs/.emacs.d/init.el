@@ -339,6 +339,11 @@
   :after evil
   :config (global-evil-matchit-mode 1))
 
+(use-package evil-easymotion
+  :after evil
+  :config
+  (evilem-default-keybindings "'"))
+
 (use-package company
   :hook (after-init . global-company-mode)
   :config
