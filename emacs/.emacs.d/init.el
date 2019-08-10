@@ -94,7 +94,7 @@
 (use-package which-key
   :config
   (which-key-mode 1)
-  (setq which-key-idle-delay 0.1))
+  (setq which-key-idle-delay 0))
 
 (use-package general
   :after which-key
@@ -162,7 +162,7 @@
       (unless prev-window (user-error "Last window not found"))
       (select-window prev-window)))
 
-  (general-create-definer tyrant-def
+  (general-create-definer leader-def
     :states '(normal visual insert motion emacs)
     :prefix "SPC"
     :non-normal-prefix "C-SPC")
@@ -172,17 +172,10 @@
     :prefix "SPC m"
     :non-normal-prefix "C-SPC m")
 
-  (general-define-key
-   :keymaps 'key-translation-map
-   "ESC" (kbd "C-g"))
+  (general-def '(normal visual) '(prog-mode-map restclient-mode-map)
+    "RET" (general-key "SPC m"))
 
-  (general-def
-    "C-x x" 'eval-defun)
-
-  (general-def '(normal visual) prog-mode-map
-    "RET" (general-simulate-key "SPC m"))
-
-  (tyrant-def
+  (leader-def
     ""     nil
     "c"   (general-simulate-key "C-c")
     "h"   (general-simulate-key "C-h")
@@ -209,7 +202,6 @@
     ;; Window operations
     "w"   '(:ignore t :which-key "windows")
     "w TAB" 'alternate-window
-    "wm"  'maximize-window
     "wv"  'split-window-horizontally
     "ws"  'split-window-vertically
     "wV"  (lambda () (interactive)(split-window-horizontally) (other-window 1))
@@ -298,7 +290,7 @@
   (evil-set-initial-state 'biblio-selection-mode 'motion)
   (defvar doc-view-continuous t)
   :general
-  (tyrant-def
+  (leader-def
     "wh"  'evil-window-left
     "wl"  'evil-window-right
     "wj"  'evil-window-down
@@ -335,10 +327,6 @@
   (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
   (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
 
-(use-package evil-matchit
-  :after evil
-  :config (global-evil-matchit-mode 1))
-
 (use-package evil-easymotion
   :after evil
   :config
@@ -347,44 +335,44 @@
 (use-package company
   :hook (after-init . global-company-mode)
   :config
-  (define-key company-active-map (kbd "M-n") nil)
-  (define-key company-active-map (kbd "M-p") nil)
-  (define-key company-active-map (kbd "C-j") #'company-select-next-or-abort)
-  (define-key company-active-map (kbd "C-k") #'company-select-previous-or-abort)
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 1)
-  (setq company-tooltip-align-annotations t)
-  (setq company-frontends '(company-echo-metadata-frontend
-                            company-pseudo-tooltip-unless-just-one-frontend
-                            company-preview-frontend))
-  (setq company-backends '((company-capf
-                            company-files)
-                           (company-dabbrev-code company-keywords)
-                            company-dabbrev company-yasnippet)))
+  (setq company-idle-delay 0
+    company-minimum-prefix-length 1
+    company-tooltip-align-annotations t
+    company-frontends '(company-echo-metadata-frontend
+                         company-pseudo-tooltip-unless-just-one-frontend
+                         company-preview-frontend)
+    company-backends '((company-capf company-files)
+                        (company-dabbrev-code company-keywords)
+                        company-dabbrev company-yasnippet))
+  :general
+  ('company-active-map
+    "C-j" 'company-select-next-or-abort
+    "C-k" 'company-select-previous-or-abort))
 
 (use-package ivy
-    :hook (after-init . ivy-mode)
-    :config (setq ivy-use-virtual-buffers t
-                ivy-count-format "(%d/%d) "
-                ivy-initial-inputs-alist nil
-                ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
-                (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-next-line)
-                (define-key ivy-minibuffer-map (kbd "C-k") 'ivy-previous-line)
-                (set-face-attribute 'ivy-current-match nil
-                                    :underline t
-                                    :background nil
-                                    :weight 'semi-bold)
-
-    :commands (ivy-switch-buffer)
-    :general
-    (tyrant-def "bb"  'ivy-switch-buffer))
+  :hook (after-init . ivy-mode)
+  :config (setq ivy-use-virtual-buffers t
+            ivy-count-format "(%d/%d) "
+            ivy-initial-inputs-alist nil
+            ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
+  (set-face-attribute 'ivy-current-match nil
+    :underline t
+    :background nil
+    :weight 'semi-bold)
+  :general
+  (general-def
+    '(normal insert visual)
+    'ivy-minibuffer-map
+    "C-j" 'ivy-next-line
+    "C-k" 'ivy-previous-line)
+  (leader-def "bb"  'ivy-switch-buffer))
 
 (use-package smex)
 
 (use-package counsel
   :after (ivy)
   :general
-  (tyrant-def
+  (leader-def
     "SPC" 'counsel-M-x
     "/"   'counsel-rg
     "ff"  'counsel-find-file
@@ -397,8 +385,8 @@
 (use-package counsel-projectile
   :after (projectile ivy)
   :general
-  (tyrant-def
-   "p"   '(:ignore t :which-key "projectile")
+  (leader-def
+   "p"   '(:ignore t :which-key "projects")
    "pd"  'counsel-projectile-dired-find-dir
    "po"  'counsel-projectile-find-other-file
    "pf"  'counsel-projectile-find-file
@@ -406,7 +394,9 @@
    "pb"  'counsel-projectile-switch-to-buffer))
 
 (use-package treemacs
-  :commands treemacs)
+  :general
+  (leader-def
+    "pt" 'treemacs))
 
 (use-package treemacs-evil
   :after treemacs evil)
@@ -417,7 +407,7 @@
 (use-package flycheck
   :commands (flycheck-mode)
   :general
-  (tyrant-def
+  (leader-def
    "e"   '(:ignore t :which-key "errors")
    "en"  'flycheck-next-error
    "ep"  'flycheck-previous-error))
@@ -436,11 +426,12 @@
     (eq command 'eldoc-message-now))
 
   (eldoc-add-command 'eldoc-message-now)
-  (tyrant-def "t" 'eldoc-message-now)
+  (leader-def "t" 'eldoc-message-now)
   :hook
   (eldoc-mode . eldoc-box-hover-mode)
   (eldoc-box-hover-mode . eldoc-box-hover-at-point-mode)
   :config
+  (setq eldoc-box-cleanup-interval 0)
   (define-advice eldoc-box--default-at-point-position-function
     (:override (width height) display-above-point)
     "Set `eldoc-box-position-function' to this function to have
@@ -473,7 +464,7 @@
 (use-package magit
   :commands (magit-status)
   :general
-  (tyrant-def
+  (leader-def
    "g"   '(:ignore t :which-key "git")
    "gs"  'magit-status
    "gf"  'magit-log-buffer-file
@@ -502,7 +493,7 @@
   ;;   "\C-k" 'git-timemachine-show-previous-revision
   ;;   "\C-j" 'git-timemachine-show-next-revision
   ;;   "q"    'git-timemachine-quit)
-  (tyrant-def
+  (leader-def
     "gt" 'git-timemachine))
 
 (use-package git-gutter
@@ -518,7 +509,7 @@
     (kbd "C-k") 'term-send-up
     (kbd "C-j") 'term-send-down)
   :general
-  (tyrant-def
+  (leader-def
     "'" 'shell-pop))
 
 (use-package editorconfig
@@ -590,8 +581,6 @@
   :after anaconda-mode
   :config (add-to-list 'company-backends 'company-anaconda))
 
-;; (use-package eglot)
-
 (use-package lsp-mode
   :init (setq lsp-prefer-flymake nil)
   :commands lsp
@@ -618,7 +607,13 @@
   :hook (rust-mode . flycheck-rust-setup))
 
 (use-package restclient
-  :mode ("\\.http\\'" . restclient-mode))
+  :mode ("\\.http\\'" . restclient-mode)
+  :general
+  (major-def
+    :keymaps 'restclient-mode-map
+    "s" 'restclient-http-send-current
+    "j" 'restclient-jump-next
+    "k" 'restclient-jump-prev))
 
 ;; (use-package latex
 ;;   ;; :mode ("\\.tex\\'" . latex-mode)
