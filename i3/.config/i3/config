@@ -195,7 +195,7 @@ focus_follows_mouse no
 # Startup programs
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh &> /dev/null
 
-exec --no-startup-id feh --bg-scale ~/Dropbox/billeder/sierpinski.png
+exec --no-startup-id feh --bg-scale ~/Dropbox/images/sierpinski.png
 exec --no-startup-id redshift &
 exec --no-startup-id compton --backend glx --vsync -b -o 0
 # exec --no-startup-id setxkbmap -layout us,dk -option grp:ctrls_toggle -option caps:swapescape
