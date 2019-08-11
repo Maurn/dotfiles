@@ -27,6 +27,9 @@
 (setq vc-follow-symlinks t)
 (setq fill-column 100)
 
+;; for fixing 'package unavailable' issues
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
 ;; scroll one line at a time (less "jumpy" than defaults)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
@@ -42,6 +45,7 @@
 ;; Disable backup files
 (setq make-backup-files nil) ; stop creating backup~ files
 (setq auto-save-default nil) ; stop creating #autosave# files
+(setq create-lockfiles nil)  ; no fucking lockfiles either
 
 (add-to-list 'default-frame-alist '(font . "SourceCodeProSemibold-11"))
 
@@ -361,8 +365,8 @@
     :weight 'semi-bold)
   :general
   (general-def
-    '(normal insert visual)
-    'ivy-minibuffer-map
+    '(normal insert visual emacs)
+    '(ivy-minibuffer-map projectile-mode-map counsel-mode-map)
     "C-j" 'ivy-next-line
     "C-k" 'ivy-previous-line)
   (leader-def "bb"  'ivy-switch-buffer))
