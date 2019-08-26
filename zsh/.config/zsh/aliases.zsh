@@ -18,6 +18,7 @@ alias stream='peerflix --mpv'
 alias nvm='unalias nvm && source /usr/share/nvm/init-nvm.sh && nvm'
 alias pip='pip --user'
 alias ysi='tmuxinator start ysi'
+alias hololink='tmuxinator start hololink'
 mkcd () { mkdir "$1"; cd "$1" }
 
 earth-background () {

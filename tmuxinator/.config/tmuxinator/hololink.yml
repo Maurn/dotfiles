@@ -1,0 +1,17 @@
+name: hololink
+root: ~/entropyfox/hololink
+
+windows:
+  - hololink:
+      layout: even-horizontal
+      panes:
+        - server:
+            - cd services/api
+            - npm run dev
+        - editor:
+            - cd services/editor
+            - npm run dev
+        - frontend:
+            - cd services/viewer
+            - npm run dev
+ 

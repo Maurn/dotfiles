@@ -177,7 +177,7 @@
     :non-normal-prefix "C-SPC m")
 
   (general-def '(normal visual) '(prog-mode-map restclient-mode-map)
-    "RET" (general-key "SPC m"))
+    "RET" (general-simulate-key "SPC m"))
 
   (leader-def
     ""     nil
@@ -420,6 +420,7 @@
 (use-package eldoc-box
   :init
   (setq eldoc-idle-delay 0)
+  (setq eldoc-echo-area-use-multiline-p t)
 
   (defun eldoc-message-now ()
     (interactive))
@@ -541,9 +542,7 @@
   :hook ((typescript-mode . tide-setup)
          (typescript-mode . tide-hl-identifier-mode))
   :config
-  (company-mode +1)
   (setq tide-tsserver-executable "/usr/bin/tsserver")
-  (setq eldoc-echo-area-use-multiline-p t)
   :general
   (general-nmap typescript-mode-map
     "gd" 'tide-jump-to-definition
@@ -565,8 +564,11 @@
 
 (use-package emmet-mode
   :hook web-mode
-  :bind (:map emmet-mode-keymap
-         ("TAB" . emmet-expand-line)))
+  :general
+  (general-def
+    'insert
+    '(emmet-mode-map company-active-map web-mode-map)
+    "TAB" 'emmet-expand-line))
 
 (use-package anaconda-mode
   :hook ((python-mode . anaconda-mode)
