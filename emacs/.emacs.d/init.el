@@ -373,6 +373,8 @@
 
 (use-package smex)
 
+;; (use-package flx)
+
 (use-package counsel
   :after (ivy)
   :general
@@ -384,10 +386,17 @@
     "fL"  'counsel-locate))
 
 (use-package projectile
-  :config (projectile-mode +1))
+  :custom
+  (projectile-completion-system 'ivy)
+  :config
+  (add-to-list 'projectile-other-file-alist '("component.ts" "component.html"))
+  (add-to-list 'projectile-other-file-alist '("component.html" "component.ts"))
+  (projectile-mode +1))
 
 (use-package counsel-projectile
   :after (projectile ivy)
+  :custom
+  (counsel-projectile-find-file-matcher 'counsel-projectile-find-file-matcher-basename)
   :general
   (leader-def
    "p"   '(:ignore t :which-key "projects")
@@ -420,51 +429,7 @@
 (use-package eldoc-box
   :init
   (setq eldoc-idle-delay 0)
-  (setq eldoc-echo-area-use-multiline-p t)
-
-  (defun eldoc-message-now ()
-    (interactive))
-
-  (defun eldoc--message-command-p (command)
-    ;; Should be using advice, but I'm lazy
-    ;; One can also loop through `eldoc-message-commands' and empty it out
-    (eq command 'eldoc-message-now))
-
-  (eldoc-add-command 'eldoc-message-now)
-  (leader-def "t" 'eldoc-message-now)
-  :hook
-  (eldoc-mode . eldoc-box-hover-mode)
-  (eldoc-box-hover-mode . eldoc-box-hover-at-point-mode)
-  :config
-  (setq eldoc-box-cleanup-interval 0)
-  (define-advice eldoc-box--default-at-point-position-function
-    (:override (width height) display-above-point)
-    "Set `eldoc-box-position-function' to this function to have
-     childframe appear above point.  Position is calculated base on WIDTH
-     and HEIGHT of childframe text window"
-    (let* ((point-pos (eldoc-box--point-position-relative-to-native-frame))
-            ;; calculate point coordinate relative to native frame
-            ;; because childframe coordinate is relative to native frame
-            (x (car point-pos))
-            (y (cdr point-pos))
-            ;; (en (frame-char-width))
-            (em (frame-char-height))
-            (frame-geometry (frame-geometry)))
-      (cons (if (< (- (frame-inner-width) width) x)
-              ;; space on the right of the pos is not enough
-              ;; put to left
-              (max 0 (- x width))
-              ;; normal, just return x
-              x)
-        (if (let ((pos (point)))
-              (goto-char (line-beginning-position))
-              (prog1 (bobp)
-                (goto-char pos)))
-          ;; space under the pos is not enough
-          ;; put above
-          (+ y em)
-          ;; normal, just return y + em
-          (max 0 (- y height)))))))
+  (setq eldoc-echo-area-use-multiline-p t))
 
 (use-package magit
   :commands (magit-status)
@@ -543,6 +508,7 @@
          (typescript-mode . tide-hl-identifier-mode))
   :config
   (setq tide-tsserver-executable "/usr/bin/tsserver")
+  (setq tide-completion-detailed t)
   :general
   (general-nmap typescript-mode-map
     "gd" 'tide-jump-to-definition
@@ -556,11 +522,12 @@
     "ro" 'tide-organize-imports))
 
 (use-package web-mode
+  :init (setq web-mode-enable-auto-pairing 'nil)
   :mode "\\.html\\'"
   :general
   (major-def
     :keymaps 'web-mode-map
-    "z" 'web-mode-fold-or-unfold))
+    "rr" 'web-mode-element-rename))
 
 (use-package emmet-mode
   :hook web-mode
@@ -599,11 +566,10 @@
     "rr" 'lsp-rename
     "=" 'lsp-format-buffer))
 
-(use-package company-lsp :commands company-lsp)
-
-(use-package ccls
-  :hook ((c-mode c++-mode objc-mode) .
-         (lambda () (require 'ccls) (lsp))))
+(use-package company-lsp
+  :commands company-lsp
+  :config
+  (setq company-lsp-cache-candidates 'auto))
 
 (use-package rust-mode
   :mode ("\\.rs\\'" . rust-mode)
@@ -621,27 +587,28 @@
     "j" 'restclient-jump-next
     "k" 'restclient-jump-prev))
 
-;; (use-package latex
-;;   ;; :mode ("\\.tex\\'" . latex-mode)
-;;   :ensure auctex
-;;   :config
-;;     (add-to-list 'TeX-view-program-list
-;;                  '("Zathura"
-;;                    ("zathura "
-;;                     (mode-io-correlate " --synctex-forward %n:0:%b   -x \"emacsclient +%{line} %{input}\" ")
-;;                     " %o")
-;;                    "zathura"))
-;;     (add-to-list 'TeX-view-program-selection
-;;                  '(output-pdf "Zathura"))
-;;     (TeX-PDF-mode 1))
+(use-package latex
+  :mode ("\\.tex\\'" . latex-mode)
+  :ensure auctex
+  :config
+    (add-to-list 'TeX-view-program-list
+                 '("Zathura"
+                   ("zathura "
+                    (mode-io-correlate " --synctex-forward %n:0:%b   -x \"emacsclient +%{line} %{input}\" ")
+                    " %o")
+                   "zathura"))
+    (add-to-list 'TeX-view-program-selection
+                 '(output-pdf "Zathura"))
+  (TeX-PDF-mode 1)
+  (auto-fill-mode 1))
 
-;; (use-package company-auctex
-;;   ;; :after (auctex company)
-;;   :config (company-auctex-init))
+(use-package company-auctex
+  ;; :after (auctex company)
+  :config (company-auctex-init))
 
-;; (use-package auctex-latexmk
-;;   ;; :after (auctex company)
-;;   :config (auctex-latexmk-setup))
+(use-package auctex-latexmk
+  ;; :after (auctex company)
+  :config (auctex-latexmk-setup))
 
 (eval-when-compile
   (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
