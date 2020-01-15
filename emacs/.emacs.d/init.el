@@ -401,7 +401,7 @@
   (leader-def
    "p"   '(:ignore t :which-key "projects")
    "pd"  'counsel-projectile-dired-find-dir
-   "po"  'counsel-projectile-find-other-file
+   "po"  'projectile-find-other-file
    "pf"  'counsel-projectile-find-file
    "pp"  'counsel-projectile-switch-project
    "pb"  'counsel-projectile-switch-to-buffer))
@@ -609,6 +609,8 @@
 (use-package auctex-latexmk
   ;; :after (auctex company)
   :config (auctex-latexmk-setup))
+
+(use-package glsl-mode)
 
 (eval-when-compile
   (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))

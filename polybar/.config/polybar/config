@@ -56,7 +56,7 @@ font-1 = MaterialIcons-Regular:size=13;5
 
 modules-left = i3
 modules-center =
-modules-right = volume keyboard torn filesystem backlight battery wifi eth date
+modules-right = volume keyboard torn memory filesystem backlight battery wifi eth date
 
 tray-position = right
 tray-padding = 0
@@ -148,7 +148,7 @@ time = %H:%M
 label = %date% - %time%
 
 [module/volume]
-type = internal/alsa
+type = internal/pulseaudio
 
 format-volume = <ramp-volume><label-volume>
 format-muted = <label-muted>
@@ -188,6 +188,10 @@ mount-0 = /
 
 label-mounted = %used% / %total%
 
+[module/memory]
+type = internal/memory
+
+label =  %gb_used%/%gb_total%
 
 [settings]
 screenchange-reload = true
