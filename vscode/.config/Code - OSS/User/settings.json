@@ -1090,5 +1090,6 @@
     "breadcrumbs.enabled": true,
     "workbench.activityBar.visible": false,
     "tslint.alwaysShowRuleFailuresAsWarnings": true,
-    "search.location": "panel"
+    "search.location": "panel",
+    "javascript.updateImportsOnFileMove.enabled": "always"
 }
