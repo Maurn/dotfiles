@@ -17,7 +17,7 @@ search_wrap = true
 cursor_blink = off
 
 # "block", "underline" or "ibeam"
-cursor_shape = block
+cursor_shape = ibeam
 
 # $BROWSER is used by default if set, with xdg-open as a fallback
 #browser = xdg-open
@@ -35,8 +35,8 @@ filter_unmatched_urls = true
 # special
 foreground      = #ffffff
 foreground_bold = #ffffff
-cursor          = #ffffff
-background      = rgba(0,0,0,1)
+cursor          = #d86f00
+background      = #000000
 
 # black
 color0  = #555555

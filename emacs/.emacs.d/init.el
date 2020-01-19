@@ -331,10 +331,10 @@
   (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
   (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
 
-(use-package evil-easymotion
-  :after evil
-  :config
-  (evilem-default-keybindings "'"))
+(use-package avy
+  :general
+  (general-nmap
+    "'" 'avy-goto-char))
 
 (use-package company
   :hook (after-init . global-company-mode)
@@ -402,6 +402,7 @@
    "p"   '(:ignore t :which-key "projects")
    "pd"  'counsel-projectile-dired-find-dir
    "po"  'projectile-find-other-file
+   "pO"  'projectile-find-other-file-other-window
    "pf"  'counsel-projectile-find-file
    "pp"  'counsel-projectile-switch-project
    "pb"  'counsel-projectile-switch-to-buffer))
@@ -433,6 +434,8 @@
 
 (use-package magit
   :commands (magit-status)
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
   :general
   (leader-def
    "g"   '(:ignore t :which-key "git")
@@ -513,6 +516,13 @@
   (general-nmap typescript-mode-map
     "gd" 'tide-jump-to-definition
     "K"  'tide-documentation-at-point)
+  (general-nmap 'tide-references-mode-map
+    "gj" 'tide-find-next-reference
+    "gk" 'tide-find-previous-reference
+    (kbd "C-j") 'tide-find-next-reference
+    (kbd "C-k") 'tide-find-previous-reference
+    (kbd "RET") 'tide-goto-reference
+    "q" 'quit-window)
   (major-def
     :keymaps 'typescript-mode-map
     "=" 'tide-format
@@ -602,15 +612,19 @@
   (TeX-PDF-mode 1)
   (auto-fill-mode 1))
 
-(use-package company-auctex
-  ;; :after (auctex company)
-  :config (company-auctex-init))
+;; (use-package company-auctex
+;;   ;; :after (auctex company)
+;;   :config (company-auctex-init))
 
-(use-package auctex-latexmk
-  ;; :after (auctex company)
-  :config (auctex-latexmk-setup))
+;; (use-package auctex-latexmk
+;;   ;; :after (auctex company)
+;;   :config (auctex-latexmk-setup))
 
-(use-package glsl-mode)
+(use-package vterm)
+
+(use-package glsl-mode
+  :mode (("\\.frag\\'" . glsl-mode)))
+
 
 (eval-when-compile
   (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))

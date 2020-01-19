@@ -33,4 +33,5 @@
 # fi
 
 setxkbmap -layout us,dk -option grp:ctrls_toggle -option grp:lswitch -option caps:swapescape
+light -Srs "sysfs/leds/platform::mute" 0
 numlockx &
