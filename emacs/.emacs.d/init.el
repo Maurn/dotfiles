@@ -281,6 +281,10 @@
   :config
   (keychain-refresh-environment))
 
+(use-package recentf
+  :config
+  (recentf-mode 1))
+
 (use-package evil
   :init
   (setq evil-want-C-u-scroll t)
@@ -332,6 +336,7 @@
   (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
 
 (use-package avy
+  :after evil
   :general
   (general-nmap
     "'" 'avy-goto-char))
@@ -355,14 +360,15 @@
 
 (use-package ivy
   :hook (after-init . ivy-mode)
-  :config (setq ivy-use-virtual-buffers t
-            ivy-count-format "(%d/%d) "
-            ivy-initial-inputs-alist nil
-            ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
+  :config
+  (setq ivy-use-virtual-buffers t
+                ivy-count-format "(%d/%d) "
+                ivy-initial-inputs-alist nil
+                ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
   (set-face-attribute 'ivy-current-match nil
-    :underline t
-    :background nil
-    :weight 'semi-bold)
+                      :underline t
+                      :background nil
+                      :weight 'semi-bold)
   :general
   (general-def
     '(normal insert visual emacs)
@@ -588,6 +594,10 @@
 (use-package flycheck-rust
   :hook (rust-mode . flycheck-rust-setup))
 
+(use-package nim-mode
+  :mode ("\\.nim\\'" . nim-mode)
+  :hook (nim-mode . lsp))
+
 (use-package restclient
   :mode ("\\.http\\'" . restclient-mode)
   :general
@@ -599,6 +609,7 @@
 
 (use-package latex
   :mode ("\\.tex\\'" . latex-mode)
+  :hook (latex-mode . auto-fill-mode)
   :ensure auctex
   :config
     (add-to-list 'TeX-view-program-list
@@ -609,21 +620,24 @@
                    "zathura"))
     (add-to-list 'TeX-view-program-selection
                  '(output-pdf "Zathura"))
-  (TeX-PDF-mode 1)
-  (auto-fill-mode 1))
+  (TeX-PDF-mode 1))
 
-;; (use-package company-auctex
-;;   ;; :after (auctex company)
-;;   :config (company-auctex-init))
+(use-package company-auctex
+  :after (auctex company)
+  :config (company-auctex-init))
 
-;; (use-package auctex-latexmk
-;;   ;; :after (auctex company)
-;;   :config (auctex-latexmk-setup))
+(use-package auctex-latexmk
+  :after (auctex company)
+  :config (auctex-latexmk-setup))
 
-(use-package vterm)
+;; (use-package vterm)
 
 (use-package glsl-mode
   :mode (("\\.frag\\'" . glsl-mode)))
+
+(use-package exec-path-from-shell
+  :config
+  (exec-path-from-shell-initialize))
 
 
 (eval-when-compile
