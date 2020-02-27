@@ -7,8 +7,7 @@
   (setq gc-cons-threshold 402653184
       gc-cons-percentage 0.6))
 
-(with-eval-after-load 'display-line-numbers
-  (defvar display-line-numbers-type 'relative))
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
 
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
@@ -221,13 +220,13 @@
     ;; File operations
     "f"   '(:ignore t :which-key "files")
     "fc"  'write-file
-    "fe"  '(:ignore t :which-key "emacs")
-    "fed" 'find-user-init-file
-    "feR" 'load-user-init-file
-    "fj"  'dired-jump
     "fl"  'find-file-literally
     "fR"  'rename-file-and-buffer
     "fs"  'save-buffer
+    "fe"  '(:ignore t :which-key "emacs")
+    "fed" 'find-user-init-file
+    "feR" 'load-user-init-file
+    "fep" 'list-packages
 
     ;; applications
     "a"   '(:ignore t :which-key "applications")
@@ -276,10 +275,6 @@
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
-
-(use-package keychain-environment
-  :config
-  (keychain-refresh-environment))
 
 (use-package recentf
   :config
@@ -344,7 +339,8 @@
 (use-package company
   :hook (after-init . global-company-mode)
   :config
-  (setq company-idle-delay 0
+  (setq
+    company-idle-delay 0.0
     company-minimum-prefix-length 1
     company-tooltip-align-annotations t
     company-frontends '(company-echo-metadata-frontend
@@ -361,10 +357,10 @@
 (use-package ivy
   :hook (after-init . ivy-mode)
   :config
-  (setq ivy-use-virtual-buffers t
-                ivy-count-format "(%d/%d) "
-                ivy-initial-inputs-alist nil
-                ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
+  (setq
+    ivy-use-virtual-buffers t
+    ivy-count-format "(%d/%d) "
+    ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
   (set-face-attribute 'ivy-current-match nil
                       :underline t
                       :background nil
@@ -377,12 +373,13 @@
     "C-k" 'ivy-previous-line)
   (leader-def "bb"  'ivy-switch-buffer))
 
-(use-package smex)
-
-;; (use-package flx)
+(use-package smex
+  :after ivy)
 
 (use-package counsel
-  :after (ivy)
+  :after ivy
+  :config
+  (setq ivy-initial-inputs-alist nil)
   :general
   (leader-def
     "SPC" 'counsel-M-x
@@ -414,6 +411,7 @@
    "pb"  'counsel-projectile-switch-to-buffer))
 
 (use-package treemacs
+  :commands (treemacs)
   :general
   (leader-def
     "pt" 'treemacs))
@@ -455,23 +453,11 @@
 (use-package git-timemachine
   :commands (git-timemachine)
   :config
-  (evil-define-minor-mode-key 'normal 'git-timemachine-mode
-    "\C-k" 'git-timemachine-show-previous-revision
-    "\C-j" 'git-timemachine-show-next-revision
-    "q"    'git-timemachine-quit)
-    ;; "gtg"  'git-timemachine-show-nth-revision
-    ;; "gtt"  'git-timemachine-show-revision-fuzzy
-    ;; "gty"  'git-timemachine-kill-abbreviated-revision
-    ;; "gtY"  'git-timemachine-kill-revision
-    ;; "gtb" 'git-timemachine-blame)
   :general
-  ;; (general-def
-  ;;   :definer 'minor-mode
-  ;;   :states 'normal
-  ;;   :keymaps 'git-timemachine-mode
-  ;;   "\C-k" 'git-timemachine-show-previous-revision
-  ;;   "\C-j" 'git-timemachine-show-next-revision
-  ;;   "q"    'git-timemachine-quit)
+  (general-nmap 'git-timemachine-mod-map
+    "C-k" 'git-timemachine-show-previous-revision
+    "C-j" 'git-timemachine-show-next-revision
+    "q"    'git-timemachine-quit)
   (leader-def
     "gt" 'git-timemachine))
 
@@ -498,9 +484,6 @@
 (use-package yasnippet
   :config (yas-global-mode 1))
 
-(use-package yasnippet-snippets
-  :after yasnippet)
-
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
@@ -511,31 +494,31 @@
 (use-package typescript-mode
   :mode (("\\.ts\\'" . typescript-mode)))
 
-(use-package tide
-  :after (typescript-mode company flycheck)
-  :hook ((typescript-mode . tide-setup)
-         (typescript-mode . tide-hl-identifier-mode))
-  :config
-  (setq tide-tsserver-executable "/usr/bin/tsserver")
-  (setq tide-completion-detailed t)
-  :general
-  (general-nmap typescript-mode-map
-    "gd" 'tide-jump-to-definition
-    "K"  'tide-documentation-at-point)
-  (general-nmap 'tide-references-mode-map
-    "gj" 'tide-find-next-reference
-    "gk" 'tide-find-previous-reference
-    (kbd "C-j") 'tide-find-next-reference
-    (kbd "C-k") 'tide-find-previous-reference
-    (kbd "RET") 'tide-goto-reference
-    "q" 'quit-window)
-  (major-def
-    :keymaps 'typescript-mode-map
-    "=" 'tide-format
-    "r" '(:ignore t :which-key "refactor")
-    "rf" 'tide-fix
-    "rr" 'tide-rename-symbol
-    "ro" 'tide-organize-imports))
+;; (use-package tide
+;;   :after (typescript-mode company flycheck)
+;;   :hook ((typescript-mode . tide-setup)
+;;          (typescript-mode . tide-hl-identifier-mode))
+;;   :config
+;;   (setq tide-tsserver-executable "/usr/bin/tsserver")
+;;   (setq tide-completion-detailed t)
+;;   :general
+;;   (general-nmap typescript-mode-map
+;;     "gd" 'tide-jump-to-definition
+;;     "K"  'tide-documentation-at-point)
+;;   (general-nmap 'tide-references-mode-map
+;;     "gj" 'tide-find-next-reference
+;;     "gk" 'tide-find-previous-reference
+;;     (kbd "C-j") 'tide-find-next-reference
+;;     (kbd "C-k") 'tide-find-previous-reference
+;;     (kbd "RET") 'tide-goto-reference
+;;     "q" 'quit-window)
+;;   (major-def
+;;     :keymaps 'typescript-mode-map
+;;     "=" 'tide-format
+;;     "r" '(:ignore t :which-key "refactor")
+;;     "rf" 'tide-fix
+;;     "rr" 'tide-rename-symbol
+;;     "ro" 'tide-organize-imports))
 
 (use-package web-mode
   :init (setq web-mode-enable-auto-pairing 'nil)
@@ -553,25 +536,18 @@
     '(emmet-mode-map company-active-map web-mode-map)
     "TAB" 'emmet-expand-line))
 
-(use-package anaconda-mode
-  :hook ((python-mode . anaconda-mode)
-         (python-mode . anaconda-eldoc-mode))
-  :general
-  (general-nmap python-mode-map
-    "gd" 'anaconda-mode-find-definitions
-    "K"  'anaconda-mode-show-doc)
-  (major-def
-    :keymaps 'python-mode-map
-    "ss" 'run-python
-    "sb" 'python-shell-send-buffer
-    "sf" 'python-shell-send-defun))
-
-(use-package company-anaconda
-  :after anaconda-mode
-  :config (add-to-list 'company-backends 'company-anaconda))
-
 (use-package lsp-mode
-  :init (setq lsp-prefer-flymake nil)
+  :init
+  (defvar lsp-prefer-flymake nil)
+  (setq lsp-prefer-capf t)
+  (setq lsp-clients-angular-language-server-command
+    '("node"
+       "/home/maurn/.npm-global/lib/node_modules/@angular/language-server"
+       "--ngProbeLocations"
+       "/home/maurn/.npm-global/lib/node_modules"
+       "--tsProbeLocations"
+       "/home/maurn/.npm-global/lib/node_modules"
+       "--stdio"))
   :commands lsp
   :general
   (general-nmap (c-mode-map c++-mode-map rust-mode-map)
@@ -582,10 +558,7 @@
     "rr" 'lsp-rename
     "=" 'lsp-format-buffer))
 
-(use-package company-lsp
-  :commands company-lsp
-  :config
-  (setq company-lsp-cache-candidates 'auto))
+(use-package lsp-ui)
 
 (use-package rust-mode
   :mode ("\\.rs\\'" . rust-mode)
@@ -612,14 +585,6 @@
   :hook (latex-mode . auto-fill-mode)
   :ensure auctex
   :config
-    (add-to-list 'TeX-view-program-list
-                 '("Zathura"
-                   ("zathura "
-                    (mode-io-correlate " --synctex-forward %n:0:%b   -x \"emacsclient +%{line} %{input}\" ")
-                    " %o")
-                   "zathura"))
-    (add-to-list 'TeX-view-program-selection
-                 '(output-pdf "Zathura"))
   (TeX-PDF-mode 1))
 
 (use-package company-auctex
@@ -635,10 +600,6 @@
 (use-package glsl-mode
   :mode (("\\.frag\\'" . glsl-mode)))
 
-(use-package exec-path-from-shell
-  :config
-  (exec-path-from-shell-initialize))
-
 
 (eval-when-compile
   (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -647,7 +608,7 @@
 
 (eval-and-compile
   (add-hook 'emacs-startup-hook '(lambda ()
-                                   (setq gc-cons-threshold 16777216
+                                   (setq gc-cons-threshold 106777216
                                          gc-cons-percentage 0.1))))
 (provide 'init)
 ;;; init.el ends here
