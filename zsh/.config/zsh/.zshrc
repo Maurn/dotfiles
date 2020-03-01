@@ -25,7 +25,6 @@ function precmd(){
 export EDITOR=nvim
 export TERM=xterm-termite
 
-source $ZDOTDIR/vi-mode.zsh
 # Colored man pages
 export LESS_TERMCAP_mb=$'\E[1;31m'     # begin bold
 export LESS_TERMCAP_md=$'\E[1;36m'     # begin blink
@@ -39,6 +38,9 @@ source $ZDOTDIR/aliases.zsh
 
 typeset -U path
 path+=(~/.npm-global/bin/)
+path+=(~/.nimble/bin)
+
+export GODOT_BIN=/usr/bin/godot
 
 # Plugins
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -52,3 +54,5 @@ source /usr/share/fzf/completion.zsh
 source $ZDOTDIR/keybindings.zsh
 
 export ANDROID_HOME=/home/maurn/android/sdk
+
+# source $ZDOTDIR/vi-mode.zsh

@@ -25,6 +25,7 @@
 (electric-pair-mode 1)
 (setq vc-follow-symlinks t)
 (setq fill-column 100)
+(setq initial-scratch-message nil)
 
 ;; for fixing 'package unavailable' issues
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
@@ -301,6 +302,17 @@
     "bN"  'evil-buffer-new
     "fd"  'evil-save-and-close))
 
+(use-package evil-terminal-cursor-changer
+  :unless window-system
+  :init
+  (setq evil-motion-state-cursor 'box)  ; █
+  (setq evil-visual-state-cursor 'box)  ; █
+  (setq evil-normal-state-cursor 'box)  ; █
+  (setq evil-insert-state-cursor 'bar)  ; ⎸
+  (setq evil-emacs-state-cursor  'hbar) ; _
+  :config
+  (evil-terminal-cursor-changer-activate))
+
 (use-package evil-surround
   :after evil
   :config (global-evil-surround-mode 1))
@@ -494,31 +506,31 @@
 (use-package typescript-mode
   :mode (("\\.ts\\'" . typescript-mode)))
 
-;; (use-package tide
-;;   :after (typescript-mode company flycheck)
-;;   :hook ((typescript-mode . tide-setup)
-;;          (typescript-mode . tide-hl-identifier-mode))
-;;   :config
-;;   (setq tide-tsserver-executable "/usr/bin/tsserver")
-;;   (setq tide-completion-detailed t)
-;;   :general
-;;   (general-nmap typescript-mode-map
-;;     "gd" 'tide-jump-to-definition
-;;     "K"  'tide-documentation-at-point)
-;;   (general-nmap 'tide-references-mode-map
-;;     "gj" 'tide-find-next-reference
-;;     "gk" 'tide-find-previous-reference
-;;     (kbd "C-j") 'tide-find-next-reference
-;;     (kbd "C-k") 'tide-find-previous-reference
-;;     (kbd "RET") 'tide-goto-reference
-;;     "q" 'quit-window)
-;;   (major-def
-;;     :keymaps 'typescript-mode-map
-;;     "=" 'tide-format
-;;     "r" '(:ignore t :which-key "refactor")
-;;     "rf" 'tide-fix
-;;     "rr" 'tide-rename-symbol
-;;     "ro" 'tide-organize-imports))
+(use-package tide
+  :after (typescript-mode company flycheck)
+  :hook ((typescript-mode . tide-setup)
+         (typescript-mode . tide-hl-identifier-mode))
+  :config
+  (setq tide-tsserver-executable "/usr/bin/tsserver")
+  (setq tide-completion-detailed t)
+  :general
+  (general-nmap typescript-mode-map
+    "gd" 'tide-jump-to-definition
+    "K"  'tide-documentation-at-point)
+  (general-nmap 'tide-references-mode-map
+    "gj" 'tide-find-next-reference
+    "gk" 'tide-find-previous-reference
+    (kbd "C-j") 'tide-find-next-reference
+    (kbd "C-k") 'tide-find-previous-reference
+    (kbd "RET") 'tide-goto-reference
+    "q" 'quit-window)
+  (major-def
+    :keymaps 'typescript-mode-map
+    "=" 'tide-format
+    "r" '(:ignore t :which-key "refactor")
+    "rf" 'tide-fix
+    "rr" 'tide-rename-symbol
+    "ro" 'tide-organize-imports))
 
 (use-package web-mode
   :init (setq web-mode-enable-auto-pairing 'nil)
@@ -557,8 +569,6 @@
     "r" '(:ignore t :which-key "refactor")
     "rr" 'lsp-rename
     "=" 'lsp-format-buffer))
-
-(use-package lsp-ui)
 
 (use-package rust-mode
   :mode ("\\.rs\\'" . rust-mode)
