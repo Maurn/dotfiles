@@ -3,9 +3,21 @@
 ;;; Emacs Startup File --- initialization for Emacs
 ;;; Package --- Summary
 ;;; Code:
-(eval-and-compile
-  (setq gc-cons-threshold 402653184
-      gc-cons-percentage 0.6))
+;; (eval-and-compile
+;;   (setq gc-cons-threshold 402653184
+;;       gc-cons-percentage 0.6))
+(setq gc-cons-threshold most-positive-fixnum)
+
+;; In Emacs 27+, package initialization occurs before `user-init-file' is
+;; loaded, but after `early-init-file'. Doom handles package initialization, so
+;; we must prevent Emacs from doing it early!
+;; (setq package-enable-at-startup nil)
+;; (advice-add #'package--ensure-init-file :override #'ignore)
+
+;; Resizing the Emacs frame can be a terribly expensive part of changing the
+;; font. By inhibiting this, we easily halve startup times with fonts that are
+;; larger than the system default.
+(setq frame-inhibit-implied-resize t)
 
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
@@ -49,9 +61,10 @@
 
 (add-to-list 'default-frame-alist '(font . "SourceCodeProSemibold-11"))
 
+  (display-line-numbers-mode)
 (defun my-prog-mode-hook ()
   "Prog hook!"
-  (flycheck-mode)
+  ;; (flycheck-mode)
   (display-line-numbers-mode)
   (setq truncate-lines t))
 
@@ -93,12 +106,14 @@
     (package-install 'use-package)) ; and install the most recent version of use-package
 
   (require 'use-package)
-  (setq use-package-always-ensure t))
+  (setq use-package-always-ensure t
+        use-package-compute-statistics t))
 
 (use-package which-key
   :config
   (which-key-mode 1)
-  (setq which-key-idle-delay 0))
+  :custom
+  (which-key-idle-delay 0))
 
 (use-package general
   :after which-key
@@ -278,15 +293,14 @@
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package recentf
-  :config
-  (recentf-mode 1))
+  :hook (after-init . recentf-mode))
 
 (use-package evil
+  :hook (after-init . evil-mode)
   :init
   (setq evil-want-C-u-scroll t)
   (setq evil-want-minibuffer t)
   (defvar evil-want-Y-yank-to-eol t)
-  :hook (after-init . evil-mode)
   :config
   (evil-set-initial-state 'shell-mode 'normal)
   (evil-set-initial-state 'doc-view-mode 'normal)
@@ -304,6 +318,7 @@
 
 (use-package evil-terminal-cursor-changer
   :unless window-system
+  :after evil
   :init
   (setq evil-motion-state-cursor 'box)  ; █
   (setq evil-visual-state-cursor 'box)  ; █
@@ -401,12 +416,12 @@
     "fL"  'counsel-locate))
 
 (use-package projectile
+  :hook (after-init . projectile-mode)
   :custom
   (projectile-completion-system 'ivy)
   :config
   (add-to-list 'projectile-other-file-alist '("component.ts" "component.html"))
-  (add-to-list 'projectile-other-file-alist '("component.html" "component.ts"))
-  (projectile-mode +1))
+  (add-to-list 'projectile-other-file-alist '("component.html" "component.ts")))
 
 (use-package counsel-projectile
   :after (projectile ivy)
@@ -435,18 +450,13 @@
   :after treemacs projectile)
 
 (use-package flycheck
-  :commands (flycheck-mode)
+  :hook (prog-mode . flycheck-mode)
   :general
   (leader-def
    "e"   '(:ignore t :which-key "errors")
    "en"  'flycheck-next-error
    "ep"  'flycheck-previous-error))
 
-
-(use-package eldoc-box
-  :init
-  (setq eldoc-idle-delay 0)
-  (setq eldoc-echo-area-use-multiline-p t))
 
 (use-package magit
   :commands (magit-status)
@@ -616,9 +626,16 @@
   (when (file-exists-p custom-file)
     (load custom-file)))
 
-(eval-and-compile
-  (add-hook 'emacs-startup-hook '(lambda ()
-                                   (setq gc-cons-threshold 106777216
-                                         gc-cons-percentage 0.1))))
+(use-package gcmh
+  :hook (after-init . gcmh-mode)
+  :custom
+  (gcmh-idle-delay 10)
+  (gcmh-high-cons-threshold (* 16 1024 1024)))
+
+;; (eval-and-compile
+;;   (add-hook 'emacs-startup-hook '(lambda ()
+;;                                    (setq gc-cons-threshold 106777216
+;;                                          gc-cons-percentage 0.1))))
+
 (provide 'init)
 ;;; init.el ends here
