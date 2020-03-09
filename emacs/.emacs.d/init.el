@@ -3,21 +3,6 @@
 ;;; Emacs Startup File --- initialization for Emacs
 ;;; Package --- Summary
 ;;; Code:
-;; (eval-and-compile
-;;   (setq gc-cons-threshold 402653184
-;;       gc-cons-percentage 0.6))
-(setq gc-cons-threshold most-positive-fixnum)
-
-;; In Emacs 27+, package initialization occurs before `user-init-file' is
-;; loaded, but after `early-init-file'. Doom handles package initialization, so
-;; we must prevent Emacs from doing it early!
-;; (setq package-enable-at-startup nil)
-;; (advice-add #'package--ensure-init-file :override #'ignore)
-
-;; Resizing the Emacs frame can be a terribly expensive part of changing the
-;; font. By inhibiting this, we easily halve startup times with fonts that are
-;; larger than the system default.
-(setq frame-inhibit-implied-resize t)
 
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
@@ -26,9 +11,6 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (global-hl-line-mode 1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
 (blink-cursor-mode 0)
 (winner-mode 1)
 (put 'narrow-to-region 'disabled nil)
@@ -38,15 +20,17 @@
 (setq vc-follow-symlinks t)
 (setq fill-column 100)
 (setq initial-scratch-message nil)
-
-;; for fixing 'package unavailable' issues
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+(global-display-line-numbers-mode 1)
+(save-place-mode 1)
 
 ;; scroll one line at a time (less "jumpy" than defaults)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 (setq scroll-step 1) ;; keyboard scroll one line at a time
+
+(setq-default truncate-lines t)
+(setq use-dialog-box nil)
 
 (setq help-window-select 't)
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -59,55 +43,27 @@
 (setq auto-save-default nil) ; stop creating #autosave# files
 (setq create-lockfiles nil)  ; no fucking lockfiles either
 
-(add-to-list 'default-frame-alist '(font . "SourceCodeProSemibold-11"))
-
-  (display-line-numbers-mode)
-(defun my-prog-mode-hook ()
-  "Prog hook!"
-  ;; (flycheck-mode)
-  (display-line-numbers-mode)
-  (setq truncate-lines t))
-
-(add-hook 'prog-mode-hook 'my-prog-mode-hook)
-
-;;; We’re going to set the load-path ourselves and avoid calling
-;;; (package-initilize) (for performance reasons) so we need to set
-;;; package--init-file-ensured to true to tell package.el to not
-;;; automatically call it on our behalf. Additionally we’re setting
-;;; package-enable-at-startup to nil so that packages will not
-;;; automatically be loaded for us since use-package will be handling
-;;; that.
-(eval-and-compile
-  (setq load-prefer-newer t
-        package-user-dir "~/.emacs.d/elpa"
-        package--init-file-ensured t
-        package-enable-at-startup nil)
-
-  (unless (file-directory-p package-user-dir)
-    (make-directory package-user-dir t))
-
-  (setq load-path (append load-path (directory-files package-user-dir t "^[^.]" t))))
-
-
 (eval-when-compile
-  (require 'package)
-  ;; tells emacs not to load any packages before starting up
-  ;; the following lines tell emacs where on the internet to look up
-  ;; for new packages.
+  (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (when (file-exists-p custom-file)
+    (load custom-file))
+
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                            ("elpa"  . "https://elpa.gnu.org/packages/")
-                           ("org"   . "https://orgmode.org/elpa/")))
-  ;; (package-initialize)
-  (unless package--initialized (package-initialize t))
+                           ("org"   . "https://orgmode.org/elpa/"))
+        package-quickstart t
+        load-prefer-newer t)
 
-  ;; Bootstrap `use-package'
-  (unless (package-installed-p 'use-package) ; unless it is already installed
-    (package-refresh-contents) ; update packages archive
-    (package-install 'use-package)) ; and install the most recent version of use-package
+  (package-initialize)
 
-  (require 'use-package)
-  (setq use-package-always-ensure t
-        use-package-compute-statistics t))
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+
+  (setq-default use-package-always-ensure t
+                use-package-verbose t
+                use-package-compute-statistics t)
+  (require 'use-package))
 
 (use-package which-key
   :config
@@ -284,24 +240,31 @@
   (set-face-attribute 'highlight nil :underline t))
 
 (use-package doom-modeline
-  :hook (after-init . doom-modeline-mode)
+  ;; :hook (after-init . doom-modeline-mode)
   :config
-  (setq doom-modeline-buffer-file-name-style 'truncate-upto-root)
-  (setq doom-modeline-icon nil))
+  (doom-modeline-mode 1)
+  (setq doom-modeline-buffer-file-name-style 'truncate-upto-root
+        doom-modeline-icon nil))
 
 (use-package rainbow-delimiters
+  ;; :config (rainbow-delimiters-mode 1))
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package recentf
-  :hook (after-init . recentf-mode))
+  :ensure nil
+  ;; :hook (after-init . recentf-mode)
+  :config
+  (setq recentf-max-saved-items 300
+        recentf-auto-cleanup 600))
 
 (use-package evil
-  :hook (after-init . evil-mode)
   :init
-  (setq evil-want-C-u-scroll t)
-  (setq evil-want-minibuffer t)
-  (defvar evil-want-Y-yank-to-eol t)
+  (setq evil-want-C-u-scroll t
+        evil-want-minibuffer t
+        evil-want-Y-yank-to-eol t)
+  (evil-mode 1)
   :config
+  (add-hook 'window-configuration-change-hook #'evil-normalize-keymaps)
   (evil-set-initial-state 'shell-mode 'normal)
   (evil-set-initial-state 'doc-view-mode 'normal)
   (evil-set-initial-state 'package-menu-mode 'normal)
@@ -364,8 +327,8 @@
     "'" 'avy-goto-char))
 
 (use-package company
-  :hook (after-init . global-company-mode)
   :config
+  (global-company-mode 1)
   (setq
     company-idle-delay 0.0
     company-minimum-prefix-length 1
@@ -373,16 +336,21 @@
     company-frontends '(company-echo-metadata-frontend
                          company-pseudo-tooltip-unless-just-one-frontend
                          company-preview-frontend)
-    company-backends '((company-capf company-files)
-                        (company-dabbrev-code company-keywords)
-                        company-dabbrev company-yasnippet))
+    company-backends '(company-capf company-files))
+    ;; company-frontends '(company-echo-metadata-frontend
+    ;;                      company-pseudo-tooltip-unless-just-one-frontend
+    ;;                      company-preview-frontend)
+    ;; company-backends '((company-capf company-files)
+    ;;                     (company-dabbrev-code company-keywords)
+    ;;                     company-dabbrev company-yasnippet))
   :general
   ('company-active-map
     "C-j" 'company-select-next-or-abort
     "C-k" 'company-select-previous-or-abort))
 
 (use-package ivy
-  :hook (after-init . ivy-mode)
+  :init
+  (ivy-mode 1)
   :config
   (setq
     ivy-use-virtual-buffers t
@@ -416,10 +384,11 @@
     "fL"  'counsel-locate))
 
 (use-package projectile
-  :hook (after-init . projectile-mode)
+  ;; :hook (emacs-startup . projectile-mode)
   :custom
   (projectile-completion-system 'ivy)
   :config
+  (projectile-mode 1)
   (add-to-list 'projectile-other-file-alist '("component.ts" "component.html"))
   (add-to-list 'projectile-other-file-alist '("component.html" "component.ts")))
 
@@ -467,37 +436,27 @@
    "g"   '(:ignore t :which-key "git")
    "gs"  'magit-status
    "gf"  'magit-log-buffer-file
-   "gb"  'magit-blame-addition))
+   "gb"  'magit-blame-addition)
+  (normal
+   magit-blame-mode-map
+   "q" 'magit-blame-quit))
 
 (use-package evil-magit
   :hook (magit-mode . evil-magit-init))
 
 (use-package git-timemachine
-  :commands (git-timemachine)
-  :config
   :general
-  (general-nmap 'git-timemachine-mod-map
+  (leader-def
+    "gt" 'git-timemachine)
+  (general-def
+    '(normal visual)
+    git-timemachine-mode-map
     "C-k" 'git-timemachine-show-previous-revision
     "C-j" 'git-timemachine-show-next-revision
-    "q"    'git-timemachine-quit)
-  (leader-def
-    "gt" 'git-timemachine))
+    "q"    'git-timemachine-quit))
 
 (use-package git-gutter
   :hook (prog-mode . global-git-gutter-mode))
-
-(use-package shell-pop
-  :config
-  (setq shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell)))))
-  (setq shell-pop-term-shell "/bin/zsh")
-  ;; need to do this manually or not picked up by `shell-pop'
-  (shell-pop--set-shell-type 'shell-pop-shell-type shell-pop-shell-type)
-  (evil-define-key 'insert term-raw-map
-    (kbd "C-k") 'term-send-up
-    (kbd "C-j") 'term-send-down)
-  :general
-  (leader-def
-    "'" 'shell-pop))
 
 (use-package editorconfig
   :config
@@ -516,31 +475,31 @@
 (use-package typescript-mode
   :mode (("\\.ts\\'" . typescript-mode)))
 
-(use-package tide
-  :after (typescript-mode company flycheck)
-  :hook ((typescript-mode . tide-setup)
-         (typescript-mode . tide-hl-identifier-mode))
-  :config
-  (setq tide-tsserver-executable "/usr/bin/tsserver")
-  (setq tide-completion-detailed t)
-  :general
-  (general-nmap typescript-mode-map
-    "gd" 'tide-jump-to-definition
-    "K"  'tide-documentation-at-point)
-  (general-nmap 'tide-references-mode-map
-    "gj" 'tide-find-next-reference
-    "gk" 'tide-find-previous-reference
-    (kbd "C-j") 'tide-find-next-reference
-    (kbd "C-k") 'tide-find-previous-reference
-    (kbd "RET") 'tide-goto-reference
-    "q" 'quit-window)
-  (major-def
-    :keymaps 'typescript-mode-map
-    "=" 'tide-format
-    "r" '(:ignore t :which-key "refactor")
-    "rf" 'tide-fix
-    "rr" 'tide-rename-symbol
-    "ro" 'tide-organize-imports))
+;; (use-package tide
+;;   :after (typescript-mode company flycheck)
+;;   :hook ((typescript-mode . tide-setup)
+;;          (typescript-mode . tide-hl-identifier-mode))
+;;   :config
+;;   (setq tide-tsserver-executable "/usr/bin/tsserver")
+;;   (setq tide-completion-detailed t)
+;;   :general
+;;   (general-nmap typescript-mode-map
+;;     "gd" 'tide-jump-to-definition
+;;     "K"  'tide-documentation-at-point)
+;;   (general-nmap 'tide-references-mode-map
+;;     "gj" 'tide-find-next-reference
+;;     "gk" 'tide-find-previous-reference
+;;     (kbd "C-j") 'tide-find-next-reference
+;;     (kbd "C-k") 'tide-find-previous-reference
+;;     (kbd "RET") 'tide-goto-reference
+;;     "q" 'quit-window)
+;;   (major-def
+;;     :keymaps 'typescript-mode-map
+;;     "=" 'tide-format
+;;     "r" '(:ignore t :which-key "refactor")
+;;     "rf" 'tide-fix
+;;     "rr" 'tide-rename-symbol
+;;     "ro" 'tide-organize-imports))
 
 (use-package web-mode
   :init (setq web-mode-enable-auto-pairing 'nil)
@@ -562,6 +521,7 @@
   :init
   (defvar lsp-prefer-flymake nil)
   (setq lsp-prefer-capf t)
+  (setq lsp-completion-styles '(basic flex))
   (setq lsp-clients-angular-language-server-command
     '("node"
        "/home/maurn/.npm-global/lib/node_modules/@angular/language-server"
@@ -571,8 +531,10 @@
        "/home/maurn/.npm-global/lib/node_modules"
        "--stdio"))
   :commands lsp
+  :hook (typescript-mode . lsp)
   :general
-  (general-nmap (c-mode-map c++-mode-map rust-mode-map)
+  (general-def 'normal lsp-mode-map
+    ;; [remap evil-goto-definition] 'lsp-find-definition)
     "gd" 'lsp-find-definition)
   (major-def
     :keymaps '(c-mode-map c++-mode-map rust-mode-map)
@@ -615,27 +577,16 @@
   :after (auctex company)
   :config (auctex-latexmk-setup))
 
-;; (use-package vterm)
-
 (use-package glsl-mode
   :mode (("\\.frag\\'" . glsl-mode)))
 
-
-(eval-when-compile
-  (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
-  (when (file-exists-p custom-file)
-    (load custom-file)))
-
 (use-package gcmh
-  :hook (after-init . gcmh-mode)
+  ;; :hook (after-init . gcmh-mode)
+  :config
+  (gcmh-mode 1)
   :custom
-  (gcmh-idle-delay 10)
-  (gcmh-high-cons-threshold (* 16 1024 1024)))
-
-;; (eval-and-compile
-;;   (add-hook 'emacs-startup-hook '(lambda ()
-;;                                    (setq gc-cons-threshold 106777216
-;;                                          gc-cons-percentage 0.1))))
+  (gcmh-idle-delay 10))
+  ;; (gcmh-high-cons-threshold (* 16 1024 1024)))
 
 (provide 'init)
 ;;; init.el ends here

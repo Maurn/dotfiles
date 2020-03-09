@@ -1,4 +1,8 @@
+;;; Package --- Summary
 ;;; early-init.el -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Emacs Startup File --- initialization for Emacs
+;;; Code:
 
 ;; Emacs HEAD (27+) introduces early-init.el, which is run before init.el,
 ;; before package and UI initialization happens.
@@ -12,7 +16,14 @@
 (setq package-enable-at-startup nil)
 ;; (advice-add #'package--ensure-init-file :override #'ignore)
 
+(push '(menu-bar-lines . 0) default-frame-alist)
+(push '(tool-bar-lines . 0) default-frame-alist)
+(push '(vertical-scroll-bars) default-frame-alist)
+(add-to-list 'default-frame-alist '(font . "SourceCodeProSemibold-11"))
+
 ;; Resizing the Emacs frame can be a terribly expensive part of changing the
 ;; font. By inhibiting this, we easily halve startup times with fonts that are
 ;; larger than the system default.
 (setq frame-inhibit-implied-resize t)
+(provide 'early-init)
+;;; early-init.el ends here
