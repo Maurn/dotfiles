@@ -25,5 +25,13 @@
 ;; font. By inhibiting this, we easily halve startup times with fonts that are
 ;; larger than the system default.
 (setq frame-inhibit-implied-resize t)
+
+(defvar file-name-handler-alist-original file-name-handler-alist)
+(setq file-name-handler-alist nil)
+
+(add-hook 'emacs-startup-hook
+  (lambda ()
+    (setq file-name-handler-alist file-name-handler-alist-original)))
+
 (provide 'early-init)
 ;;; early-init.el ends here

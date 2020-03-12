@@ -4,55 +4,58 @@
 ;;; Package --- Summary
 ;;; Code:
 
-(setq read-process-output-max (* 1024 1024)) ;; 1mb
 
-(set-language-environment "UTF-8")
+(setq-default read-process-output-max (* 1024 1024) ;; 1mb
+              indent-tabs-mode nil
+              tab-width 4
+              show-paren-delay 0
+              vc-follow-symlinks t
+              help-window-select 't
+              fill-column 80
+              initial-scratch-message nil
+              ;; scroll one line at a time (less "jumpy" than defaults)
+              mouse-wheel-scroll-amount '(1 ((shift) . 1)) ;; one line at a time
+              mouse-wheel-progressive-speed nil ;; don't accelerate scrolling
+              mouse-wheel-follow-mouse 't ;; scroll window under mouse
+              scroll-step 1 ;; keyboard scroll one line at a time
+
+              use-dialog-box nil
+              ring-bell-function 'ignore
+              visible-bell nil
+
+              make-backup-files nil ; stop creating backup~ files
+              auto-save-default nil ; stop creating #autosave# files
+              create-lockfiles nil)  ; no fucking lockfiles either
+
+(defalias 'yes-or-no-p 'y-or-n-p)
+
 (set-default-coding-systems 'utf-8)
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
 (global-hl-line-mode 1)
 (blink-cursor-mode 0)
 (winner-mode 1)
+(save-place-mode 1)
 (put 'narrow-to-region 'disabled nil)
-(defvar show-paren-delay 0)
 (show-paren-mode 1)
 (electric-pair-mode 1)
-(setq vc-follow-symlinks t)
-(setq fill-column 100)
-(setq initial-scratch-message nil)
-(global-display-line-numbers-mode 1)
-(save-place-mode 1)
 
-;; scroll one line at a time (less "jumpy" than defaults)
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
-(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
-(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
-(setq scroll-step 1) ;; keyboard scroll one line at a time
+(defun my-prog-mode-hook ()
+  "Prog hook!"
+  (display-line-numbers-mode)
+  (setq truncate-lines t))
 
-(setq-default truncate-lines t)
-(setq use-dialog-box nil)
+(add-hook 'prog-mode-hook 'my-prog-mode-hook)
 
-(setq help-window-select 't)
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-(setq ring-bell-function 'ignore
-      visible-bell nil)
-
-;; Disable backup files
-(setq make-backup-files nil) ; stop creating backup~ files
-(setq auto-save-default nil) ; stop creating #autosave# files
-(setq create-lockfiles nil)  ; no fucking lockfiles either
 
 (eval-when-compile
   (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
   (when (file-exists-p custom-file)
     (load custom-file))
 
-  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                           ("elpa"  . "https://elpa.gnu.org/packages/")
-                           ("org"   . "https://orgmode.org/elpa/"))
-        package-quickstart t
-        load-prefer-newer t)
+  (setq-default package-archives '(("melpa" . "https://melpa.org/packages/")
+                                   ("elpa"  . "https://elpa.gnu.org/packages/")
+                                   ("org"   . "https://orgmode.org/elpa/"))
+                package-quickstart t
+                load-prefer-newer t)
 
   (package-initialize)
 
@@ -65,14 +68,7 @@
                 use-package-compute-statistics t)
   (require 'use-package))
 
-(use-package which-key
-  :config
-  (which-key-mode 1)
-  :custom
-  (which-key-idle-delay 0))
-
 (use-package general
-  :after which-key
   :config
   (general-override-mode 1)
   (general-evil-setup)
@@ -144,21 +140,14 @@
 
   (general-create-definer major-def
     :states '(normal visual insert motion emacs)
-    :prefix "SPC m"
-    :non-normal-prefix "C-SPC m")
-
-  (general-def '(normal visual) '(prog-mode-map restclient-mode-map)
-    "RET" (general-simulate-key "SPC m"))
+    :prefix "RET"
+    :non-normal-prefix "C-RET")
 
   (leader-def
     ""     nil
     "c"   (general-simulate-key "C-c")
     "h"   (general-simulate-key "C-h")
-    "u"   (general-simulate-key "C-u")
-    "x"   (general-simulate-key "C-x")
     "TAB" 'alternate-buffer
-
-    "m" '(:ignore t :which-key "major mode")
 
     ;; Quit operations
     "q"	  '(:ignore t :which-key "quit")
@@ -200,14 +189,18 @@
     "feR" 'load-user-init-file
     "fep" 'list-packages
 
+    ;; text
+    "t"  '(:ignore t :which-key "text")
+    "ta" 'align
+    "tA" 'align-regexp
+    "t+" 'text-scale-adjust
+
     ;; applications
-    "a"   '(:ignore t :which-key "applications")
-    "ad"  'dired
-    ":"   'shell-command
-    ";"   'eval-expression
-    "ac"  'calendar
-    "aq"  'quick-calc
-    "oa"  'org-agenda)
+    "a"  '(:ignore t :which-key "applications")
+    "ad" 'dired
+    "ac" 'calendar
+    "ap" 'list-packages
+    "aq" 'quick-calc)
 
   (general-def 'normal doc-view-mode-map
     "j"   'doc-view-next-line-or-next-page
@@ -232,6 +225,13 @@
     "x"   'package-menu-execute
     "q"   'quit-window))
 
+
+(use-package which-key
+  :config
+  (which-key-mode 1)
+  :custom
+  (which-key-idle-delay 0))
+
 (use-package doom-themes
   :config
   (load-theme 'doom-one t)
@@ -240,20 +240,23 @@
   (set-face-attribute 'highlight nil :underline t))
 
 (use-package doom-modeline
-  ;; :hook (after-init . doom-modeline-mode)
   :config
   (doom-modeline-mode 1)
   (setq doom-modeline-buffer-file-name-style 'truncate-upto-root
         doom-modeline-icon nil))
 
+(use-package page-break-lines
+  :config
+  (global-page-break-lines-mode))
+
 (use-package rainbow-delimiters
-  ;; :config (rainbow-delimiters-mode 1))
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package recentf
   :ensure nil
-  ;; :hook (after-init . recentf-mode)
+  :defer 0.1
   :config
+  (recentf-mode 1)
   (setq recentf-max-saved-items 300
         recentf-auto-cleanup 600))
 
@@ -279,29 +282,17 @@
     "bN"  'evil-buffer-new
     "fd"  'evil-save-and-close))
 
-(use-package evil-terminal-cursor-changer
-  :unless window-system
-  :after evil
-  :init
-  (setq evil-motion-state-cursor 'box)  ; █
-  (setq evil-visual-state-cursor 'box)  ; █
-  (setq evil-normal-state-cursor 'box)  ; █
-  (setq evil-insert-state-cursor 'bar)  ; ⎸
-  (setq evil-emacs-state-cursor  'hbar) ; _
-  :config
-  (evil-terminal-cursor-changer-activate))
-
 (use-package evil-surround
   :after evil
   :config (global-evil-surround-mode 1))
 
 (use-package evil-commentary
   :after evil
-  :config (evil-commentary-mode 1)
-  :general
-  ('normal override-global-map
-    "gc"  'evil-commentary
-    "gC" 'evil-commentary-line))
+  :config (evil-commentary-mode 1))
+  ;; :general
+  ;; (general-nvmap
+  ;;   "gc"  'evil-commentary
+  ;;   "gC" 'evil-commentary-line))
 
 (use-package evil-visualstar
   :after evil
@@ -320,19 +311,38 @@
   (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
   (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
 
+(use-package evil-terminal-cursor-changer
+  :unless window-system
+  :after evil
+  :init
+  (setq evil-motion-state-cursor 'box   ; █
+        evil-visual-state-cursor 'box   ; █
+        evil-normal-state-cursor 'box   ; █
+        evil-insert-state-cursor 'bar   ; ⎸
+        evil-emacs-state-cursor  'hbar) ; _
+  :config
+  (evil-terminal-cursor-changer-activate))
+
+(use-package xclip
+  :unless window-system
+  :config
+  (xclip-mode 1))
+
 (use-package avy
   :after evil
   :general
-  (general-nmap
+  ('(normal visual motion)
     "'" 'avy-goto-char))
 
 (use-package company
-  :config
+  :init
   (global-company-mode 1)
+  :config
   (setq
     company-idle-delay 0.0
     company-minimum-prefix-length 1
     company-tooltip-align-annotations t
+    completion-ignore-case t
     company-frontends '(company-echo-metadata-frontend
                          company-pseudo-tooltip-unless-just-one-frontend
                          company-preview-frontend)
@@ -352,21 +362,38 @@
   :init
   (ivy-mode 1)
   :config
-  (setq
-    ivy-use-virtual-buffers t
-    ivy-count-format "(%d/%d) "
-    ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
+  (setq enable-recursive-minibuffers t
+        ivy-use-virtual-buffers t
+        ivy-count-format "(%d/%d) "
+        ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
   (set-face-attribute 'ivy-current-match nil
                       :underline t
                       :background nil
                       :weight 'semi-bold)
   :general
-  (general-def
-    '(normal insert visual emacs)
-    '(ivy-minibuffer-map projectile-mode-map counsel-mode-map)
+  (general-iemap
+    ;; '(normal insert visual emacs)
+    '(ivy-minibuffer-map)
+    "C-'" 'ivy-avy
     "C-j" 'ivy-next-line
     "C-k" 'ivy-previous-line)
+  (general-nvmap
+    ivy-minibuffer-map
+    "'" 'ivy-avy
+    "j" 'ivy-next-line
+    "k" 'ivy-previous-line)
   (leader-def "bb"  'ivy-switch-buffer))
+
+(use-package ivy-xref
+  :init
+  ;; xref initialization is different in Emacs 27 - there are two different
+  ;; variables which can be set rather than just one
+  (when (>= emacs-major-version 27)
+    (setq xref-show-definitions-function #'ivy-xref-show-defs))
+  ;; Necessary in Emacs <27. In Emacs 27 it will affect all xref-based
+  ;; commands other than xref-find-definitions (e.g. project-find-regexp)
+  ;; as well
+  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
 (use-package smex
   :after ivy)
@@ -384,7 +411,6 @@
     "fL"  'counsel-locate))
 
 (use-package projectile
-  ;; :hook (emacs-startup . projectile-mode)
   :custom
   (projectile-completion-system 'ivy)
   :config
@@ -408,6 +434,8 @@
 
 (use-package treemacs
   :commands (treemacs)
+  :init
+  (setq treemacs-follow-mode t)
   :general
   (leader-def
     "pt" 'treemacs))
@@ -453,7 +481,7 @@
     git-timemachine-mode-map
     "C-k" 'git-timemachine-show-previous-revision
     "C-j" 'git-timemachine-show-next-revision
-    "q"    'git-timemachine-quit))
+    "q"   'git-timemachine-quit))
 
 (use-package git-gutter
   :hook (prog-mode . global-git-gutter-mode))
@@ -473,7 +501,7 @@
   :init (setq markdown-command "multimarkdown"))
 
 (use-package typescript-mode
-  :mode (("\\.ts\\'" . typescript-mode)))
+  :mode "\\.ts\\'")
 
 ;; (use-package tide
 ;;   :after (typescript-mode company flycheck)
@@ -519,10 +547,10 @@
 
 (use-package lsp-mode
   :init
-  (defvar lsp-prefer-flymake nil)
-  (setq lsp-prefer-capf t)
-  (setq lsp-completion-styles '(basic flex))
-  (setq lsp-clients-angular-language-server-command
+  (setq lsp-prefer-capf t
+        lsp-completion-styles '(basic flex))
+
+  (defvar lsp-clients-angular-language-server-command
     '("node"
        "/home/maurn/.npm-global/lib/node_modules/@angular/language-server"
        "--ngProbeLocations"
@@ -530,28 +558,35 @@
        "--tsProbeLocations"
        "/home/maurn/.npm-global/lib/node_modules"
        "--stdio"))
-  :commands lsp
-  :hook (typescript-mode . lsp)
+  :commands (lsp lsp-deferred)
+  :hook ((typescript-mode
+          web-mode
+          c++-mode
+          c-mode
+          rust-mode
+          python-mode
+          nim-mode) . lsp-deferred)
   :general
   (general-def 'normal lsp-mode-map
-    ;; [remap evil-goto-definition] 'lsp-find-definition)
-    "gd" 'lsp-find-definition)
-  (major-def
-    :keymaps '(c-mode-map c++-mode-map rust-mode-map)
+    "gd" 'lsp-find-definition
+    "gt" 'lsp-find-type-definition
+    "gr" 'lsp-find-references
+    "K" 'lsp-describe-thing-at-point)
+  (major-def 'lsp-mode-map
     "r" '(:ignore t :which-key "refactor")
     "rr" 'lsp-rename
+    "rf" 'lsp-execute-code-action
+    "ro" 'lsp-organize-imports
     "=" 'lsp-format-buffer))
 
 (use-package rust-mode
-  :mode ("\\.rs\\'" . rust-mode)
-  :hook (rust-mode . lsp))
+  :mode "\\.rs\\'")
 
 (use-package flycheck-rust
   :hook (rust-mode . flycheck-rust-setup))
 
 (use-package nim-mode
-  :mode ("\\.nim\\'" . nim-mode)
-  :hook (nim-mode . lsp))
+  :mode "\\.nim\\'")
 
 (use-package restclient
   :mode ("\\.http\\'" . restclient-mode)
@@ -564,7 +599,7 @@
 
 (use-package latex
   :mode ("\\.tex\\'" . latex-mode)
-  :hook (latex-mode . auto-fill-mode)
+  :hook (text-mode . auto-fill-mode)
   :ensure auctex
   :config
   (TeX-PDF-mode 1))
@@ -581,7 +616,6 @@
   :mode (("\\.frag\\'" . glsl-mode)))
 
 (use-package gcmh
-  ;; :hook (after-init . gcmh-mode)
   :config
   (gcmh-mode 1)
   :custom
