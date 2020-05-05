@@ -41,7 +41,8 @@
 (defun my-prog-mode-hook ()
   "Prog hook!"
   (display-line-numbers-mode)
-  (setq truncate-lines t))
+  (setq truncate-lines t
+        auto-hscroll-mode 'current-line))
 
 (add-hook 'prog-mode-hook 'my-prog-mode-hook)
 
@@ -135,6 +136,7 @@
 
   (general-create-definer leader-def
     :states '(normal visual insert motion emacs)
+    :keymaps 'override
     :prefix "SPC"
     :non-normal-prefix "C-SPC")
 
@@ -234,10 +236,12 @@
 
 (use-package doom-themes
   :config
-  (load-theme 'doom-one t)
-  (set-face-foreground 'highlight nil)
-  (set-face-background 'highlight nil)
-  (set-face-attribute 'highlight nil :underline t))
+  (load-theme 'doom-one t))
+  ;; (set-face-foreground 'highlight nil)
+  ;; (set-face-background 'highlight nil)
+  ;; (set-face-attribute 'highlight nil :underline t))
+  ;; :custom-face
+  ;; ('highlight ))
 
 (use-package doom-modeline
   :config
@@ -254,9 +258,10 @@
 
 (use-package recentf
   :ensure nil
-  :defer 0.1
+  :init
+  (recentf-mode)
+  :hook (kill-emacs . recentf-save-list)
   :config
-  (recentf-mode 1)
   (setq recentf-max-saved-items 300
         recentf-auto-cleanup 600))
 
@@ -288,11 +293,11 @@
 
 (use-package evil-commentary
   :after evil
-  :config (evil-commentary-mode 1))
-  ;; :general
-  ;; (general-nvmap
-  ;;   "gc"  'evil-commentary
-  ;;   "gC" 'evil-commentary-line))
+  :config (evil-commentary-mode 1)
+  :general
+  (general-nmap
+    "gc"  'evil-commentary
+    "gC" 'evil-commentary-line))
 
 (use-package evil-visualstar
   :after evil
@@ -372,8 +377,7 @@
                       :weight 'semi-bold)
   :general
   (general-iemap
-    ;; '(normal insert visual emacs)
-    '(ivy-minibuffer-map)
+    ivy-minibuffer-map
     "C-'" 'ivy-avy
     "C-j" 'ivy-next-line
     "C-k" 'ivy-previous-line)
@@ -458,7 +462,7 @@
 (use-package magit
   :commands (magit-status)
   :custom
-  (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
   :general
   (leader-def
    "g"   '(:ignore t :which-key "git")
@@ -502,6 +506,9 @@
 
 (use-package typescript-mode
   :mode "\\.ts\\'")
+
+(use-package gdscript-mode
+  :mode "\\.gd\\'")
 
 ;; (use-package tide
 ;;   :after (typescript-mode company flycheck)
@@ -591,8 +598,7 @@
 (use-package restclient
   :mode ("\\.http\\'" . restclient-mode)
   :general
-  (major-def
-    :keymaps 'restclient-mode-map
+  (major-def 'restclient-mode-map
     "s" 'restclient-http-send-current
     "j" 'restclient-jump-next
     "k" 'restclient-jump-prev))
