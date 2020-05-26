@@ -99,6 +99,11 @@
           (set-buffer-major-mode scratch)
           scratch)))
 
+  (defun kill-other-buffers ()
+    "Kill all other buffers."
+    (interactive)
+    (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+
   ;;Taken from http://emacsredux.com/blog/2013/05/04/rename-file-and-buffer/
   (defun rename-file-and-buffer ()
     "Rename the current buffer and file it is visiting."
@@ -159,6 +164,7 @@
     ;; Buffer operations
     "b"   '(:ignore t :which-key "buffers")
     "bd"  'kill-this-buffer
+    "bD"  'kill-other-buffers
     "bn"  'next-buffer
     "bp"  'previous-buffer
     "bq"  'kill-buffer-and-window
@@ -554,8 +560,7 @@
 
 (use-package lsp-mode
   :init
-  (setq lsp-prefer-capf t
-        lsp-completion-styles '(basic flex))
+  (setq lsp-completion-styles '(basic flex))
 
   (defvar lsp-clients-angular-language-server-command
     '("node"

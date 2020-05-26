@@ -22,7 +22,7 @@ function precmd(){
     RPROMPT=$(git-prompt)
 }
 
-export EDITOR=nvim
+export VISUAL='/usr/bin/emacsclient -c -nw'
 export TERM=xterm-termite
 
 # Colored man pages
@@ -55,4 +55,4 @@ source $ZDOTDIR/keybindings.zsh
 
 export ANDROID_HOME=/home/maurn/android/sdk
 
-# source $ZDOTDIR/vi-mode.zsh
+ # source $ZDOTDIR/vi-mode.zsh
