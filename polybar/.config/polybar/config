@@ -56,7 +56,7 @@ font-1 = MaterialIcons-Regular:size=13;5
 
 modules-left = i3
 modules-center =
-modules-right = volume keyboard torn memory filesystem backlight battery wifi eth date
+modules-right = volume keyboard memory filesystem backlight battery wifi eth date
 
 tray-position = right
 tray-padding = 0
