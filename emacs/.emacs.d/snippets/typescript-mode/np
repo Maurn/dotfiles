@@ -1,0 +1,6 @@
+# key: np
+# name: np
+# --
+new Promise((resolve, reject) => {
+    $0
+});

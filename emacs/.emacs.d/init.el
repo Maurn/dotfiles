@@ -5,27 +5,32 @@
 ;;; Code:
 
 
-(setq-default read-process-output-max (* 1024 1024) ;; 1mb
-              indent-tabs-mode nil
-              tab-width 4
-              show-paren-delay 0
-              vc-follow-symlinks t
-              help-window-select 't
-              fill-column 80
-              initial-scratch-message nil
-              ;; scroll one line at a time (less "jumpy" than defaults)
-              mouse-wheel-scroll-amount '(1 ((shift) . 1)) ;; one line at a time
-              mouse-wheel-progressive-speed nil ;; don't accelerate scrolling
-              mouse-wheel-follow-mouse 't ;; scroll window under mouse
-              scroll-step 1 ;; keyboard scroll one line at a time
+(setq-default
+  read-process-output-max (* 1024 1024) ;; 1mb
+  indent-tabs-mode nil
+  tab-width 4
+  show-paren-delay 0
+  vc-follow-symlinks t
+  help-window-select 't
+  fill-column 80
+  initial-scratch-message nil
 
-              use-dialog-box nil
-              ring-bell-function 'ignore
-              visible-bell nil
+  ;; scroll one line at a time (less "jumpy" than defaults)
+  mouse-wheel-scroll-amount '(1 ((shift) . 1)) ;; one line at a time
+  mouse-wheel-progressive-speed nil            ;; don't accelerate scrolling
+  mouse-wheel-follow-mouse 't                  ;; scroll window under mouse
+  scroll-step 1                                ;; keyboard scroll one line at a time
 
-              make-backup-files nil ; stop creating backup~ files
-              auto-save-default nil ; stop creating #autosave# files
-              create-lockfiles nil)  ; no fucking lockfiles either
+  use-dialog-box nil
+  ring-bell-function 'ignore
+  visible-bell nil
+
+  comment-auto-fill-only-comments t
+
+  make-backup-files nil ; stop creating backup~ files
+  auto-save-default nil ; stop creating #autosave# files
+  create-lockfiles nil) ; no fucking lockfiles either
+
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -269,7 +274,16 @@
   :hook (kill-emacs . recentf-save-list)
   :config
   (setq recentf-max-saved-items 300
-        recentf-auto-cleanup 600))
+    recentf-auto-cleanup 600
+    recentf-exclude '("/tmp/"
+                       "/ssh:"
+                       "/sudo:"
+                       "recentf$"
+                       "/elpa/"
+                       "/snippets/"))
+  (defun recentf-save-list/silent ()
+    (let ((save-silently t)) (recentf-save-list)))
+  (run-at-time nil (* 5 60) 'recentf-save-list/silent))
 
 (use-package evil
   :init
@@ -279,6 +293,7 @@
   (evil-mode 1)
   :config
   (add-hook 'window-configuration-change-hook #'evil-normalize-keymaps)
+  (add-hook 'evil-normal-state-entry-hook #'company-abort)
   (evil-set-initial-state 'shell-mode 'normal)
   (evil-set-initial-state 'doc-view-mode 'normal)
   (evil-set-initial-state 'package-menu-mode 'normal)
@@ -354,16 +369,17 @@
     company-minimum-prefix-length 1
     company-tooltip-align-annotations t
     completion-ignore-case t
-    company-frontends '(company-echo-metadata-frontend
-                         company-pseudo-tooltip-unless-just-one-frontend
-                         company-preview-frontend)
-    company-backends '(company-capf company-files))
+    ;; company-frontends '(company-echo-metadata-frontend
+    ;;                      company-pseudo-tooltip-unless-just-one-frontend
+    ;;                      company-preview-frontend)
+    company-backends '(company-files (company-capf :with company-yasnippet)))
     ;; company-frontends '(company-echo-metadata-frontend
     ;;                      company-pseudo-tooltip-unless-just-one-frontend
     ;;                      company-preview-frontend)
     ;; company-backends '((company-capf company-files)
     ;;                     (company-dabbrev-code company-keywords)
     ;;                     company-dabbrev company-yasnippet))
+
   :general
   ('company-active-map
     "C-j" 'company-select-next-or-abort
@@ -377,10 +393,13 @@
         ivy-use-virtual-buffers t
         ivy-count-format "(%d/%d) "
         ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
-  (set-face-attribute 'ivy-current-match nil
-                      :underline t
-                      :background nil
-                      :weight 'semi-bold)
+
+  (add-hook 'server-after-make-frame-hook
+    '(lambda () (set-face-attribute 'ivy-current-match nil
+                  :underline t
+                  :background nil
+                  :weight 'semi-bold)))
+
   :general
   (general-iemap
     ivy-minibuffer-map
@@ -501,7 +520,11 @@
   (editorconfig-mode 1))
 
 (use-package yasnippet
-  :config (yas-global-mode 1))
+  :config
+  (yas-global-mode 1)
+  (add-hook 'snippet-mode-hook
+    '(lambda ()
+       (setq-local require-final-newline nil))))
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
@@ -560,8 +583,6 @@
 
 (use-package lsp-mode
   :init
-  (setq lsp-completion-styles '(basic flex))
-
   (defvar lsp-clients-angular-language-server-command
     '("node"
        "/home/maurn/.npm-global/lib/node_modules/@angular/language-server"
