@@ -293,7 +293,7 @@
   (evil-mode 1)
   :config
   (add-hook 'window-configuration-change-hook #'evil-normalize-keymaps)
-  (add-hook 'evil-normal-state-entry-hook #'company-abort)
+  ;;(add-hook 'evil-normal-state-entry-hook #'company-abort)
   (evil-set-initial-state 'shell-mode 'normal)
   (evil-set-initial-state 'doc-view-mode 'normal)
   (evil-set-initial-state 'package-menu-mode 'normal)
