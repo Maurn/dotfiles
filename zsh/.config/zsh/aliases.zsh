@@ -18,11 +18,13 @@ alias subdl='subliminal download -l en'
 alias stream='peerflix --mpv'
 alias nvm='unalias nvm && source /usr/share/nvm/init-nvm.sh && nvm'
 alias pip='pip --user'
+alias xclip='xclip -selection c'
 alias ysi='tmuxinator start ysi'
 alias hololink='tmuxinator start hololink'
 alias ysiapi='cd ~/entropyfox/YSI/services/api/ && npm start'
 alias ysifront='cd ~/entropyfox/YSI/services/frontend/ && npm start'
 alias ysiplen='cd ~/entropyfox/YSI/services/plenary/ && npm start'
+alias ysizoom='cd ~/entropyfox/YSI/services/zoomweb/ && npm start'
 mkcd () { mkdir "$1"; cd "$1" }
 
 earth-background () {

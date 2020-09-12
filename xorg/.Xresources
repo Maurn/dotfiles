@@ -1,5 +1,5 @@
 !!NumiX Darkest.
-!!BY WuX 
+!!BY WuX
 
 !*background: #000000
 !*foreground: #FFFFFF
@@ -36,21 +36,6 @@
 *color7:    #A2A2A2
 *color15:   #f9f9f9
 
-URxvt*scrollBar:         false
-URxvt*scrollBar_right:   false
-
-URxvt*transparent:       false
-
-URxvt*depth: 32
-URxvt.foreground: #ffffff
-URxvt.background: [80]#000000
-
-URxvt.font: xft:Source Code Pro Semibold:size=11
-URxvt.letterSpace: a
-URxvt.internalBorder: 3 
-URxvt.keysym.Shift-Up: command:\033]720;1\007
-URxvt.keysym.Shift-Down: command:\033]721;1\007
-
 *antialias:  true
 *autohint:   true
 
@@ -65,18 +50,3 @@ Emacs.verticalScrollBars: off
 Emacs.toolBar:            off
 Emacs.cursorBlink:        off
 Emacs.background:         #282c34
-
-! ------------------------------------------------------------------------------
-! ROFI Color theme
-! Copyright: 2017 leofa
-! ------------------------------------------------------------------------------
-! "Color scheme for normal row" Set from: File
-rofi.color-normal:                   argb:001d1f21, argb:ccc4cbd4, argb:00404552, argb:cc2ba7ff, #f9f9f9
-! "Color scheme for urgent row" Set from: File
-rofi.color-urgent:                   argb:001d1f21, argb:cccc6666, argb:004b5160, argb:00a54242, #f9f9f9
-! "Color scheme for active row" Set from: File
-rofi.color-active:                   argb:001d1f21, #65acff, argb:004b5160, argb:004491ed, #f9f9f9
-! "Color scheme window" Set from: File
-rofi.color-window:                   argb:cc1d1f21, argb:cc1d1f21, #1d1f21
-! "Separator style (none, dash, solid)" Set from: XResources
-rofi.separator-style:                none
