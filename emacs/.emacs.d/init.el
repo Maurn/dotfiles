@@ -287,13 +287,14 @@
 
 (use-package evil
   :init
+  (global-undo-tree-mode 1)
   (setq evil-want-C-u-scroll t
         evil-want-minibuffer t
+        evil-undo-system 'undo-tree
         evil-want-Y-yank-to-eol t)
   (evil-mode 1)
   :config
   (add-hook 'window-configuration-change-hook #'evil-normalize-keymaps)
-  ;;(add-hook 'evil-normal-state-entry-hook #'company-abort)
   (evil-set-initial-state 'shell-mode 'normal)
   (evil-set-initial-state 'doc-view-mode 'normal)
   (evil-set-initial-state 'package-menu-mode 'normal)
@@ -379,6 +380,7 @@
     ;; company-backends '((company-capf company-files)
     ;;                     (company-dabbrev-code company-keywords)
     ;;                     company-dabbrev company-yasnippet))
+  (add-hook 'evil-normal-state-entry-hook #'company-abort)
 
   :general
   ('company-active-map
@@ -538,6 +540,8 @@
 
 (use-package gdscript-mode
   :mode "\\.gd\\'")
+
+(use-package yaml-mode)
 
 ;; (use-package tide
 ;;   :after (typescript-mode company flycheck)
