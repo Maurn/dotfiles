@@ -27,7 +27,7 @@
   spacing: 0;
   background-color: transparent;
 
-  font: "Knack Nerd Font 14";
+  font: "Source Sans Pro Semibold 22";
   text-color: @text;
 }
 
@@ -43,7 +43,7 @@ mainbox {
 
 inputbar {
   margin: 0px 0px 20px 0px;
-  children: [prompt, textbox-prompt-colon, entry, case-indicator];
+  children: [entry, case-indicator];
 }
 
 prompt {

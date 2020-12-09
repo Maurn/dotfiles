@@ -285,6 +285,8 @@
     (let ((save-silently t)) (recentf-save-list)))
   (run-at-time nil (* 5 60) 'recentf-save-list/silent))
 
+(use-package undo-tree)
+
 (use-package evil
   :init
   (global-undo-tree-mode 1)
@@ -598,6 +600,7 @@
   :commands (lsp lsp-deferred)
   :hook ((typescript-mode
           web-mode
+          ;; js-mode
           c++-mode
           c-mode
           rust-mode

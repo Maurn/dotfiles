@@ -10,6 +10,7 @@ alias vim='nvim'
 alias e='emacsclient -c -nw'
 alias E="SUDO_EDITOR=\"emacsclient -t -a emacs\" sudoedit"
 alias z='zathura --fork'
+alias n='n -A'
 alias irc='irssi'
 alias feh='feh -.B black'
 alias sudo='sudo ' # need this for sudo aliases to work
