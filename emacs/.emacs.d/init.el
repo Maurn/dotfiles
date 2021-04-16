@@ -27,9 +27,15 @@
 
   comment-auto-fill-only-comments t
 
+  lsp-headerline-breadcrumb-mode nil
+
+
   make-backup-files nil ; stop creating backup~ files
   auto-save-default nil ; stop creating #autosave# files
   create-lockfiles nil) ; no fucking lockfiles either
+
+
+(setq auth-sources '("~/.authinfo"))
 
 
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -69,9 +75,12 @@
     (package-refresh-contents)
     (package-install 'use-package))
 
-  (setq-default use-package-always-ensure t
-                use-package-verbose t
-                use-package-compute-statistics t)
+  (setq-default
+    use-package-always-ensure t
+    use-package-always-demand t
+    use-package-verbose t
+    use-package-compute-statistics t)
+
   (require 'use-package))
 
 (use-package general
@@ -292,6 +301,7 @@
   (global-undo-tree-mode 1)
   (setq evil-want-C-u-scroll t
         evil-want-minibuffer t
+        evil-want-keybinding nil
         evil-undo-system 'undo-tree
         evil-want-Y-yank-to-eol t)
   (evil-mode 1)
@@ -371,17 +381,12 @@
     company-idle-delay 0.0
     company-minimum-prefix-length 1
     company-tooltip-align-annotations t
-    completion-ignore-case t
-    ;; company-frontends '(company-echo-metadata-frontend
-    ;;                      company-pseudo-tooltip-unless-just-one-frontend
-    ;;                      company-preview-frontend)
-    company-backends '(company-files (company-capf :with company-yasnippet)))
-    ;; company-frontends '(company-echo-metadata-frontend
-    ;;                      company-pseudo-tooltip-unless-just-one-frontend
-    ;;                      company-preview-frontend)
-    ;; company-backends '((company-capf company-files)
-    ;;                     (company-dabbrev-code company-keywords)
-    ;;                     company-dabbrev company-yasnippet))
+    company-frontends '(company-echo-metadata-frontend
+                         company-pseudo-tooltip-unless-just-one-frontend
+                         company-preview-frontend)
+    company-backends '((company-capf company-files)
+                        company-yasnippet))
+
   (add-hook 'evil-normal-state-entry-hook #'company-abort)
 
   :general
@@ -502,8 +507,13 @@
    magit-blame-mode-map
    "q" 'magit-blame-quit))
 
-(use-package evil-magit
-  :hook (magit-mode . evil-magit-init))
+(use-package forge
+  :after magit)
+
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init 'magit))
 
 (use-package git-timemachine
   :general
@@ -544,6 +554,18 @@
   :mode "\\.gd\\'")
 
 (use-package yaml-mode)
+
+(use-package json-mode
+  :mode "\\.json\\'")
+
+(use-package ansible)
+
+;; (use-package prettier
+;;   :hook (after-init . global-prettier-mode)
+;;   :custom
+;;   (prettier-enabled-parsers '(angular babel babel-flow babel-ts css elm espree
+;;   flow graphql html java json json-stringify less lua markdown mdx meriyah php postgresql pug
+;;   python ruby scss sh solidity svelte swift toml typescript vue xml yaml)))
 
 ;; (use-package tide
 ;;   :after (typescript-mode company flycheck)
@@ -589,7 +611,21 @@
 
 (use-package lsp-mode
   :init
-  (defvar lsp-clients-angular-language-server-command
+  (setq lsp-headerline-breadcrumb-mode nil)
+  ;; :init
+  ;; (defvar lsp-clients-angular-language-server-command
+  ;;   '("node"
+  ;;      "/home/maurn/.npm-global/lib/node_modules/@angular/language-server"
+  ;;      "--ngProbeLocations"
+  ;;      "/home/maurn/.npm-global/lib/node_modules"
+  ;;      "--tsProbeLocations"
+  ;;      "/home/maurn/.npm-global/lib/node_modules"
+  ;;      "--stdio"))
+  ;; (defvar lsp-headerline-breadcrumb-mode-enable nil)
+  ;; (setq lsp-headerline-breadcrumb-mode-enable nil)
+  :custom
+  (lsp-headerline-breadcrumb-mode-enable nil)
+  (lsp-clients-angular-language-server-command
     '("node"
        "/home/maurn/.npm-global/lib/node_modules/@angular/language-server"
        "--ngProbeLocations"
@@ -597,6 +633,9 @@
        "--tsProbeLocations"
        "/home/maurn/.npm-global/lib/node_modules"
        "--stdio"))
+  :config
+  (setq lsp-headerline-breadcrumb-mode nil)
+  (lsp-headerline-breadcrumb-mode 0)
   :commands (lsp lsp-deferred)
   :hook ((typescript-mode
           web-mode
@@ -605,7 +644,7 @@
           c-mode
           rust-mode
           python-mode
-          nim-mode) . lsp-deferred)
+          nim-mode) . lsp)
   :general
   (general-def 'normal lsp-mode-map
     "gd" 'lsp-find-definition
