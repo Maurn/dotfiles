@@ -89,19 +89,19 @@ label-focused = %index%
 label-focused-foreground = #ffffff
 label-focused-background = ${colors.active}
 ;label-focused-underline = ${self.active}
-label-focused-padding = 4
+label-focused-padding = 3
 
 label-visible = %index%
 label-visible-background = ${colors.inactive}
-label-visible-padding = 4
+label-visible-padding = 3
 
 label-unfocused = %index%
 label-unfocused-background = ${colors.background}
-label-unfocused-padding = 4
+label-unfocused-padding = 3
 
 label-urgent = %index%
 label-urgent-background = #900000
-label-urgent-padding = 4
+label-urgent-padding = 3
 
 [module/eth]
 type = internal/network

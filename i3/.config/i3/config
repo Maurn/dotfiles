@@ -158,14 +158,16 @@ bindsym $mod+r mode "resize"
 
 # Brightness
 bindsym $mod+F5 exec --no-startup-id "light -U 5%"
+bindsym $mod+Shift+F5 exec --no-startup-id "light -U 1%"
 bindsym $mod+F6 exec --no-startup-id "light -A 5%"
+bindsym $mod+Shift+F6 exec --no-startup-id "light -A 1%"
 
 #Audio
-bindsym $mod+F10 exec --no-startup-id "amixer -q -D pulse set Master 5%+ unmute"
-bindsym $mod+Shift+F10 exec --no-startup-id "amixer -q -D pulse set Master 1%+ unmute"
-bindsym $mod+F9 exec --no-startup-id "amixer -q -D pulse set Master 5%- unmute"
-bindsym $mod+Shift+F9 exec --no-startup-id "amixer -q -D pulse set Master 1%- unmute"
-bindsym $mod+F11 exec --no-startup-id "amixer -q -D pulse set Master toggle"
+bindsym $mod+F10 exec --no-startup-id "pamixer -i 5 -u"
+bindsym $mod+Shift+F10 exec --no-startup-id "pamixer -i 1 -u"
+bindsym $mod+F9 exec --no-startup-id "pamixer -d 5 -u"
+bindsym $mod+Shift+F9 exec --no-startup-id "pamixer -d 1 -u"
+bindsym $mod+F11 exec --no-startup-id "pamixer -t"
 
 bindsym $mod+Shift+e exec --no-startup-id "emacsclient -c"
 
