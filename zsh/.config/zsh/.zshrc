@@ -24,7 +24,6 @@ function precmd(){
 
 export EDITOR='/usr/bin/emacsclient -c -nw'
 export VISUAL='/usr/bin/emacsclient -c -nw'
-export TERM=xterm-termite
 
 # Colored man pages
 export LESS_TERMCAP_mb=$'\E[1;31m'     # begin bold

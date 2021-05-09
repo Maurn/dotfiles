@@ -30,7 +30,7 @@ font pango:Source Code Pro 10.4
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec termite -c ~/.config/termite/config
+bindsym $mod+Return exec i3-sensible-terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
