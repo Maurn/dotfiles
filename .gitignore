@@ -6,3 +6,6 @@ atom/
 recentf
 
 flycheck*
+
+vscode*
+!vscode/.config/Code - OSS/User/settings.json
