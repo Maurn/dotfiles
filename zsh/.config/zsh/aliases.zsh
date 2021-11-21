@@ -27,6 +27,10 @@ alias ysiapi='cd ~/entropyfox/YSI/services/api/ && npm start'
 alias ysifront='cd ~/entropyfox/YSI/services/frontend/ && npm start'
 alias ysiplen='cd ~/entropyfox/YSI/services/plenary/ && npm start'
 alias ysizoom='cd ~/entropyfox/YSI/services/zoomweb/ && npm start'
+alias ysiops='cd ~/entropyfox/YSI/ops'
+alias pryglapi='cd ~/code/prygl.nu/services/api/ && npm start'
+alias pryglfront='cd ~/code/prygl.nu/services/frontend/ && npm start'
+alias pryglops='cd ~/code/prygl.nu/ops'
 mkcd () { mkdir "$1"; cd "$1" }
 
 earth-background () {
@@ -35,4 +39,8 @@ earth-background () {
     local date=$(date --date="$(echo $metadata | jq -r '.date')" +%Y/%m/%d)
 
     curl "https://epic.gsfc.nasa.gov/archive/natural/$date/png/$img.png" | feh -.B black --bg-max -
+}
+
+wav2flac () {
+  for file in *.wav; do ffmpeg -i $file ${file%.*}.flac; done
 }

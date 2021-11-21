@@ -178,11 +178,11 @@ for_window [class="^.*"] border pixel 1
 smart_borders on
 
 # Loading colors from Xresources
-set_from_resource $bg            i3wm.background #000000
-set_from_resource $border        i3wm.blue       #007bff
-set_from_resource $text          i3wm.foreground #ffffff
-set_from_resource $text-inactive i3wm.gray       #808080
-set               $indicator     #ffffff
+set $bg            #000000       
+set $border        #007bff 
+set $text          #ffffff       
+set $text-inactive #808080 
+set $indicator     #ffffff        
 
 # Setting window colors
 #class                  border  backgr. text           indicator child_border
@@ -197,10 +197,12 @@ focus_follows_mouse no
 # Startup programs
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh &> /dev/null
 exec_always --no-startup-id autotiling
+exec_always --no-startup-id setxkbmap -layout us,dk -option grp:ctrls_toggle -option grp:lswitch -option caps:swapescape
 
+exec --no-startup-id xrandr --output eDP1 --mode 1920x1080
 exec --no-startup-id feh --bg-scale ~/Dropbox/images/sierpinski.png
-exec --no-startup-id redshift &
 exec --no-startup-id flameshot &
 exec --no-startup-id picom --backend glx --vsync --no-use-damage -b -i 1
-# exec --no-startup-id setxkbmap -layout us,dk -option grp:ctrls_toggle -option caps:swapescape
-# exec --no-startup-id numlockx &
+exec --no-startup-id numlockx &
+exec --no-startup-id light -Srs "sysfs/leds/platform::mute" 0
+exec --no-startup-id udiskie --smart-tray &

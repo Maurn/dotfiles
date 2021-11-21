@@ -69,8 +69,6 @@
                 package-quickstart t
                 load-prefer-newer t)
 
-  (package-initialize)
-
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
     (package-install 'use-package))
@@ -275,6 +273,11 @@
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package exec-path-from-shell
+  :config
+  (when (daemonp)
+    (exec-path-from-shell-initialize)))
 
 (use-package recentf
   :ensure nil
@@ -560,91 +563,24 @@
 
 (use-package ansible)
 
-;; (use-package prettier
-;;   :hook (after-init . global-prettier-mode)
-;;   :custom
-;;   (prettier-enabled-parsers '(angular babel babel-flow babel-ts css elm espree
-;;   flow graphql html java json json-stringify less lua markdown mdx meriyah php postgresql pug
-;;   python ruby scss sh solidity svelte swift toml typescript vue xml yaml)))
-
-;; (use-package tide
-;;   :after (typescript-mode company flycheck)
-;;   :hook ((typescript-mode . tide-setup)
-;;          (typescript-mode . tide-hl-identifier-mode))
-;;   :config
-;;   (setq tide-tsserver-executable "/usr/bin/tsserver")
-;;   (setq tide-completion-detailed t)
-;;   :general
-;;   (general-nmap typescript-mode-map
-;;     "gd" 'tide-jump-to-definition
-;;     "K"  'tide-documentation-at-point)
-;;   (general-nmap 'tide-references-mode-map
-;;     "gj" 'tide-find-next-reference
-;;     "gk" 'tide-find-previous-reference
-;;     (kbd "C-j") 'tide-find-next-reference
-;;     (kbd "C-k") 'tide-find-previous-reference
-;;     (kbd "RET") 'tide-goto-reference
-;;     "q" 'quit-window)
-;;   (major-def
-;;     :keymaps 'typescript-mode-map
-;;     "=" 'tide-format
-;;     "r" '(:ignore t :which-key "refactor")
-;;     "rf" 'tide-fix
-;;     "rr" 'tide-rename-symbol
-;;     "ro" 'tide-organize-imports))
-
-(use-package web-mode
-  :init (setq web-mode-enable-auto-pairing 'nil)
-  :mode "\\.html\\'"
-  :general
-  (major-def
-    :keymaps 'web-mode-map
-    "rr" 'web-mode-element-rename))
-
-(use-package emmet-mode
-  :hook web-mode
-  :general
-  (general-def
-    'insert
-    '(emmet-mode-map company-active-map web-mode-map)
-    "TAB" 'emmet-expand-line))
+(use-package prettier
+  :hook (after-init . global-prettier-mode)
+  :custom
+  (prettier-enabled-parsers '(angular babel babel-flow babel-ts css elm espree
+  flow graphql html java json json-stringify less lua markdown mdx meriyah php postgresql pug
+  python ruby scss sh solidity svelte swift toml typescript vue xml yaml)))
 
 (use-package lsp-mode
   :init
-  (setq lsp-headerline-breadcrumb-mode nil)
-  ;; :init
-  ;; (defvar lsp-clients-angular-language-server-command
-  ;;   '("node"
-  ;;      "/home/maurn/.npm-global/lib/node_modules/@angular/language-server"
-  ;;      "--ngProbeLocations"
-  ;;      "/home/maurn/.npm-global/lib/node_modules"
-  ;;      "--tsProbeLocations"
-  ;;      "/home/maurn/.npm-global/lib/node_modules"
-  ;;      "--stdio"))
-  ;; (defvar lsp-headerline-breadcrumb-mode-enable nil)
-  ;; (setq lsp-headerline-breadcrumb-mode-enable nil)
   :custom
   (lsp-headerline-breadcrumb-mode-enable nil)
-  (lsp-clients-angular-language-server-command
-    '("node"
-       "/home/maurn/.npm-global/lib/node_modules/@angular/language-server"
-       "--ngProbeLocations"
-       "/home/maurn/.npm-global/lib/node_modules"
-       "--tsProbeLocations"
-       "/home/maurn/.npm-global/lib/node_modules"
-       "--stdio"))
-  :config
-  (setq lsp-headerline-breadcrumb-mode nil)
-  (lsp-headerline-breadcrumb-mode 0)
   :commands (lsp lsp-deferred)
   :hook ((typescript-mode
           web-mode
-          ;; js-mode
           c++-mode
           c-mode
           rust-mode
-          python-mode
-          nim-mode) . lsp)
+          python-mode) . lsp)
   :general
   (general-def 'normal lsp-mode-map
     "gd" 'lsp-find-definition
@@ -658,14 +594,18 @@
     "ro" 'lsp-organize-imports
     "=" 'lsp-format-buffer))
 
+(use-package web-mode
+  :mode "\\.html\\'"
+  :general
+  (major-def
+    :keymaps 'web-mode-map
+    "rr" 'web-mode-element-rename))
+
 (use-package rust-mode
   :mode "\\.rs\\'")
 
 (use-package flycheck-rust
   :hook (rust-mode . flycheck-rust-setup))
-
-(use-package nim-mode
-  :mode "\\.nim\\'")
 
 (use-package restclient
   :mode ("\\.http\\'" . restclient-mode)
@@ -675,30 +615,21 @@
     "j" 'restclient-jump-next
     "k" 'restclient-jump-prev))
 
-(use-package latex
-  :mode ("\\.tex\\'" . latex-mode)
-  :hook (text-mode . auto-fill-mode)
-  :ensure auctex
-  :config
-  (TeX-PDF-mode 1))
-
-(use-package company-auctex
-  :after (auctex company)
-  :config (company-auctex-init))
-
-(use-package auctex-latexmk
-  :after (auctex company)
-  :config (auctex-latexmk-setup))
-
 (use-package glsl-mode
   :mode (("\\.frag\\'" . glsl-mode)))
+
+(use-package sqlformat
+  :mode ("\\.sql\\'" . sql-mode)
+  :hook (sql-mode . sqlformat-on-save-mode)
+  :custom
+  (sqlformat-command 'pgformatter))
 
 (use-package gcmh
   :config
   (gcmh-mode 1)
   :custom
-  (gcmh-idle-delay 10))
-  ;; (gcmh-high-cons-threshold (* 16 1024 1024)))
+  (gcmh-idle-delay 10)
+  (gcmh-high-cons-threshold (* 16 1024 1024)))
 
 (provide 'init)
 ;;; init.el ends here

@@ -22,6 +22,7 @@ function precmd(){
     RPROMPT=$(git-prompt)
 }
 
+export TERM='alacritty-direct'
 export EDITOR='/usr/bin/emacsclient -c -nw'
 export VISUAL='/usr/bin/emacsclient -c -nw'
 
@@ -40,8 +41,7 @@ source $ZDOTDIR/aliases.zsh
 source $ZDOTDIR/bookmarks.zsh
 
 typeset -U path
-path+=(~/.npm-global/bin/)
-path+=(~/.nimble/bin)
+path+=(~/.npm-global/bin)
 
 export GODOT_BIN=/usr/bin/godot
 
