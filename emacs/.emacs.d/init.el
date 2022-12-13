@@ -29,6 +29,7 @@
 
   lsp-headerline-breadcrumb-mode nil
 
+  native-comp-async-report-warnings-errors nil
 
   make-backup-files nil ; stop creating backup~ files
   auto-save-default nil ; stop creating #autosave# files
@@ -66,12 +67,12 @@
   (setq-default package-archives '(("melpa" . "https://melpa.org/packages/")
                                    ("elpa"  . "https://elpa.gnu.org/packages/")
                                    ("org"   . "https://orgmode.org/elpa/"))
-                package-quickstart t
+                ;; package-quickstart t
                 load-prefer-newer t)
 
-  (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
+  ;(unless (package-installed-p 'use-package)
+       ;;(package-refresh-contents)
+       ;;(package-install 'use-package)
 
   (setq-default
     use-package-always-ensure t
@@ -255,11 +256,6 @@
 (use-package doom-themes
   :config
   (load-theme 'doom-one t))
-  ;; (set-face-foreground 'highlight nil)
-  ;; (set-face-background 'highlight nil)
-  ;; (set-face-attribute 'highlight nil :underline t))
-  ;; :custom-face
-  ;; ('highlight ))
 
 (use-package doom-modeline
   :config
@@ -273,11 +269,6 @@
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
-
-(use-package exec-path-from-shell
-  :config
-  (when (daemonp)
-    (exec-path-from-shell-initialize)))
 
 (use-package recentf
   :ensure nil
@@ -624,12 +615,7 @@
   :custom
   (sqlformat-command 'pgformatter))
 
-(use-package gcmh
-  :config
-  (gcmh-mode 1)
-  :custom
-  (gcmh-idle-delay 10)
-  (gcmh-high-cons-threshold (* 16 1024 1024)))
+(setq gc-cons-threshold 100000000) ; 100 Mb
 
 (provide 'init)
 ;;; init.el ends here

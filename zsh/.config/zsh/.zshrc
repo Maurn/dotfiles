@@ -22,7 +22,6 @@ function precmd(){
     RPROMPT=$(git-prompt)
 }
 
-export TERM='alacritty-direct'
 export EDITOR='/usr/bin/emacsclient -c -nw'
 export VISUAL='/usr/bin/emacsclient -c -nw'
 
@@ -40,9 +39,6 @@ source /usr/share/nnn/quitcd/quitcd.bash_zsh
 source $ZDOTDIR/aliases.zsh
 source $ZDOTDIR/bookmarks.zsh
 
-typeset -U path
-path+=(~/.npm-global/bin)
-
 export GODOT_BIN=/usr/bin/godot
 
 # Plugins
@@ -56,6 +52,6 @@ source /usr/share/fzf/completion.zsh
 
 source $ZDOTDIR/keybindings.zsh
 
-export ANDROID_HOME=/home/maurn/android/sdk
+export ANDROID_HOME=~/Android/Sdk
 
  # source $ZDOTDIR/vi-mode.zsh
