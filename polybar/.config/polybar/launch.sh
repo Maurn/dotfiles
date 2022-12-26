@@ -12,7 +12,7 @@ if [ $hostname == "spanden" ]; then
     MONITOR=HDMI-2 polybar -r bottom &
     MONITOR=DVI-D-1 polybar -r bottom &
 else
-    MONITOR=eDP1 polybar -r bottom &
+    MONITOR=eDP-1 polybar -r bottom &
 fi
 
 echo "Bars launched..."

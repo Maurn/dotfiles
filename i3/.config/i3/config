@@ -199,10 +199,10 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh &> /dev/null
 exec_always --no-startup-id autotiling
 exec_always --no-startup-id setxkbmap -layout us,dk -option grp:ctrls_toggle -option grp:lswitch -option caps:swapescape
 
-exec --no-startup-id xrandr --output eDP1 --mode 1920x1080
-exec --no-startup-id feh --bg-scale ~/Dropbox/images/sierpinski.png
+exec --no-startup-id feh --bg-scale ~/dotfiles/images/sierpinski.png
 exec --no-startup-id flameshot &
 exec --no-startup-id picom --backend glx --vsync --no-use-damage -b -i 1
-exec --no-startup-id numlockx &
+#exec --no-startup-id numlockx &
 exec --no-startup-id light -Srs "sysfs/leds/platform::mute" 0
 exec --no-startup-id udiskie --smart-tray &
+exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent &

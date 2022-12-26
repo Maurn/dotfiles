@@ -71,8 +71,8 @@
                 load-prefer-newer t)
 
   ;(unless (package-installed-p 'use-package)
-       ;;(package-refresh-contents)
-       ;;(package-install 'use-package)
+       (package-refresh-contents)
+       (package-install 'use-package)
 
   (setq-default
     use-package-always-ensure t
@@ -288,7 +288,9 @@
     (let ((save-silently t)) (recentf-save-list)))
   (run-at-time nil (* 5 60) 'recentf-save-list/silent))
 
-(use-package undo-tree)
+(use-package undo-tree
+  :custom
+  (undo-tree-auto-save-history nil))
 
 (use-package evil
   :init
@@ -501,8 +503,6 @@
    magit-blame-mode-map
    "q" 'magit-blame-quit))
 
-(use-package forge
-  :after magit)
 
 (use-package evil-collection
   :after evil

@@ -1,0 +1,52 @@
+!!NumiX Darkest.
+!!BY WuX
+
+!*background: #000000
+!*foreground: #FFFFFF
+
+!Black
+*color0:    #555555
+*color8:    #888888
+
+!Red
+*color1:    #9C3528
+*color9:    #d64937
+
+!Green
+*color2:    #61BC3B
+*color10:   #86DF5D
+
+!yellow
+*color3:    #F3B43A
+*color11:   #FDD75A
+
+!blue
+*color4:    #167fff
+*color12:   #0F75BD
+
+!Magenta
+*color5:    #744560
+*color13:   #9E5E83
+
+!Cyan
+*color6:    #00b7eb
+*color14:   #37c3d6
+
+!White
+*color7:    #A2A2A2
+*color15:   #f9f9f9
+
+*antialias:  true
+*autohint:   false
+
+Xft.antialias:  true
+Xft.rgba:       rgb
+Xft.hinting:    true
+Xft.hintstyle:  hintfull
+
+Emacs.bitmapIcon:         off
+Emacs.menuBar:            off
+Emacs.verticalScrollBars: off
+Emacs.toolBar:            off
+Emacs.cursorBlink:        off
+Emacs.background:         #282c34
