@@ -39,6 +39,7 @@ bindsym $mod+Shift+q kill
 bindsym $mod+d exec --no-startup-id "rofi -show drun"
 bindsym $mod+w exec --no-startup-id "rofi -show window"
 bindsym $mod+c exec --no-startup-id "rofi -show calc"
+bindsym $mod+i exec --no-startup-id rofi -show wifi -modi "wifi:iwdrofimenu"
 
 # change focus
 bindsym $mod+h focus left
@@ -178,11 +179,11 @@ for_window [class="^.*"] border pixel 1
 smart_borders on
 
 # Loading colors from Xresources
-set $bg            #000000       
-set $border        #007bff 
-set $text          #ffffff       
-set $text-inactive #808080 
-set $indicator     #ffffff        
+set $bg            #000000
+set $border        #007bff
+set $text          #ffffff
+set $text-inactive #808080
+set $indicator     #ffffff
 
 # Setting window colors
 #class                  border  backgr. text           indicator child_border

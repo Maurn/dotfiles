@@ -3,7 +3,7 @@ configuration {
 /*	width: 50;*/
 /*	lines: 15;*/
 /*	columns: 1;*/
-	font: "SourceCodePro-Semibold 13";
+    font: "SourceSansPro SemiBold 18";
 /*	bw: 1;*/
 /*	location: 0;*/
 /*	padding: 5;*/
@@ -19,7 +19,7 @@ configuration {
 /*	run-shell-command: "{terminal} -e {cmd}";*/
 /*	window-command: "wmctrl -i -R {window}";*/
 /*	window-match-fields: "all";*/
-	icon-theme: "Paper";
+	icon-theme: "Papirus";
 /*	drun-match-fields: "name,generic,exec,categories,keywords";*/
 /*	drun-categories: ;*/
 /*	drun-show-actions: false;*/
@@ -61,8 +61,7 @@ configuration {
 /*	color-active: ;*/
 /*	color-window: ;*/
 /*	max-history-size: 25;*/
-/*	combi-hide-mode-prefix: false;*/
-/*	matching-negate-char: '-' /* unsupported */;*/
+/*	combi-h*/
 /*	cache-dir: ;*/
 /*	window-thumbnail: false;*/
 /*	drun-use-desktop-cache: false;*/
@@ -149,4 +148,26 @@ configuration {
 /*	me-accept-custom: "Control+MouseDPrimary";*/
 }
 
-@theme "onedark"
+@theme "spotlight-dark"
+
+* {
+    font: "SourceSansPro SemiBold 18";
+}
+
+
+entry {
+    font: "SourceSansPro SemiBold 22";
+}
+
+window {
+    border-radius:  0;
+}
+
+element-icon {
+    size:   1.5em;
+}
+
+element selected urgent {
+    background-color:   @bg2;
+    text-color:         @fg1;
+}

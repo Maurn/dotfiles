@@ -40,3 +40,7 @@ earth-background () {
 wav2flac () {
   for file in *.wav; do ffmpeg -i $file ${file%.*}.flac; done
 }
+
+flac2wav () {
+  for file in *.flac; do ffmpeg -i $file ${file%.*}.wav; done
+}

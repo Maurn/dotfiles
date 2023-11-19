@@ -44,9 +44,4 @@ Xft.rgba:       rgb
 Xft.hinting:    true
 Xft.hintstyle:  hintfull
 
-Emacs.bitmapIcon:         off
-Emacs.menuBar:            off
-Emacs.verticalScrollBars: off
-Emacs.toolBar:            off
-Emacs.cursorBlink:        off
-Emacs.background:         #282c34
+Xcursor.size: 32
