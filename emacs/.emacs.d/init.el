@@ -4,7 +4,6 @@
 ;;; Package --- Summary
 ;;; Code:
 
-
 (setq-default
   read-process-output-max (* 1024 1024) ;; 1mb
   indent-tabs-mode nil
@@ -71,12 +70,12 @@
                 load-prefer-newer t)
 
   ;(unless (package-installed-p 'use-package)
-       (package-refresh-contents)
-       (package-install 'use-package)
+        ;; (package-refresh-contents)
+        ;; (package-install 'use-package)
 
   (setq-default
     use-package-always-ensure t
-    use-package-always-demand t
+    ;; use-package-always-demand t
     use-package-verbose t
     use-package-compute-statistics t)
 
@@ -369,102 +368,140 @@
   ('(normal visual motion)
     "'" 'avy-goto-char))
 
-(use-package company
+(use-package corfu
+  ;; Optional customizations
+  :custom
+  (corfu-auto-delay 0)
+  ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (corfu-auto t)                 ;; Enable auto completion
+  (corfu-auto-prefix 0)                 ;; Enable auto completion
+  ;; (corfu-popupinfo-delay t)
+  (corfu-echo-delay t)
+  ;; (corfu-separator ?\s)          ;; Orderless field separator
+  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
+  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+
+  ;; Recommended: Enable Corfu globally.
+  ;; This is recommended since Dabbrev can be used globally (M-/).
+  ;; See also `corfu-excluded-modes'.
   :init
-  (global-company-mode 1)
-  :config
-  (setq
-    company-idle-delay 0.0
-    company-minimum-prefix-length 1
-    company-tooltip-align-annotations t
-    company-frontends '(company-echo-metadata-frontend
-                         company-pseudo-tooltip-unless-just-one-frontend
-                         company-preview-frontend)
-    company-backends '((company-capf company-files)
-                        company-yasnippet))
+  (global-corfu-mode)
+  (corfu-echo-mode 1)
+  ;; (corfu-history-mode 1)
+  (savehist-mode 1)
+  )
+  ;; (add-to-list 'savehist-additional-variables 'corfu-history)
+  ;; :config
+  ;; (add-hook 'evil-normal-state-entry-hook #'corfu-quit)
+  ;; :general
+  ;; ('corfu-map
+  ;;   "C-j" 'corfu-next
+  ;;   "C-k" 'corfu-previous))
 
-  (add-hook 'evil-normal-state-entry-hook #'company-abort)
+;; (use-package corfu-echo
+;;   :ensure nil
+;;   :
+;;   :config
+;;   (corfu-echo-mode))
 
-  :general
-  ('company-active-map
-    "C-j" 'company-select-next-or-abort
-    "C-k" 'company-select-previous-or-abort))
-
-(use-package ivy
+(use-package vertico
   :init
-  (ivy-mode 1)
-  :config
-  (setq enable-recursive-minibuffers t
-        ivy-use-virtual-buffers t
-        ivy-count-format "(%d/%d) "
-        ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
+  (vertico-mode)
 
-  (add-hook 'server-after-make-frame-hook
-    '(lambda () (set-face-attribute 'ivy-current-match nil
-                  :underline t
-                  :background nil
-                  :weight 'semi-bold)))
+  ;; Different scroll margin
+  ;; (setq vertico-scroll-margin 0)
+
+  ;; Show more candidates
+  ;; (setq vertico-count 20)
+
+  ;; Grow and shrink the Vertico minibuffer
+  ;; (setq vertico-resize t)
+
+  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+  ;; (setq vertico-cycle t)
+
+  ;; Add prompt indicator to `completing-read-multiple'.
+  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+  ;; Do not allow the cursor in the minibuffer prompt
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+  ;; Vertico commands are hidden in normal buffers.
+  ;; (setq read-extended-command-predicate
+  ;;       #'command-completion-default-include-p)
+
+  ;; Enable recursive minibuffers
+  (setq enable-recursive-minibuffers t)
 
   :general
   (general-iemap
-    ivy-minibuffer-map
-    "C-'" 'ivy-avy
-    "C-j" 'ivy-next-line
-    "C-k" 'ivy-previous-line)
+    minibuffer-local-map
+    ;; "C-'" 'ivy-avy
+    "C-j" 'vertico-next
+    "C-k" 'vertico-previous)
   (general-nvmap
-    ivy-minibuffer-map
-    "'" 'ivy-avy
-    "j" 'ivy-next-line
-    "k" 'ivy-previous-line)
-  (leader-def "bb"  'ivy-switch-buffer))
+    minibuffer-local-map
+    ;; "'" 'ivy-avy
+    "j" 'vertico-next
+    "k" 'vertico-previous)
+  (leader-def "bb" 'consult-buffer)
+  (leader-def "bB" 'consult-buffer-other-window))
 
-(use-package ivy-xref
+(use-package marginalia
   :init
-  ;; xref initialization is different in Emacs 27 - there are two different
-  ;; variables which can be set rather than just one
-  (when (>= emacs-major-version 27)
-    (setq xref-show-definitions-function #'ivy-xref-show-defs))
-  ;; Necessary in Emacs <27. In Emacs 27 it will affect all xref-based
-  ;; commands other than xref-find-definitions (e.g. project-find-regexp)
-  ;; as well
-  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
+  (marginalia-mode))
 
-(use-package smex
-  :after ivy)
+(use-package orderless
+  :init
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq orderless-matching-styles '(orderless-literal orderless-regexp orderless-initialism))
+  (setq completion-styles '(orderless partial-completion basic)
+        completion-category-defaults nil
+        completion-category-overrides nil))
 
-(use-package counsel
-  :after ivy
-  :config
-  (setq ivy-initial-inputs-alist nil)
+(use-package consult
+  :init
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
   :general
   (leader-def
-    "SPC" 'counsel-M-x
-    "/"   'counsel-rg
-    "ff"  'counsel-find-file
-    "fr"  'counsel-recentf
-    "fL"  'counsel-locate))
+    "SPC" (general-simulate-key "M-x")
+    "ff"  'find-file
+    "fr"  'consult-recent-file
+    "/"   'consult-ripgrep))
 
 (use-package projectile
-  :custom
-  (projectile-completion-system 'ivy)
   :config
   (projectile-mode 1)
   (add-to-list 'projectile-other-file-alist '("component.ts" "component.html"))
-  (add-to-list 'projectile-other-file-alist '("component.html" "component.ts")))
-
-(use-package counsel-projectile
-  :after (projectile ivy)
-  :custom
-  (counsel-projectile-find-file-matcher 'counsel-projectile-find-file-matcher-basename)
+  (add-to-list 'projectile-other-file-alist '("component.html" "component.ts"))
   :general
   (leader-def
    "p"   '(:ignore t :which-key "projects")
-   "pd"  'counsel-projectile-dired-find-dir
    "po"  'projectile-find-other-file
    "pO"  'projectile-find-other-file-other-window
-   "pf"  'counsel-projectile-find-file
-   "pp"  'counsel-projectile-switch-project
-   "pb"  'counsel-projectile-switch-to-buffer))
+   "pf"  'projectile-find-file
+   "pF"  'projectile-find-file-other-window
+   "pp"  'projectile-switch-project
+   "pb"  'projectile-switch-to-buffer
+   "pB"  'projectile-switch-to-buffer-other-window))
 
 (use-package treemacs
   :commands (treemacs)
@@ -507,7 +544,7 @@
 (use-package evil-collection
   :after evil
   :config
-  (evil-collection-init 'magit))
+  (evil-collection-init '(corfu magit)))
 
 (use-package git-timemachine
   :general
@@ -547,6 +584,8 @@
 (use-package gdscript-mode
   :mode "\\.gd\\'")
 
+(use-package dockerfile-mode)
+
 (use-package yaml-mode)
 
 (use-package json-mode
@@ -562,16 +601,21 @@
   python ruby scss sh solidity svelte swift toml typescript vue xml yaml)))
 
 (use-package lsp-mode
-  :init
   :custom
-  (lsp-headerline-breadcrumb-mode-enable nil)
+  (lsp-completion-provider :none) ;; we use Corfu!
+  :init
+  (defun my/lsp-mode-setup-completion ()
+    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+          '(orderless))) ;; Configure orderless
   :commands (lsp lsp-deferred)
-  :hook ((typescript-mode
-          web-mode
-          c++-mode
-          c-mode
-          rust-mode
-          python-mode) . lsp)
+  :hook
+  (((typescript-mode
+    web-mode
+    c++-mode
+    c-mode
+    rust-mode
+    python-mode) . lsp)
+  (lsp-completion-mode . my/lsp-mode-setup-completion))
   :general
   (general-def 'normal lsp-mode-map
     "gd" 'lsp-find-definition
@@ -586,7 +630,8 @@
     "=" 'lsp-format-buffer))
 
 (use-package web-mode
-  :mode "\\.html\\'"
+  :mode (("\\.html\\'" . web-mode)
+        ("\\.svelte\\'" . web-mode))
   :general
   (major-def
     :keymaps 'web-mode-map
@@ -608,6 +653,15 @@
 
 (use-package glsl-mode
   :mode (("\\.frag\\'" . glsl-mode)))
+
+(use-package lsp-pyright
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)
+                         (lsp)))
+  :config
+  (setq python-indent-offset 4)
+  (setq lsp-pyright-use-library-code-for-types t)
+  (setq lsp-pyright-stub-path (concat (getenv "HOME") "/python-type-stubs")))
 
 (use-package sqlformat
   :mode ("\\.sql\\'" . sql-mode)
