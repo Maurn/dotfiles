@@ -7,7 +7,8 @@
 (setq-default
   read-process-output-max (* 1024 1024) ;; 1mb
   indent-tabs-mode nil
-  tab-width 4
+  tab-width 2
+  evil-shift-width 2
   show-paren-delay 0
   vc-follow-symlinks t
   help-window-select 't
@@ -34,10 +35,6 @@
   auto-save-default nil ; stop creating #autosave# files
   create-lockfiles nil) ; no fucking lockfiles either
 
-
-(setq auth-sources '("~/.authinfo"))
-
-
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (set-default-coding-systems 'utf-8)
@@ -59,19 +56,11 @@
 
 
 (eval-when-compile
-  (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
-  (when (file-exists-p custom-file)
-    (load custom-file))
-
   (setq-default package-archives '(("melpa" . "https://melpa.org/packages/")
                                    ("elpa"  . "https://elpa.gnu.org/packages/")
                                    ("org"   . "https://orgmode.org/elpa/"))
                 ;; package-quickstart t
                 load-prefer-newer t)
-
-  ;(unless (package-installed-p 'use-package)
-        ;; (package-refresh-contents)
-        ;; (package-install 'use-package)
 
   (setq-default
     use-package-always-ensure t
@@ -80,6 +69,21 @@
     use-package-compute-statistics t)
 
   (require 'use-package))
+
+;; Change the user-emacs-directory to keep unwanted things out of ~/.emacs.d
+(setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
+      url-history-file (expand-file-name "url/history" user-emacs-directory))
+
+;; Use no-littering to automatically set common paths to the new user-emacs-directory
+(use-package no-littering)
+
+;; Keep customization settings in a temporary file (thanks Ambrevar!)
+(setq custom-file
+      (if (boundp 'server-socket-dir)
+          (expand-file-name "custom.el" server-socket-dir)
+        (expand-file-name (format "emacs-custom-%s.el" (user-uid)) temporary-file-directory)))
+(load custom-file t)
+
 
 (use-package general
   :config
@@ -220,30 +224,7 @@
     "ad" 'dired
     "ac" 'calendar
     "ap" 'list-packages
-    "aq" 'quick-calc)
-
-  (general-def 'normal doc-view-mode-map
-    "j"   'doc-view-next-line-or-next-page
-    "k"   'doc-view-previous-line-or-previous-page
-    "gg"  'doc-view-first-page
-    "G"   'doc-view-last-page
-    "C-d" 'doc-view-scroll-up-or-next-page
-    "C-f" 'doc-view-scroll-up-or-next-page
-    "C-b" 'doc-view-scroll-down-or-previous-page)
-
-  (general-def '(normal visual) outline-minor-mode-map
-    "zn"  'outline-next-visible-heading
-    "zp"  'outline-previous-visible-heading
-    "zf"  'outline-forward-same-level
-    "zB"  'outline-backward-same-level)
-
-  (general-def 'normal package-menu-mode-map
-    "i"   'package-menu-mark-install
-    "U"   'package-menu-mark-upgrades
-    "d"   'package-menu-mark-delete
-    "u"   'package-menu-mark-unmark
-    "x"   'package-menu-execute
-    "q"   'quit-window))
+    "aq" 'quick-calc))
 
 
 (use-package which-key
@@ -302,10 +283,10 @@
   (evil-mode 1)
   :config
   (add-hook 'window-configuration-change-hook #'evil-normalize-keymaps)
-  (evil-set-initial-state 'shell-mode 'normal)
-  (evil-set-initial-state 'doc-view-mode 'normal)
-  (evil-set-initial-state 'package-menu-mode 'normal)
-  (evil-set-initial-state 'biblio-selection-mode 'motion)
+  ;; (evil-set-initial-state 'shell-mode 'normal)
+  ;; (evil-set-initial-state 'doc-view-mode 'normal)
+  ;; (evil-set-initial-state 'package-menu-mode 'normal)
+  ;; (evil-set-initial-state 'biblio-selection-mode 'motion)
   (defvar doc-view-continuous t)
   :general
   (leader-def
@@ -315,6 +296,11 @@
     "wk"  'evil-window-up
     "bN"  'evil-buffer-new
     "fd"  'evil-save-and-close))
+
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
 
 (use-package evil-surround
   :after evil
@@ -368,82 +354,13 @@
   ('(normal visual motion)
     "'" 'avy-goto-char))
 
-(use-package corfu
-  ;; Optional customizations
-  :custom
-  (corfu-auto-delay 0)
-  ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-  (corfu-auto t)                 ;; Enable auto completion
-  (corfu-auto-prefix 0)                 ;; Enable auto completion
-  ;; (corfu-popupinfo-delay t)
-  (corfu-echo-delay t)
-  ;; (corfu-separator ?\s)          ;; Orderless field separator
-  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
-  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
-  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
-  ;; (corfu-scroll-margin 5)        ;; Use scroll margin
-
-  ;; Recommended: Enable Corfu globally.
-  ;; This is recommended since Dabbrev can be used globally (M-/).
-  ;; See also `corfu-excluded-modes'.
-  :init
-  (global-corfu-mode)
-  (corfu-echo-mode 1)
-  ;; (corfu-history-mode 1)
-  (savehist-mode 1)
-  )
-  ;; (add-to-list 'savehist-additional-variables 'corfu-history)
-  ;; :config
-  ;; (add-hook 'evil-normal-state-entry-hook #'corfu-quit)
-  ;; :general
-  ;; ('corfu-map
-  ;;   "C-j" 'corfu-next
-  ;;   "C-k" 'corfu-previous))
-
-;; (use-package corfu-echo
-;;   :ensure nil
-;;   :
-;;   :config
-;;   (corfu-echo-mode))
+(use-package savehist
+  :config
+  (savehist-mode 1))
 
 (use-package vertico
   :init
   (vertico-mode)
-
-  ;; Different scroll margin
-  ;; (setq vertico-scroll-margin 0)
-
-  ;; Show more candidates
-  ;; (setq vertico-count 20)
-
-  ;; Grow and shrink the Vertico minibuffer
-  ;; (setq vertico-resize t)
-
-  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-  ;; (setq vertico-cycle t)
-
-  ;; Add prompt indicator to `completing-read-multiple'.
-  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
-  (defun crm-indicator (args)
-    (cons (format "[CRM%s] %s"
-                  (replace-regexp-in-string
-                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-                   crm-separator)
-                  (car args))
-          (cdr args)))
-  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
-
-  ;; Do not allow the cursor in the minibuffer prompt
-  (setq minibuffer-prompt-properties
-        '(read-only t cursor-intangible t face minibuffer-prompt))
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-
-  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-  ;; Vertico commands are hidden in normal buffers.
-  ;; (setq read-extended-command-predicate
-  ;;       #'command-completion-default-include-p)
 
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t)
@@ -451,12 +368,10 @@
   :general
   (general-iemap
     minibuffer-local-map
-    ;; "C-'" 'ivy-avy
     "C-j" 'vertico-next
     "C-k" 'vertico-previous)
   (general-nvmap
     minibuffer-local-map
-    ;; "'" 'ivy-avy
     "j" 'vertico-next
     "k" 'vertico-previous)
   (leader-def "bb" 'consult-buffer)
@@ -486,6 +401,18 @@
     "ff"  'find-file
     "fr"  'consult-recent-file
     "/"   'consult-ripgrep))
+
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 't)
+  :config
+  (delete 'yaml treesit-auto-langs)
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
+
+(use-package yaml-mode
+    :custom
+    (yaml-ts-mode-hook yaml-mode-hook))
 
 (use-package projectile
   :config
@@ -540,12 +467,6 @@
    magit-blame-mode-map
    "q" 'magit-blame-quit))
 
-
-(use-package evil-collection
-  :after evil
-  :config
-  (evil-collection-init '(corfu magit)))
-
 (use-package git-timemachine
   :general
   (leader-def
@@ -560,9 +481,21 @@
 (use-package git-gutter
   :hook (prog-mode . global-git-gutter-mode))
 
-(use-package editorconfig
-  :config
-  (editorconfig-mode 1))
+;; (use-package editorconfig
+;;   :config
+;;   (editorconfig-mode 1))
+
+(use-package corfu
+  :custom
+  (corfu-auto t)
+  ;; (corfu-separator ?_) ;; Set to orderless separator, if not using space
+    (corfu-auto-delay  0) ;; TOO SMALL - NOT RECOMMENDED
+    (corfu-auto-prefix 1) ;; TOO SMALL - NOT RECOMMENDED
+  :bind
+  ;; Another key binding can be used, such as S-SPC.
+  ;; (:map corfu-map ("M-SPC" . corfu-insert-separator))
+  :init
+  (global-corfu-mode))
 
 (use-package yasnippet
   :config
@@ -571,51 +504,15 @@
     '(lambda ()
        (setq-local require-final-newline nil))))
 
-(use-package markdown-mode
-  :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
-
-(use-package typescript-mode
-  :mode "\\.ts\\'")
-
-(use-package gdscript-mode
-  :mode "\\.gd\\'")
-
-(use-package dockerfile-mode)
-
-(use-package yaml-mode)
-
-(use-package json-mode
-  :mode "\\.json\\'")
-
-(use-package ansible)
-
-(use-package prettier
-  :hook (after-init . global-prettier-mode)
-  :custom
-  (prettier-enabled-parsers '(angular babel babel-flow babel-ts css elm espree
-  flow graphql html java json json-stringify less lua markdown mdx meriyah php postgresql pug
-  python ruby scss sh solidity svelte swift toml typescript vue xml yaml)))
-
 (use-package lsp-mode
-  :custom
-  (lsp-completion-provider :none) ;; we use Corfu!
-  :init
-  (defun my/lsp-mode-setup-completion ()
-    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-          '(orderless))) ;; Configure orderless
   :commands (lsp lsp-deferred)
   :hook
-  (((typescript-mode
+  (((typescript-ts-mode
     web-mode
     c++-mode
     c-mode
     rust-mode
-    python-mode) . lsp)
-  (lsp-completion-mode . my/lsp-mode-setup-completion))
+    python-mode) . lsp-deferred))
   :general
   (general-def 'normal lsp-mode-map
     "gd" 'lsp-find-definition
@@ -629,45 +526,6 @@
     "ro" 'lsp-organize-imports
     "=" 'lsp-format-buffer))
 
-(use-package web-mode
-  :mode (("\\.html\\'" . web-mode)
-        ("\\.svelte\\'" . web-mode))
-  :general
-  (major-def
-    :keymaps 'web-mode-map
-    "rr" 'web-mode-element-rename))
-
-(use-package rust-mode
-  :mode "\\.rs\\'")
-
-(use-package flycheck-rust
-  :hook (rust-mode . flycheck-rust-setup))
-
-(use-package restclient
-  :mode ("\\.http\\'" . restclient-mode)
-  :general
-  (major-def 'restclient-mode-map
-    "s" 'restclient-http-send-current
-    "j" 'restclient-jump-next
-    "k" 'restclient-jump-prev))
-
-(use-package glsl-mode
-  :mode (("\\.frag\\'" . glsl-mode)))
-
-(use-package lsp-pyright
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-pyright)
-                         (lsp)))
-  :config
-  (setq python-indent-offset 4)
-  (setq lsp-pyright-use-library-code-for-types t)
-  (setq lsp-pyright-stub-path (concat (getenv "HOME") "/python-type-stubs")))
-
-(use-package sqlformat
-  :mode ("\\.sql\\'" . sql-mode)
-  :hook (sql-mode . sqlformat-on-save-mode)
-  :custom
-  (sqlformat-command 'pgformatter))
 
 (setq gc-cons-threshold 100000000) ; 100 Mb
 
