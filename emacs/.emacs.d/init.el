@@ -5,35 +5,36 @@
 ;;; Code:
 
 (setq-default
-  read-process-output-max (* 1024 1024) ;; 1mb
-  indent-tabs-mode nil
-  tab-width 2
-  evil-shift-width 2
-  show-paren-delay 0
-  vc-follow-symlinks t
-  help-window-select 't
-  fill-column 80
-  initial-scratch-message nil
+ read-process-output-max (* 1024 1024) ;; 1mb
+ indent-tabs-mode nil
+ tab-width 2
+ evil-shift-width 2
 
-  ;; scroll one line at a time (less "jumpy" than defaults)
-  mouse-wheel-scroll-amount '(1 ((shift) . 1)) ;; one line at a time
-  mouse-wheel-progressive-speed nil            ;; don't accelerate scrolling
-  mouse-wheel-follow-mouse 't                  ;; scroll window under mouse
-  scroll-step 1                                ;; keyboard scroll one line at a time
+ show-paren-delay 0
+ vc-follow-symlinks t
+ help-window-select 't
+ fill-column 80
+ initial-scratch-message nil
 
-  use-dialog-box nil
-  ring-bell-function 'ignore
-  visible-bell nil
+ ;; scroll one line at a time (less "jumpy" than defaults)
+ mouse-wheel-scroll-amount '(1 ((shift) . 1)) ;; one line at a time
+ mouse-wheel-progressive-speed nil            ;; don't accelerate scrolling
+ mouse-wheel-follow-mouse 't                  ;; scroll window under mouse
+ scroll-step 1                                ;; keyboard scroll one line at a time
 
-  comment-auto-fill-only-comments t
+ use-dialog-box nil
+ ring-bell-function 'ignore
+ visible-bell nil
 
-  lsp-headerline-breadcrumb-mode nil
+ comment-auto-fill-only-comments t
 
-  native-comp-async-report-warnings-errors nil
+ lsp-headerline-breadcrumb-mode nil
 
-  make-backup-files nil ; stop creating backup~ files
-  auto-save-default nil ; stop creating #autosave# files
-  create-lockfiles nil) ; no fucking lockfiles either
+ native-comp-async-report-warnings-errors nil
+
+ make-backup-files nil ; stop creating backup~ files
+ auto-save-default nil ; stop creating #autosave# files
+ create-lockfiles nil) ; no fucking lockfiles either
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -63,10 +64,10 @@
                 load-prefer-newer t)
 
   (setq-default
-    use-package-always-ensure t
-    ;; use-package-always-demand t
-    use-package-verbose t
-    use-package-compute-statistics t)
+   use-package-always-ensure t
+   ;; use-package-always-demand t
+   use-package-verbose t
+   use-package-compute-statistics t)
 
   (require 'use-package))
 
@@ -257,13 +258,13 @@
   :hook (kill-emacs . recentf-save-list)
   :config
   (setq recentf-max-saved-items 300
-    recentf-auto-cleanup 600
-    recentf-exclude '("/tmp/"
-                       "/ssh:"
-                       "/sudo:"
-                       "recentf$"
-                       "/elpa/"
-                       "/snippets/"))
+        recentf-auto-cleanup 600
+        recentf-exclude '("/tmp/"
+                          "/ssh:"
+                          "/sudo:"
+                          "recentf$"
+                          "/elpa/"
+                          "/snippets/"))
   (defun recentf-save-list/silent ()
     (let ((save-silently t)) (recentf-save-list)))
   (run-at-time nil (* 5 60) 'recentf-save-list/silent))
@@ -352,7 +353,7 @@
   :after evil
   :general
   ('(normal visual motion)
-    "'" 'avy-goto-char))
+   "'" 'avy-goto-char))
 
 (use-package savehist
   :config
@@ -411,8 +412,8 @@
   (global-treesit-auto-mode))
 
 (use-package yaml-mode
-    :custom
-    (yaml-ts-mode-hook yaml-mode-hook))
+  :custom
+  (yaml-ts-mode-hook yaml-mode-hook))
 
 (use-package projectile
   :config
@@ -421,14 +422,14 @@
   (add-to-list 'projectile-other-file-alist '("component.html" "component.ts"))
   :general
   (leader-def
-   "p"   '(:ignore t :which-key "projects")
-   "po"  'projectile-find-other-file
-   "pO"  'projectile-find-other-file-other-window
-   "pf"  'projectile-find-file
-   "pF"  'projectile-find-file-other-window
-   "pp"  'projectile-switch-project
-   "pb"  'projectile-switch-to-buffer
-   "pB"  'projectile-switch-to-buffer-other-window))
+    "p"   '(:ignore t :which-key "projects")
+    "po"  'projectile-find-other-file
+    "pO"  'projectile-find-other-file-other-window
+    "pf"  'projectile-find-file
+    "pF"  'projectile-find-file-other-window
+    "pp"  'projectile-switch-project
+    "pb"  'projectile-switch-to-buffer
+    "pB"  'projectile-switch-to-buffer-other-window))
 
 (use-package treemacs
   :commands (treemacs)
@@ -448,9 +449,9 @@
   :hook (prog-mode . flycheck-mode)
   :general
   (leader-def
-   "e"   '(:ignore t :which-key "errors")
-   "en"  'flycheck-next-error
-   "ep"  'flycheck-previous-error))
+    "e"   '(:ignore t :which-key "errors")
+    "en"  'flycheck-next-error
+    "ep"  'flycheck-previous-error))
 
 
 (use-package magit
@@ -459,10 +460,10 @@
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
   :general
   (leader-def
-   "g"   '(:ignore t :which-key "git")
-   "gs"  'magit-status
-   "gf"  'magit-log-buffer-file
-   "gb"  'magit-blame-addition)
+    "g"   '(:ignore t :which-key "git")
+    "gs"  'magit-status
+    "gf"  'magit-log-buffer-file
+    "gb"  'magit-blame-addition)
   (normal
    magit-blame-mode-map
    "q" 'magit-blame-quit))
@@ -485,12 +486,16 @@
 ;;   :config
 ;;   (editorconfig-mode 1))
 
+(use-package apheleia
+  :config
+  (apheleia-global-mode +1))
+
 (use-package corfu
   :custom
   (corfu-auto t)
   ;; (corfu-separator ?_) ;; Set to orderless separator, if not using space
-    (corfu-auto-delay  0) ;; TOO SMALL - NOT RECOMMENDED
-    (corfu-auto-prefix 1) ;; TOO SMALL - NOT RECOMMENDED
+  (corfu-auto-delay  0) ;; TOO SMALL - NOT RECOMMENDED
+  (corfu-auto-prefix 1) ;; TOO SMALL - NOT RECOMMENDED
   :bind
   ;; Another key binding can be used, such as S-SPC.
   ;; (:map corfu-map ("M-SPC" . corfu-insert-separator))
@@ -501,18 +506,25 @@
   :config
   (yas-global-mode 1)
   (add-hook 'snippet-mode-hook
-    '(lambda ()
-       (setq-local require-final-newline nil))))
+            '(lambda ()
+               (setq-local require-final-newline nil))))
 
 (use-package lsp-mode
+  :custom
+  (lsp-completion-provider :none) ;; we use Corfu!
+  :init
+  (defun my/lsp-mode-setup-completion ()
+    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+          '(orderless))) ;; Configure orderless
   :commands (lsp lsp-deferred)
   :hook
+  (lsp-completion-mode . my/lsp-mode-setup-completion)
   (((typescript-ts-mode
-    web-mode
-    c++-mode
-    c-mode
-    rust-mode
-    python-mode) . lsp-deferred))
+     web-mode
+     c++-mode
+     c-mode
+     rust-mode
+     python-mode) . lsp-deferred))
   :general
   (general-def 'normal lsp-mode-map
     "gd" 'lsp-find-definition
@@ -526,6 +538,16 @@
     "ro" 'lsp-organize-imports
     "=" 'lsp-format-buffer))
 
+(use-package web-mode
+  :mode (("\\.html\\'" . web-mode)
+         ("\\.svelte\\'" . web-mode))
+  :config
+  (setq web-mode-engines-alist
+        '(("svelte" . "\\.svelte\\'")))
+  :general
+  (major-def
+    :keymaps 'web-mode-map
+    "rr" 'web-mode-element-rename))
 
 (setq gc-cons-threshold 100000000) ; 100 Mb
 
