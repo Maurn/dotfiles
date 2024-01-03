@@ -1,0 +1,44 @@
+[colors.bright]
+black = "#777777"
+blue = "#167fff"
+cyan = "#00b7eb"
+green = "#61bc3b"
+magenta = "#744560"
+red = "#9c3528"
+white = "#c5c8c6"
+yellow = "#f3b43a"
+
+[colors.cursor]
+cursor = "#00b7eb"
+
+[colors.normal]
+black = "#777777"
+blue = "#167fff"
+cyan = "#00b7eb"
+green = "#61bc3b"
+magenta = "#744560"
+red = "#9c3528"
+white = "#c5c8c6"
+yellow = "#f3b43a"
+
+[colors.primary]
+background = "#000000"
+foreground = "#ffffff"
+
+[cursor.style]
+blinking = "Never"
+shape = "Beam"
+
+[font]
+size = 7.9
+
+[font.normal]
+family = "Source Code Pro"
+style = "SemiBold"
+
+[font.offset]
+x = 0
+y = -2
+
+[window.padding]
+x = 2
