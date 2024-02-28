@@ -28,8 +28,6 @@
 
  comment-auto-fill-only-comments t
 
- lsp-headerline-breadcrumb-mode nil
-
  native-comp-async-report-warnings-errors nil
 
  make-backup-files nil ; stop creating backup~ files
@@ -344,10 +342,10 @@
   :config
   (evil-terminal-cursor-changer-activate))
 
-(use-package xclip
-  :unless window-system
-  :config
-  (xclip-mode 1))
+;; (use-package xclip
+;;   :unless window-system
+;;   :config
+;;   (xclip-mode 1))
 
 (use-package avy
   :after evil
@@ -482,9 +480,9 @@
 (use-package git-gutter
   :hook (prog-mode . global-git-gutter-mode))
 
-;; (use-package editorconfig
-;;   :config
-;;   (editorconfig-mode 1))
+(use-package editorconfig
+  :config
+  (editorconfig-mode 1))
 
 (use-package apheleia
   :config
@@ -516,6 +514,7 @@
   (defun my/lsp-mode-setup-completion ()
     (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
           '(orderless))) ;; Configure orderless
+  (setq lsp-headerline-breadcrumb-enable nil)
   :commands (lsp lsp-deferred)
   :hook
   (lsp-completion-mode . my/lsp-mode-setup-completion)
@@ -523,7 +522,7 @@
      web-mode
      c++-mode
      c-mode
-     rust-mode
+     rust-ts-mode
      python-mode) . lsp-deferred))
   :general
   (general-def 'normal lsp-mode-map
