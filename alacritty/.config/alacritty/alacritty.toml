@@ -30,7 +30,7 @@ blinking = "Never"
 shape = "Beam"
 
 [font]
-size = 10
+size = 11
 
 [font.normal]
 family = "Source Code Pro"
