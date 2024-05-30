@@ -28,6 +28,8 @@ alias ysiops='cd ~/entropylabs/YSI/ops'
 alias pryglapi='cd ~/code/prygl.nu/services/api/ && npm start'
 alias pryglfront='cd ~/code/prygl.nu/services/frontend/ && npm start'
 alias pryglops='cd ~/code/prygl.nu/ops'
+alias wacky='cd ~/code/wackywiz && alacritty --working-directory ~/code/wackywiz &;  npm run dev'
+
 mkcd () { mkdir "$1"; cd "$1" }
 
 earth-background () {
