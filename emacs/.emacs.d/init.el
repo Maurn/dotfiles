@@ -523,6 +523,7 @@
   :hook
   (lsp-completion-mode . my/lsp-mode-setup-completion)
   (((typescript-ts-mode
+     ;; (((typescript-mode
      web-mode
      c++-mode
      c-mode
