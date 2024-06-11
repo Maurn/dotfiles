@@ -14,7 +14,6 @@
         "wireplumber",
         "idle_inhibitor",
         "network",
-        // "power-profiles-daemon",
         "disk",
         // "memory",
         "backlight",
@@ -41,18 +40,9 @@
         }
     },
     "hyprland/language": {
-        "format": "󰌌 {}",
+        "format": " {}",
         "format-en": "en",
         "format-da": "da"
-    },
-    "keyboard-state": {
-        "numlock": true,
-        "capslock": true,
-        "format": "{name} {icon}",
-        "format-icons": {
-            "locked": "",
-            "unlocked": ""
-        }
     },
     "idle_inhibitor": {
         "format": "{icon}",
@@ -66,7 +56,7 @@
         "spacing": 10
     },
     "clock": {
-        "format": "{:%a - %d/%m/%Y - %H:%M}  ",
+        "format": "󰃭 {:%a - %d/%m/%Y - %H:%M}",
         "tooltip-format": "<tt><small>{calendar}</small></tt>",
         "calendar": {
                     "mode"          : "year",
@@ -91,65 +81,43 @@
     },
     "disk": {
         "interval": 30,
-        "format": "{specific_used:0.0f} /{specific_total:0.2f} GB",
+        "format": " {specific_free:0.0f} GB",
         "unit": "GB"
-        // 0.25 GB out of 2000.00 GB available. Alternatively 241.3MiB out of 1.9TiB available.
     },
     "memory": {
-        "format": "{}% "
-    },
-    "temperature": {
-        // "thermal-zone": 2,
-        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
-        "critical-threshold": 80,
-        // "format-critical": "{temperatureC}°C {icon}",
-        "format": "{temperatureC}°C {icon}",
-        "format-icons": ["", "", ""]
+        "format": "󰍛 {avail}%"
     },
     "backlight": {
         // "device": "acpi_video1",
-        "format": "{percent}% {icon}",
-        "format-icons": ["", "", "", "", "", "", "", "", ""]
+        "format": "{icon} {percent}%",
+        "format-icons": ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
     },
     "battery": {
         "states": {
-            // "good": 95,
             "warning": 30,
             "critical": 15
         },
-        "format": "{capacity}% {icon}",
-        "format-full": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
-    },
-    "power-profiles-daemon": {
-      "format": "{icon}",
-      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
-      "tooltip": true,
-      "format-icons": {
-        "default": "",
-        "performance": "",
-        "balanced": "",
-        "power-saver": ""
-      }
+        "format": "{icon} {capacity}%",
+        "format-full": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": " {capacity}%",
+        "format-alt": "{icon} {time}",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
     },
     "network": {
-        "format-wifi": "{essid} ({signalStrength}%) ",
+        "format-wifi": "{icon} {essid} ({signalStrength}%)",
         "format-ethernet": "{ipaddr}/{cidr} ",
-        "tooltip-format": "{ifname} via {gwaddr} ",
+        "tooltip-format": "{ifname} via {gwaddr}",
         "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "Disconnected ⚠",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        "format-disconnected": " Disconnected",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
     },
     "wireplumber": {
         "format": "{icon} {volume}%",
         "format-muted": "󰝟",
         "on-click": "pamixer -t",
         "on-right-click": "pavucontrol",
-        "format-icons": ["", "", ""]
+        "format-icons": ["󰕿", "󰖀", "󰕾"]
     }
 }
