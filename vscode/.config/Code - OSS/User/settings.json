@@ -1088,7 +1088,8 @@
     "vim.useSystemClipboard": true,
     "window.menuBarVisibility": "toggle",
     "breadcrumbs.enabled": true,
-    "workbench.activityBar.visible": false,
     "tslint.alwaysShowRuleFailuresAsWarnings": true,
-    "javascript.updateImportsOnFileMove.enabled": "always"
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "workbench.activityBar.location": "hidden",
+    "svelte.enable-ts-plugin": true
 }
