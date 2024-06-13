@@ -25,6 +25,10 @@
     color: @foreground-inactive;
 }
 
+#workspaces button.visible {
+    background-color: @background-alt;
+}
+
 #workspaces button.active {
     background-color: @active;
 }
