@@ -18,7 +18,8 @@
 }
 
 #workspaces button {
-    padding: 0.3rem 0.5rem;
+    min-width: 2rem;
+    min-height: 2rem;
 }
 
 #workspaces button.empty {
