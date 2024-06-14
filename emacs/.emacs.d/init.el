@@ -346,10 +346,10 @@
   :config
   (evil-terminal-cursor-changer-activate))
 
-;; (use-package xclip
-;;   :unless window-system
-;;   :config
-;;   (xclip-mode 1))
+(use-package xclip
+  :unless window-system
+  :config
+  (xclip-mode 1))
 
 (use-package avy
   :after evil
@@ -544,8 +544,9 @@
 
 (use-package web-mode
   :mode (("\\.html\\'" . web-mode)
-         ("\\.svelte\\'" . web-mode))
+         ("\\.svelte\\'" . svelte-mode))
   :config
+  (define-derived-mode svelte-mode web-mode "Svelte")
   (setq web-mode-engines-alist
         '(("svelte" . "\\.svelte\\'")))
   :general
