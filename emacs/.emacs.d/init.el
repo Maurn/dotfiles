@@ -511,6 +511,18 @@
             '(lambda ()
                (setq-local require-final-newline nil))))
 
+(use-package web-mode
+  :mode (("\\.html\\'" . web-mode)
+         ("\\.svelte\\'" . svelte-mode))
+  :config
+  (define-derived-mode svelte-mode web-mode "Svelte")
+  (setq web-mode-engines-alist
+        '(("svelte" . "\\.svelte\\'")))
+  :general
+  (major-def
+    :keymaps 'web-mode-map
+    "rr" 'web-mode-element-rename))
+
 (use-package lsp-mode
   :custom
   (lsp-completion-provider :none) ;; we use Corfu!
@@ -518,13 +530,13 @@
   (defun my/lsp-mode-setup-completion ()
     (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
           '(orderless))) ;; Configure orderless
-  (setq lsp-headerline-breadcrumb-enable nil)
+  (setq lsp-headerline-breadcrumb-enable nil
+        lsp-eldoc-render-all t)
   :commands (lsp lsp-deferred)
   :hook
   (lsp-completion-mode . my/lsp-mode-setup-completion)
   (((typescript-ts-mode
-     ;; (((typescript-mode
-     web-mode
+     svelte-mode
      c++-mode
      c-mode
      rust-ts-mode
@@ -541,18 +553,6 @@
     "rf" 'lsp-execute-code-action
     "ro" 'lsp-organize-imports
     "=" 'lsp-format-buffer))
-
-(use-package web-mode
-  :mode (("\\.html\\'" . web-mode)
-         ("\\.svelte\\'" . svelte-mode))
-  :config
-  (define-derived-mode svelte-mode web-mode "Svelte")
-  (setq web-mode-engines-alist
-        '(("svelte" . "\\.svelte\\'")))
-  :general
-  (major-def
-    :keymaps 'web-mode-map
-    "rr" 'web-mode-element-rename))
 
 (setq gc-cons-threshold 100000000) ; 100 Mb
 
