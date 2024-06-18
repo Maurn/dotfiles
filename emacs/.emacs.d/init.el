@@ -404,6 +404,30 @@
     "ff"  'find-file
     "fr"  'consult-recent-file
     "/"   'consult-ripgrep))
+(use-package embark
+  :ensure t
+
+  :bind
+  (("C-." . embark-act)         ;; pick some comfortable binding
+   ("C-;" . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+
+  :init
+
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+
+  :config
+
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+
+(use-package embark-consult
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
 
 (use-package treesit-auto
   :custom
@@ -501,8 +525,14 @@
   :bind
   ;; Another key binding can be used, such as S-SPC.
   ;; (:map corfu-map ("M-SPC" . corfu-insert-separator))
+  :config
+  (setq corfu-min-width 30)
   :init
   (global-corfu-mode))
+
+(use-package nerd-icons-corfu
+  :config
+  (add-to-list 'corfu-margin-formatters 'nerd-icons-corfu-formatter))
 
 (use-package yasnippet
   :config
@@ -512,16 +542,19 @@
                (setq-local require-final-newline nil))))
 
 (use-package web-mode
-  :mode (("\\.html\\'" . web-mode)
+  :mode (
          ("\\.svelte\\'" . svelte-mode))
+  :custom
+  (web-mode-markup-indent-offset 2)
+  (web-mode-css-indent-offset 2)
+  (web-mode-code-indent-offset 2)
+  (web-mode-enable-auto-closing nil)
+  (web-mode-enable-auto-pairing nil)
+
   :config
   (define-derived-mode svelte-mode web-mode "Svelte")
   (setq web-mode-engines-alist
-        '(("svelte" . "\\.svelte\\'")))
-  :general
-  (major-def
-    :keymaps 'web-mode-map
-    "rr" 'web-mode-element-rename))
+        '(("svelte" . "\\.svelte\\'"))))
 
 (use-package lsp-mode
   :custom
@@ -553,6 +586,8 @@
     "rf" 'lsp-execute-code-action
     "ro" 'lsp-organize-imports
     "=" 'lsp-format-buffer))
+
+(use-package lsp-java)
 
 (setq gc-cons-threshold 100000000) ; 100 Mb
 

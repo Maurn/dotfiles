@@ -1,12 +1,12 @@
 @define-color foreground #ffffff;
-@define-color foreground-inactive #7f8c8d;
+@define-color foreground-inactive #888888;
 @define-color background #000000;
 @define-color background-alt #31363b;
 @define-color active #003ea3;
 
 * {
-    font-family: Noto Sans Regular;
-    font-size: 15px;
+    font-family: Inconsolata Semibold;
+    font-size: 18px;
     padding: 0;
     margin: 0;
     border-radius: 0;
@@ -53,4 +53,12 @@
     animation-timing-function: steps(12);
     animation-iteration-count: infinite;
     animation-direction: alternate;
+}
+
+#language {
+    min-width: 45px;
+}
+
+#wireplumber.muted {
+    color: @foreground-inactive;
 }
