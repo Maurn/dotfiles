@@ -4,17 +4,20 @@
 ;;; Package --- Summary
 ;;; Code:
 
-(setq-default
+(setopt
  read-process-output-max (* 1024 1024) ;; 1mb
  indent-tabs-mode nil
  tab-width 2
  evil-shift-width 2
+
+ use-package-always-ensure t
 
  show-paren-delay 0
  vc-follow-symlinks t
  help-window-select 't
  fill-column 80
  initial-scratch-message nil
+ sentence-end-double-space nil
 
  ;; scroll one line at a time (less "jumpy" than defaults)
  mouse-wheel-scroll-amount '(1 ((shift) . 1)) ;; one line at a time
@@ -25,16 +28,21 @@
  use-dialog-box nil
  ring-bell-function 'ignore
  visible-bell nil
+ use-dialog-box nil
 
  comment-auto-fill-only-comments t
-
- native-comp-async-report-warnings-errors nil
 
  make-backup-files nil ; stop creating backup~ files
  auto-save-default nil ; stop creating #autosave# files
  create-lockfiles nil) ; no fucking lockfiles either
 
-(defalias 'yes-or-no-p 'y-or-n-p)
+;; Automatically reread from disk if the underlying file changes
+(setopt auto-revert-avoid-polling t)
+;; Some systems don't do file notifications well; see
+;; https://todo.sr.ht/~ashton314/emacs-bedrock/11
+(setopt auto-revert-interval 5)
+(setopt auto-revert-check-vc-info t)
+(global-auto-revert-mode)
 
 (set-default-coding-systems 'utf-8)
 (global-hl-line-mode 1)
@@ -45,6 +53,8 @@
 (show-paren-mode 1)
 (electric-pair-mode 1)
 
+(defalias 'yes-or-no-p 'y-or-n-p)
+
 (defun my-prog-mode-hook ()
   "Prog hook!"
   (display-line-numbers-mode)
@@ -53,21 +63,10 @@
 
 (add-hook 'prog-mode-hook 'my-prog-mode-hook)
 
+(with-eval-after-load 'package
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
 
-(eval-when-compile
-  (setq-default package-archives '(("melpa" . "https://melpa.org/packages/")
-                                   ("elpa"  . "https://elpa.gnu.org/packages/")
-                                   ("org"   . "https://orgmode.org/elpa/"))
-                ;; package-quickstart t
-                load-prefer-newer t)
-
-  (setq-default
-   use-package-always-ensure t
-   ;; use-package-always-demand t
-   use-package-verbose t
-   use-package-compute-statistics t)
-
-  (require 'use-package))
+(require 'use-package)
 
 ;; Change the user-emacs-directory to keep unwanted things out of ~/.emacs.d
 (setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
@@ -243,8 +242,8 @@
 (use-package doom-modeline
   :config
   (doom-modeline-mode 1)
-  (setq doom-modeline-buffer-file-name-style 'truncate-upto-root
-        doom-modeline-icon nil))
+  (setopt doom-modeline-buffer-file-name-style 'truncate-upto-root
+          doom-modeline-icon nil))
 
 (use-package page-break-lines
   :config
@@ -259,14 +258,14 @@
   (recentf-mode)
   :hook (kill-emacs . recentf-save-list)
   :config
-  (setq recentf-max-saved-items 300
-        recentf-auto-cleanup 600
-        recentf-exclude '("/tmp/"
-                          "/ssh:"
-                          "/sudo:"
-                          "recentf$"
-                          "/elpa/"
-                          "/snippets/"))
+  (setopt recentf-max-saved-items 300
+          recentf-auto-cleanup 600
+          recentf-exclude '("/tmp/"
+                            "/ssh:"
+                            "/sudo:"
+                            "recentf$"
+                            "/elpa/"
+                            "/snippets/"))
   (defun recentf-save-list/silent ()
     (let ((save-silently t)) (recentf-save-list)))
   (run-at-time nil (* 5 60) 'recentf-save-list/silent))
@@ -278,11 +277,11 @@
 (use-package evil
   :init
   (global-undo-tree-mode 1)
-  (setq evil-want-C-u-scroll t
-        evil-want-minibuffer t
-        evil-want-keybinding nil
-        evil-undo-system 'undo-tree
-        evil-want-Y-yank-to-eol t)
+  (setopt evil-want-C-u-scroll t
+          evil-want-minibuffer t
+          evil-want-keybinding nil
+          evil-undo-system 'undo-tree
+          evil-want-Y-yank-to-eol t)
   (evil-mode 1)
   :config
   (add-hook 'window-configuration-change-hook #'evil-normalize-keymaps)
@@ -314,7 +313,7 @@
   :config (evil-commentary-mode 1)
   :general
   (general-nmap
-    "gc"  'evil-commentary
+    "gc" 'evil-commentary
     "gC" 'evil-commentary-line))
 
 (use-package evil-visualstar
@@ -338,11 +337,11 @@
   :unless window-system
   :after evil
   :init
-  (setq evil-motion-state-cursor 'box   ; █
-        evil-visual-state-cursor 'box   ; █
-        evil-normal-state-cursor 'box   ; █
-        evil-insert-state-cursor 'bar   ; ⎸
-        evil-emacs-state-cursor  'hbar) ; _
+  (setopt evil-motion-state-cursor 'box   ; █
+          evil-visual-state-cursor 'box   ; █
+          evil-normal-state-cursor 'box   ; █
+          evil-insert-state-cursor 'bar   ; ⎸
+          evil-emacs-state-cursor  'hbar) ; _
   :config
   (evil-terminal-cursor-changer-activate))
 
@@ -365,8 +364,7 @@
   :init
   (vertico-mode)
 
-  ;; Enable recursive minibuffers
-  (setq enable-recursive-minibuffers t)
+  (setopt enable-recursive-minibuffers t)
 
   :general
   (general-iemap
@@ -396,8 +394,8 @@
 
 (use-package consult
   :init
-  (setq xref-show-xrefs-function #'consult-xref
-        xref-show-definitions-function #'consult-xref)
+  (setopt xref-show-xrefs-function #'consult-xref
+          xref-show-definitions-function #'consult-xref)
   :general
   (leader-def
     "SPC" (general-simulate-key "M-x")
@@ -484,6 +482,8 @@
   :commands (magit-status)
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+  :config
+  (add-hook 'after-save-hook 'magit-after-save-refresh-status t)
   :general
   (leader-def
     "g"   '(:ignore t :which-key "git")
