@@ -5,60 +5,64 @@
 @define-color active #003ea3;
 
 * {
-    font-family: Inconsolata Semibold;
-    font-size: 18px;
-    padding: 0;
-    margin: 0;
-    border-radius: 0;
+  font-family: Inconsolata Semibold;
+  font-size: 18px;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
 }
 
 #waybar {
-    color: @foreground;
-    background-color: @background;
+  color: @foreground;
+  background-color: @background;
 }
 
 #workspaces button {
-    min-width: 2rem;
-    min-height: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
 }
 
 #workspaces button.empty {
-    color: @foreground-inactive;
+  color: @foreground-inactive;
 }
 
 #workspaces button.visible {
-    background-color: @background-alt;
+  background-color: @background-alt;
 }
 
 #workspaces button.active {
-    background-color: @active;
+  background-color: @active;
+}
+
+#workspaces button.urgent {
+  background-color: #aa6600;
 }
 
 #tray {
-    padding-right: 0;
+  padding-right: 0;
 }
 
 @keyframes blink {
-    to {
-        background-color: #000000;
-        color: #ffffff;
-    }
+  to {
+    background-color: #000000;
+    color: #ffffff;
+  }
 }
 
 #battery.critical:not(.charging) {
-    background-color: #f53c3c;
-    color: #ffffff;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: steps(12);
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
+  background-color: #f53c3c;
+  color: #ffffff;
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-timing-function: steps(12);
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
 #language {
-    min-width: 45px;
+  min-width: 45px;
 }
 
 #wireplumber.muted {
-    color: @foreground-inactive;
+  color: @foreground-inactive;
 }
