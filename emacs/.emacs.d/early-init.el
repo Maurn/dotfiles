@@ -14,6 +14,13 @@
 (setq warning-suppress-log-types '((comp) (bytecomp)))
 (setq native-comp-async-report-warnings-errors 'silent)
 
+(setenv "LSP_USE_PLISTS" "true")
+(setq lsp-use-plists t)
+
+;; Change the user-emacs-directory to keep unwanted things out of ~/.emacs.d
+(setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
+      url-history-file (expand-file-name "url/history" user-emacs-directory))
+
 ;; Silence stupid startup message
 (setq inhibit-startup-echo-area-message (user-login-name))
 

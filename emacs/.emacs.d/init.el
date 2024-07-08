@@ -68,10 +68,6 @@
 
 (require 'use-package)
 
-;; Change the user-emacs-directory to keep unwanted things out of ~/.emacs.d
-(setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
-      url-history-file (expand-file-name "url/history" user-emacs-directory))
-
 ;; Use no-littering to automatically set common paths to the new user-emacs-directory
 (use-package no-littering)
 
@@ -85,6 +81,7 @@
 (use-package exec-path-from-shell
   :config
   (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "LSP_USE_PLISTS")
   (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
 
 (use-package general
@@ -550,7 +547,11 @@
   (web-mode-code-indent-offset 2)
   (web-mode-enable-auto-closing nil)
   (web-mode-enable-auto-pairing nil)
-
+  :hook
+  (web-mode . (lambda ()
+                (setq-local
+                 electric-pair-pairs
+                 (append electric-pair-pairs '((?' . ?'))))))
   :config
   (define-derived-mode svelte-mode web-mode "Svelte")
   (setq web-mode-engines-alist
@@ -565,6 +566,35 @@
           '(orderless))) ;; Configure orderless
   (setq lsp-headerline-breadcrumb-enable nil
         lsp-eldoc-render-all t)
+  :config
+  (defun lsp-booster--advice-json-parse (old-fn &rest args)
+    "Try to parse bytecode instead of json."
+    (or
+     (when (equal (following-char) ?#)
+       (let ((bytecode (read (current-buffer))))
+         (when (byte-code-function-p bytecode)
+           (funcall bytecode))))
+     (apply old-fn args)))
+  (advice-add (if (progn (require 'json)
+                         (fboundp 'json-parse-buffer))
+                  'json-parse-buffer
+                'json-read)
+              :around
+              #'lsp-booster--advice-json-parse)
+
+  (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+    "Prepend emacs-lsp-booster command to lsp CMD."
+    (let ((orig-result (funcall old-fn cmd test?)))
+      (if (and (not test?)                             ;; for check lsp-server-present?
+               (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+               lsp-use-plists
+               (not (functionp 'json-rpc-connection))  ;; native json-rpc
+               (executable-find "emacs-lsp-booster"))
+          (progn
+            (message "Using emacs-lsp-booster for %s!" orig-result)
+            (cons "emacs-lsp-booster" orig-result))
+        orig-result)))
+  (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
   :commands (lsp lsp-deferred)
   :hook
   (lsp-completion-mode . my/lsp-mode-setup-completion)
