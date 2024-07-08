@@ -408,12 +408,10 @@
    ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
   :init
-
   ;; Optionally replace the key help with a completing-read interface
   (setq prefix-help-command #'embark-prefix-help-command)
 
   :config
-
   ;; Hide the mode line of the Embark live/completions buffers
   (add-to-list 'display-buffer-alist
                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
@@ -421,6 +419,7 @@
                  (window-parameters (mode-line-format . none)))))
 
 (use-package embark-consult
+  :after (consult embark)
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
@@ -517,7 +516,7 @@
   :custom
   (corfu-auto t)
   ;; (corfu-separator ?_) ;; Set to orderless separator, if not using space
-  (corfu-auto-delay  0) ;; TOO SMALL - NOT RECOMMENDED
+  (corfu-auto-delay  0.01) ;; TOO SMALL - NOT RECOMMENDED
   (corfu-auto-prefix 1) ;; TOO SMALL - NOT RECOMMENDED
   :bind
   ;; Another key binding can be used, such as S-SPC.
@@ -545,7 +544,7 @@
   (web-mode-markup-indent-offset 2)
   (web-mode-css-indent-offset 2)
   (web-mode-code-indent-offset 2)
-  (web-mode-enable-auto-closing nil)
+  (web-mode-enable-auto-closing t)
   (web-mode-enable-auto-pairing nil)
   :hook
   (web-mode . (lambda ()
