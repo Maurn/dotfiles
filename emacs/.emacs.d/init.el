@@ -423,17 +423,18 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
-(use-package treesit-auto
-  :custom
-  (treesit-auto-install 't)
-  :config
-  (delete 'yaml treesit-auto-langs)
-  (treesit-auto-add-to-auto-mode-alist 'all)
-  (global-treesit-auto-mode))
+;; (use-package treesit-auto
+;;   :custom
+;;   (treesit-auto-install 't)
+;;   :config
+;;   (delete 'yaml treesit-auto-langs)
+;;   (treesit-auto-add-to-auto-mode-alist 'all)
+;;   (global-treesit-auto-mode))
 
-(use-package yaml-mode
-  :custom
-  (yaml-ts-mode-hook yaml-mode-hook))
+(use-package yaml-mode)
+(use-package typescript-mode)
+;; :custom
+;; (yaml-ts-mode-hook yaml-mode-hook))
 
 (use-package projectile
   :config
@@ -597,11 +598,11 @@
   :commands (lsp lsp-deferred)
   :hook
   (lsp-completion-mode . my/lsp-mode-setup-completion)
-  (((typescript-ts-mode
+  (((typescript-mode
      svelte-mode
      c++-mode
      c-mode
-     rust-ts-mode
+     rust-mode
      python-mode) . lsp-deferred))
   :general
   (general-def 'normal lsp-mode-map
@@ -616,7 +617,7 @@
     "ro" 'lsp-organize-imports
     "=" 'lsp-format-buffer))
 
-(use-package lsp-java)
+;; (use-package lsp-java)
 
 (setq gc-cons-threshold 100000000) ; 100 Mb
 
