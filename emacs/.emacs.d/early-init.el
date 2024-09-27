@@ -29,7 +29,7 @@
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
-(add-to-list 'default-frame-alist '(font . "InconsolataSemibold-13"))
+(add-to-list 'default-frame-alist '(font . "InconsolataSemibold-15"))
 
 (provide 'early-init)
 ;;; early-init.el ends here

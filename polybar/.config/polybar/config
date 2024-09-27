@@ -27,7 +27,7 @@ active = #003ea3
 [bar/bottom]
 monitor = ${env:MONITOR}
 width = 100%
-height = 30
+height = 45
 offset-x = 0
 offset-y = 0
 radius = 0
@@ -50,8 +50,8 @@ module-margin-left = 0
 module-margin-right = 5
 
 
-font-0 = NotoSans-Regular:size=11.6;2
-font-1 = SymbolsNerdFont-Regular:size=15;3
+font-0 = NotoSans-Regular:size=14;5
+font-1 = SymbolsNerdFont-Regular:size=17;3
 
 
 modules-left = i3
