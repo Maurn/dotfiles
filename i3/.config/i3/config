@@ -164,11 +164,11 @@ bindsym $mod+F6 exec --no-startup-id "light -A 5%"
 bindsym $mod+Shift+F6 exec --no-startup-id "light -A 1%"
 
 #Audio
-bindsym $mod+F10 exec --no-startup-id "pamixer -i 5 -u"
-bindsym $mod+Shift+F10 exec --no-startup-id "pamixer -i 1 -u"
-bindsym $mod+F9 exec --no-startup-id "pamixer -d 5 -u"
-bindsym $mod+Shift+F9 exec --no-startup-id "pamixer -d 1 -u"
-bindsym $mod+F11 exec --no-startup-id "pamixer -t"
+bindsym $mod+F1 exec --no-startup-id "pamixer -t"
+bindsym $mod+F2 exec --no-startup-id "pamixer -d 5 -u"
+bindsym $mod+Shift+F2 exec --no-startup-id "pamixer -d 1 -u"
+bindsym $mod+F3 exec --no-startup-id "pamixer -i 5 -u"
+bindsym $mod+Shift+F3 exec --no-startup-id "pamixer -i 1 -u"
 
 bindsym $mod+Shift+e exec --no-startup-id "emacsclient -c"
 
@@ -199,6 +199,7 @@ focus_follows_mouse no
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh &> /dev/null
 exec_always --no-startup-id autotiling
 exec_always --no-startup-id setxkbmap -layout us,dk -option grp:ctrls_toggle -option grp:lswitch -option caps:swapescape
+exec_always --no-startup-id xset r rate 250 75
 
 exec --no-startup-id feh --bg-scale ~/dotfiles/images/sierpinski.png
 exec --no-startup-id flameshot &
