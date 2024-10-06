@@ -6,6 +6,7 @@
  use-package-always-ensure t)
 
 (electric-pair-mode)
+(winner-mode)
 (global-display-line-numbers-mode)
 (pixel-scroll-precision-mode)
 
@@ -67,6 +68,8 @@
   (define-derived-mode svelte-mode web-mode "Svelte")
   (setq web-mode-engines-alist
         '(("svelte" . "\\.svelte\\'"))))
+
+(use-package yaml-mode)
 
 (use-package typescript-mode)
 

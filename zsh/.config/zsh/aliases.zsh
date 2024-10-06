@@ -46,3 +46,11 @@ wav2flac () {
 flac2wav () {
   for file in *.flac; do ffmpeg -i $file ${file%.*}.wav; done
 }
+
+measure_loudness () {
+  ffmpeg -i "$1" -y -vn -af ebur128=target=-16:peak='true' /tmp/loudnessmeasure.wav
+}
+
+aac_encode () {
+  ffmpeg -i "$1" -c:a libfdk_aac -vbr 3 -movflags +faststart -vn "$2"
+}
