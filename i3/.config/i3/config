@@ -203,7 +203,7 @@ exec_always --no-startup-id xset r rate 250 75
 
 exec --no-startup-id feh --bg-scale ~/dotfiles/images/sierpinski.png
 exec --no-startup-id flameshot &
-exec --no-startup-id picom --vsync -b
+exec --no-startup-id picom --vsync --no-use-damage -b
 exec --no-startup-id numlockx &
 exec --no-startup-id light -Srs "sysfs/leds/platform::mute" 0
 exec --no-startup-id udiskie --smart-tray &
