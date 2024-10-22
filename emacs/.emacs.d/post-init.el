@@ -9,6 +9,7 @@
 (winner-mode)
 (global-display-line-numbers-mode)
 (pixel-scroll-precision-mode)
+(auto-revert-mode)
 
 (load "~/.emacs.d/functions.el")
 

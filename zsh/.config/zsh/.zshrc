@@ -50,8 +50,4 @@ source /usr/share/fzf/completion.zsh
 
 source $ZDOTDIR/keybindings.zsh
 
-# source ~/.proto/bin/
-
 export ANDROID_HOME=~/Android/Sdk
-
- # source $ZDOTDIR/vi-mode.zsh
