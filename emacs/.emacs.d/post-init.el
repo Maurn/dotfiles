@@ -26,6 +26,10 @@
   :config
   (apheleia-global-mode +1))
 
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+
 (use-package corfu
   :custom
   (corfu-auto t)
