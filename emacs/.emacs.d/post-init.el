@@ -32,7 +32,7 @@
 
 (use-package corfu
   :custom
-  (corfu-auto t)
+  (corfu-auto nil)
   ;; (corfu-separator ?_) ;; Set to orderless separator, if not using space
   (corfu-auto-delay  0.01) ;; TOO SMALL - NOT RECOMMENDED
   (corfu-auto-prefix 1) ;; TOO SMALL - NOT RECOMMENDED
@@ -42,7 +42,10 @@
   :config
   (setq corfu-min-width 30)
   :init
-  (global-corfu-mode))
+  (global-corfu-mode)
+  :general
+  ('(insert emacs)
+   "TAB" 'completion-at-point))
 
 (use-package nerd-icons-corfu
   :config
