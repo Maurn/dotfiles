@@ -11,6 +11,8 @@
 (pixel-scroll-precision-mode)
 (auto-revert-mode)
 
+(setq tab-always-indent 'complete)
+
 (load "~/.emacs.d/functions.el")
 
 (load "~/.emacs.d/editor.el")

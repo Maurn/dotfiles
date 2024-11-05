@@ -30,7 +30,7 @@ blinking = "Never"
 shape = "Beam"
 
 [font]
-size = 15
+size = 13
 
 [font.normal]
 family = "Inconsolata"

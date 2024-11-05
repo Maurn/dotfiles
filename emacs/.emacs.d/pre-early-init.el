@@ -37,6 +37,6 @@
 ;; the precise point where you previously left off.
 (add-hook 'after-init-hook #'save-place-mode)
 
-(add-to-list 'default-frame-alist '(font . "InconsolataSemibold-15"))
+(add-to-list 'default-frame-alist '(font . "InconsolataSemibold-13"))
 
 ;;; pre-early-init.el ends here
