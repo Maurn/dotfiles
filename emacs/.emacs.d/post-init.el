@@ -44,10 +44,7 @@
   :config
   (setq corfu-min-width 30)
   :init
-  (global-corfu-mode)
-  :general
-  ('(insert emacs)
-   "TAB" 'completion-at-point))
+  (global-corfu-mode))
 
 (use-package nerd-icons-corfu
   :config
