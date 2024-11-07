@@ -46,13 +46,6 @@
   :config
   (add-to-list 'corfu-margin-formatters 'nerd-icons-corfu-formatter))
 
-(use-package yasnippet
-  :config
-  (yas-global-mode 1)
-  (add-hook 'snippet-mode-hook
-            '(lambda ()
-               (setq-local require-final-newline nil))))
-
 (use-package web-mode
   :mode (
          ("\\.svelte\\'" . svelte-mode))
@@ -75,6 +68,36 @@
 (use-package yaml-mode)
 
 (use-package typescript-mode)
+
+(use-package tempel
+  :custom
+  (tempel-path "~/dotfiles/emacs/.emacs.d/templates")
+  :init
+  (defun tempel-setup-capf ()
+    ;; Add the Tempel Capf to `completion-at-point-functions'.
+    ;; `tempel-expand' only triggers on exact matches. Alternatively use
+    ;; `tempel-complete' if you want to see all matches, but then you
+    ;; should also configure `tempel-trigger-prefix', such that Tempel
+    ;; does not trigger too often when you don't expect it. NOTE: We add
+    ;; `tempel-expand' *before* the main programming mode Capf, such
+    ;; that it will be tried first.
+    (setq-local completion-at-point-functions
+                (cons #'tempel-expand
+                      completion-at-point-functions)))
+
+  (add-hook 'eglot-managed-mode-hook 'tempel-setup-capf)
+  (add-hook 'evil-insert-state-exit-hook 'tempel-done)
+  :general
+  (general-def '(normal visual insert) tempel-map
+    "C-l" 'tempel-next
+    "C-h" 'tempel-previous
+    "C-k" 'tempel-done
+    ))
+
+(use-package eglot-tempel
+  :preface (eglot-tempel-mode)
+  :init
+  (eglot-tempel-mode t))
 
 (use-package eglot
   :config

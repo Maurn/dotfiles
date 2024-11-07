@@ -1,0 +1,22 @@
+svelte-mode
+
+(state "let " p " = $state(" p ")")
+(derived "let " p " = $derived(" p ")")
+(effect "$effect(() => {" n> p n> " })" >)
+(props "type Props = {" n>
+       p n
+       "}" > n>
+       "let { " p " }: Props = $props()")
+(bindable p " = $bindable()" q)
+
+typescript-mode
+
+(loadfn "import type { PageServerLoad } from './$types'" n
+        "export const load: PageServerLoad = async ({ " p " }) => {" n>
+        p n
+        "}")
+
+;; Local Variables:
+;; mode: lisp-data
+;; outline-regexp: "[a-z]"
+;; End:
