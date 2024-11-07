@@ -28,10 +28,6 @@
   :config
   (apheleia-global-mode +1))
 
-(use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode))
-
 (use-package corfu
   :custom
   (corfu-auto nil)
@@ -83,65 +79,31 @@
 
 (use-package typescript-mode)
 
-(use-package lsp-mode
-  :custom
-  (lsp-completion-provider :none) ;; we use Corfu!
-  :init
-  (defun my/lsp-mode-setup-completion ()
-    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-          '(orderless))) ;; Configure orderless
-  :init
-  (setq lsp-headerline-breadcrumb-enable nil
-        lsp-eldoc-render-all t)
+(use-package eglot
   :config
-  (defun lsp-booster--advice-json-parse (old-fn &rest args)
-    "Try to parse bytecode instead of json."
-    (or
-     (when (equal (following-char) ?#)
-       (let ((bytecode (read (current-buffer))))
-         (when (byte-code-function-p bytecode)
-           (funcall bytecode))))
-     (apply old-fn args)))
-  (advice-add (if (progn (require 'json)
-                         (fboundp 'json-parse-buffer))
-                  'json-parse-buffer
-                'json-read)
-              :around
-              #'lsp-booster--advice-json-parse)
-
-  (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
-    "Prepend emacs-lsp-booster command to lsp CMD."
-    (let ((orig-result (funcall old-fn cmd test?)))
-      (if (and (not test?)                             ;; for check lsp-server-present?
-               (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
-               lsp-use-plists
-               (not (functionp 'json-rpc-connection))  ;; native json-rpc
-               (executable-find "emacs-lsp-booster"))
-          (progn
-            (message "Using emacs-lsp-booster for %s!" orig-result)
-            (cons "emacs-lsp-booster" orig-result))
-        orig-result)))
-  (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
-  :commands (lsp lsp-deferred)
+  (add-to-list 'eglot-server-programs
+               '(svelte-mode . ("svelteserver" "--stdio")))
   :hook
-  (lsp-completion-mode . my/lsp-mode-setup-completion)
   (((typescript-mode
      svelte-mode
      c++-mode
      c-mode
      rust-mode
-     python-mode) . lsp-deferred))
+     python-mode) . eglot-ensure))
   :general
-  (general-def 'normal lsp-mode-map
-    "gd" 'lsp-find-definition
-    "gt" 'lsp-find-type-definition
-    "gr" 'lsp-find-references
-    "K" 'lsp-describe-thing-at-point)
-  (major-def 'lsp-mode-map
+  (general-def 'normal eglot-mode-map
+    "gd" 'xref-find-definitions
+    "gt" 'eglot-find-typeDefinition
+    "gr" 'xref-find-references)
+  (major-def 'eglot-mode-map
     "r" '(:ignore t :which-key "refactor")
-    "rr" 'lsp-rename
-    "rf" 'lsp-execute-code-action
-    "ro" 'lsp-organize-imports
-    "=" 'lsp-format-buffer))
+    "rr" 'eglot-rename
+    "rf" 'eglot-code-actions
+    "ro" 'eglot-code-action-organize-imports
+    "=" 'aphelia-format-buffer))
+
+(use-package eglot-booster
+  :after eglot
+  :config	(eglot-booster-mode))
 
 ;;; post-init.el ends here
