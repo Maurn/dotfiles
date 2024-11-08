@@ -69,6 +69,8 @@
 
 (use-package typescript-mode)
 
+(use-package markdown-mode)
+
 (use-package tempel
   :custom
   (tempel-path "~/dotfiles/emacs/.emacs.d/templates")
@@ -100,6 +102,8 @@
   (eglot-tempel-mode t))
 
 (use-package eglot
+  :custom
+  (eglot-confirm-server-initiated-edits nil)
   :config
   (add-to-list 'eglot-server-programs
                '(svelte-mode . ("svelteserver" "--stdio")))

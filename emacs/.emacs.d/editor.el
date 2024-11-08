@@ -70,6 +70,12 @@
     "pp"  'project-switch-project
     "pb"  'project-switch-to-buffer
 
+    ;; errors
+    "e"  '(:ignore t :which-key "errors")
+    "en" 'flymake-goto-next-error
+    "ep" 'flymake-goto-prev-error
+    "es" 'consult-flymake
+
     ;; text
     "t"  '(:ignore t :which-key "text")
     "ta" 'align
