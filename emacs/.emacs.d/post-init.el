@@ -3,7 +3,22 @@
 ;;; Code:
 
 (setopt
- use-package-always-ensure t)
+ read-process-output-max (* 1024 1024) ;; 1mb
+ tab-width 2
+ evil-shift-width 2
+
+ use-package-always-ensure t
+
+ eldoc-idle-delay 0.03
+
+ show-paren-delay 0
+ help-window-select 't
+ fill-column 80
+ initial-scratch-message nil
+ sentence-end-double-space nil
+ auto-hscroll-mode 'current-line
+
+ comment-auto-fill-only-comments t)
 
 (electric-pair-mode)
 (winner-mode)
@@ -30,15 +45,17 @@
 
 (use-package corfu
   :custom
-  (corfu-auto nil)
   ;; (corfu-separator ?_) ;; Set to orderless separator, if not using space
-  (corfu-auto-delay  0.01) ;; TOO SMALL - NOT RECOMMENDED
-  (corfu-auto-prefix 1) ;; TOO SMALL - NOT RECOMMENDED
-  :bind
-  ;; Another key binding can be used, such as S-SPC.
-  ;; (:map corfu-map ("M-SPC" . corfu-insert-separator))
+
+  (corfu-min-width 30)
+
+  (corfu-auto nil)
+  (corfu-auto-delay 0)
+  (corfu-auto-prefix 1)
+
+  (corfu-echo-delay 0)
   :config
-  (setq corfu-min-width 30)
+  (corfu-echo-mode)
   :init
   (global-corfu-mode))
 
@@ -68,6 +85,8 @@
 (use-package yaml-mode)
 
 (use-package typescript-mode)
+
+(use-package rust-mode)
 
 (use-package markdown-mode)
 
@@ -105,6 +124,10 @@
   :custom
   (eglot-confirm-server-initiated-edits nil)
   :config
+  ;; Optimizations
+  (fset #'jsonrpc--log-event #'ignore)
+  (setq jsonrpc-event-hook nil)
+
   (add-to-list 'eglot-server-programs
                '(svelte-mode . ("svelteserver" "--stdio")))
   :hook
