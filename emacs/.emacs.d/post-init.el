@@ -22,7 +22,6 @@
 
 (electric-pair-mode)
 (winner-mode)
-(global-display-line-numbers-mode)
 (pixel-scroll-precision-mode)
 (auto-revert-mode)
 
@@ -62,6 +61,14 @@
 (use-package nerd-icons-corfu
   :config
   (add-to-list 'corfu-margin-formatters 'nerd-icons-corfu-formatter))
+
+(use-package nov
+  :mode
+  ("\\.epub\\'" . nov-mode)
+  :config
+  (setq-local
+   truncate-lines nil
+   display-line-numbers-mode nil))
 
 (use-package web-mode
   :mode (
@@ -123,11 +130,9 @@
 (use-package eglot
   :custom
   (eglot-confirm-server-initiated-edits nil)
+  (eglot-events-buffer-size 0)
+  (eglot-report-progress nil)
   :config
-  ;; Optimizations
-  (fset #'jsonrpc--log-event #'ignore)
-  (setq jsonrpc-event-hook nil)
-
   (add-to-list 'eglot-server-programs
                '(svelte-mode . ("svelteserver" "--stdio")))
   :hook
@@ -137,6 +142,7 @@
      c-mode
      rust-mode
      python-mode) . eglot-ensure))
+  (prog-mode . display-line-numbers-mode)
   :general
   (general-def 'normal eglot-mode-map
     "gd" 'xref-find-definitions

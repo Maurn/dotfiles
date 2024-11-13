@@ -40,7 +40,7 @@
 
     ;; Window operations
     "w"   '(:ignore t :which-key "windows")
-    "w TAB" 'alternate-window
+    "w TAB" 'other-window
     "wv"  'split-window-horizontally
     "ws"  'split-window-vertically
     "wV"  (lambda () (interactive)(split-window-horizontally) (other-window 1))
@@ -231,6 +231,10 @@
 (use-package marginalia
   :init
   (marginalia-mode))
+
+(use-package nerd-icons-completion
+  :config
+  (nerd-icons-completion-mode))
 
 (use-package orderless
   ;; Vertico leverages Orderless' flexible matching capabilities, allowing users

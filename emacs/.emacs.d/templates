@@ -1,5 +1,8 @@
 svelte-mode
 
+;; tags
+(script "<script lang='ts'>" n> q n "</script>")
+;; runes
 (state "let " p " = $state(" p ")")
 (derived "let " p " = $derived(" p ")")
 (effect "$effect(() => {" n> p n> " })" >)
@@ -8,9 +11,13 @@ svelte-mode
        "}" > n>
        "let { " p " }: Props = $props()")
 (bindable p " = $bindable()" q)
+;; binds
+(bv "bind:value={" q "}")
 
-typescript-mode
+typescript-mode svelte-mode
 
+(log "console.log(" p ")")
+(fun "function " p "(" p ") {" n> q n "}" >)
 (loadfn "import type { PageServerLoad } from './$types'" n
         "export const load: PageServerLoad = async ({ " p " }) => {" n>
         p n
