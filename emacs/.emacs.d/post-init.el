@@ -114,13 +114,14 @@
                       completion-at-point-functions)))
 
   (add-hook 'eglot-managed-mode-hook 'tempel-setup-capf)
-  (add-hook 'evil-insert-state-exit-hook 'tempel-done)
   :general
-  (general-def '(normal visual insert) tempel-map
-    "C-l" 'tempel-next
-    "C-h" 'tempel-previous
-    "C-k" 'tempel-done
-    ))
+  ('(normal visual insert) tempel-map
+   "C-l" 'tempel-next
+   "C-h" 'tempel-previous)
+  ('(normal visual) tempel-map
+   "TAB" 'tempel-next
+   "<backtab>" 'tempel-previous
+   "<escape>" 'tempel-done))
 
 (use-package eglot-tempel
   :preface (eglot-tempel-mode)
