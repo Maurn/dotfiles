@@ -312,6 +312,8 @@
    magit-blame-mode-map
    "q" 'magit-blame-quit))
 
+(use-package forge)
+
 (use-package git-timemachine
   :general
   (leader-def

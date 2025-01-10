@@ -9,3 +9,5 @@
 	helper = cache --timeout=10800
 [init]
 	defaultBranch = dev
+[github]
+	user = Maurn
