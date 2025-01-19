@@ -54,3 +54,14 @@ measure_loudness () {
 aac_encode () {
   ffmpeg -i "$1" -c:a libfdk_aac -vbr 3 -movflags +faststart -vn "$2"
 }
+
+deploy () {
+  if [[ $# -eq 0 ]] ; then
+    echo 'no hosts supplied'
+    return 1
+  fi
+
+  pushd ~mono/infrastructure
+  ansible-playbook deploy-sveltekit.yml -l "$1"
+  popd
+}

@@ -50,4 +50,5 @@ source /usr/share/fzf/completion.zsh
 
 source $ZDOTDIR/keybindings.zsh
 
-export ANDROID_HOME=~/Android/Sdk
+path=('/home/maurn/.proto/shims' $path)
+export PATH
