@@ -1,0 +1,10 @@
+export XCURSOR_THEME=phinger-cursors-dark
+export XCURSOR_SIZE=32
+export GDK_SCALE=1.25
+export ELECTRON_OZONE_PLATFORM_HINT=auto
+
+if [ $(cat /etc/hostname) = "spanden" ]; then
+  export LIBVA_DRIVER_NAME=nvidia
+  export __GLX_VENDOR_LIBRARY_NAME=nvidia
+  export NVD_BACKEND=direct
+fi
