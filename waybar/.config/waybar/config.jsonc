@@ -4,7 +4,8 @@
     "spacing": 15, // Gaps between modules (4px)
     // Choose the order of the modules
     "modules-left": [
-        "hyprland/workspaces"
+        "hyprland/workspaces",
+        "hyprland/submap"
     ],
     "modules-right": [
         "wireplumber",
@@ -23,6 +24,9 @@
         "disable-scroll": true,
         "warp-on-scroll": false,
         "format": "{name}"
+    },
+    "hyprland/submap": {
+        "format": "{}"
     },
     "hyprland/language": {
         "format": " {}",
