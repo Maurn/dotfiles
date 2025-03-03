@@ -55,6 +55,10 @@ aac_encode () {
   ffmpeg -i "$1" -c:a libfdk_aac -vbr 3 -movflags +faststart -vn "$2"
 }
 
+create_timelapse () {
+  ffmpeg -framerate "$1" -pattern_type glob -i '*.png' -c:v libx264 -pix_fmt yuv420p "$2"
+}
+
 deploy () {
   if [[ $# -eq 0 ]] ; then
     echo 'no hosts supplied'
