@@ -8,6 +8,7 @@
  evil-shift-width 2
 
  use-package-always-ensure t
+ use-package-always-demand t
 
  eldoc-idle-delay 0.03
 
