@@ -50,5 +50,14 @@ source /usr/share/fzf/completion.zsh
 
 source $ZDOTDIR/keybindings.zsh
 
-path=('/home/maurn/.proto/shims' $path)
-export PATH
+# proto
+export PROTO_HOME="$XDG_DATA_HOME/proto";
+export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH";
+
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}

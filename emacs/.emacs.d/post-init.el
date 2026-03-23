@@ -31,7 +31,7 @@
 (defun find-user-init-file ()
   "Edit the `user-init-file', in same window."
   (interactive)
-  (find-file user-init-file))
+  (find-file (file-name-concat minimal-emacs-user-directory "post-init.el")))
 (defun load-user-init-file ()
   "Load the `user-init-file', in same window."
   (interactive)
@@ -129,7 +129,7 @@
 
     ;; Buffer operations
     "b"   '(:ignore t :which-key "buffers")
-    "bd"  'kill-this-buffer
+    "bd"  'magit-kill-this-buffer
     "bD"  'kill-other-buffers
     "bn"  'next-buffer
     "bp"  'previous-buffer
@@ -432,6 +432,8 @@
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package editorconfig
+  :init
+  (put 'evil-shift-width 'safe-local-variable #'integerp)
   :config
   (editorconfig-mode 1))
 
@@ -551,10 +553,12 @@
     "rr" 'eglot-rename
     "rf" 'eglot-code-actions
     "ro" 'eglot-code-action-organize-imports
-    "=" 'aphelia-format-buffer))
+    "=" 'apheleia-format-buffer))
 
 (use-package eglot-booster
+  :vc (:url "https://github.com/jdtsmith/eglot-booster")
   :after eglot
+  :custom (eglot-booster-io-only t)
   :config	(eglot-booster-mode))
 
 ;;; post-init.el ends here
