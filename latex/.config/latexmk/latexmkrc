@@ -1,0 +1,6 @@
+$pdf_mode = 1;
+$dvi_mode = 0;
+$postscript_mode = 0;
+
+$pdf_previewer = "start zathura --fork";
+$aux_dir = ".aux";
