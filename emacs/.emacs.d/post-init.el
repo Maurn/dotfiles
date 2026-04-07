@@ -559,7 +559,8 @@
                        electric-pair-pairs
                        (append electric-pair-pairs '((?' . ?'))))))
   :config
-  (add-to-list 'eglot-server-programs '(svelte-ts-mode . ("svelteserver" "--stdio"))))
+  (add-to-list 'eglot-server-programs '(svelte-ts-mode . ("svelteserver" "--stdio")))
+  (add-to-list 'apheleia-mode-alist '(svelte-ts-mode . prettier-svelte)))
 
 ;; (setq sgml-quick-keys 'close)
 
