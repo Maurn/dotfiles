@@ -469,32 +469,24 @@
    truncate-lines nil
    display-line-numbers-mode nil))
 
-(use-package web-mode
-  :mode (
-         ("\\.svelte\\'" . svelte-mode))
+(use-package treesit-auto
   :custom
-  (web-mode-markup-indent-offset 2)
-  (web-mode-css-indent-offset 2)
-  (web-mode-code-indent-offset 2)
-  (web-mode-enable-auto-closing t)
-  (web-mode-enable-auto-pairing nil)
-  :hook
-  (web-mode . (lambda ()
-                (setq-local
-                 electric-pair-pairs
-                 (append electric-pair-pairs '((?' . ?'))))))
+  (treesit-font-lock-level 4)
+  (treesit-auto-install 'prompt)
   :config
-  (define-derived-mode svelte-mode web-mode "Svelte")
-  (setq web-mode-engines-alist
-        '(("svelte" . "\\.svelte\\'"))))
+  (setq my-svelte-tsauto-config
+        (make-treesit-auto-recipe
+         :lang 'svelte
+         :ts-mode 'svelte-ts-mode
+         :url "https://github.com/tree-sitter-grammars/tree-sitter-svelte"
+         :revision "master"
+         :source-dir "src"
+         :ext "\\.svelte\\'"))
+  (add-to-list 'treesit-auto-recipe-list my-svelte-tsauto-config)
+  (add-to-list 'treesit-auto-langs 'svelte)
 
-(use-package yaml-mode)
-
-(use-package typescript-mode)
-
-(use-package rust-mode)
-
-(use-package markdown-mode)
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
 
 (use-package tempel
   :custom
@@ -532,12 +524,9 @@
   (eglot-confirm-server-initiated-edits nil)
   (eglot-events-buffer-size 0)
   (eglot-report-progress nil)
-  :config
-  (add-to-list 'eglot-server-programs
-               '(svelte-mode . ("svelteserver" "--stdio")))
   :hook
   (((typescript-mode
-     svelte-mode
+     svelte-ts-mode
      c++-mode
      c-mode
      rust-mode
@@ -560,5 +549,18 @@
   :after eglot
   :custom (eglot-booster-io-only t)
   :config	(eglot-booster-mode))
+
+(use-package svelte-ts-mode
+  :vc (:url "https://github.com/leafOfTree/svelte-ts-mode")
+  :mode "\\.svelte\\'"
+  :hook
+  (svelte-ts-mode . (lambda ()
+                      (setq-local
+                       electric-pair-pairs
+                       (append electric-pair-pairs '((?' . ?'))))))
+  :config
+  (add-to-list 'eglot-server-programs '(svelte-ts-mode . ("svelteserver" "--stdio"))))
+
+;; (setq sgml-quick-keys 'close)
 
 ;;; post-init.el ends here
