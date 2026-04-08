@@ -473,6 +473,8 @@
   :custom
   (treesit-font-lock-level 4)
   (treesit-auto-install 'prompt)
+  :custom-face
+  (font-lock-property-use-face ((t :weight semibold)))
   :config
   (setq my-svelte-tsauto-config
         (make-treesit-auto-recipe
