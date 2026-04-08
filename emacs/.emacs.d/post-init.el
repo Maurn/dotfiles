@@ -487,6 +487,8 @@
   (add-to-list 'treesit-auto-recipe-list my-svelte-tsauto-config)
   (add-to-list 'treesit-auto-langs 'svelte)
 
+  (delete 'yaml treesit-auto-langs)
+
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
@@ -527,12 +529,12 @@
   (eglot-events-buffer-size 0)
   (eglot-report-progress nil)
   :hook
-  (((typescript-mode
+  (((typescript-ts-mode
      svelte-ts-mode
-     c++-mode
-     c-mode
-     rust-mode
-     python-mode) . eglot-ensure))
+     c++-ts-mode
+     c-ts-mode
+     rust-ts-mode
+     python-ts-mode) . eglot-ensure))
   (prog-mode . display-line-numbers-mode)
   :general
   (general-def 'normal eglot-mode-map
