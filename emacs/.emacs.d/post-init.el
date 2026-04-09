@@ -336,8 +336,10 @@
   (marginalia-mode))
 
 (use-package nerd-icons-completion
+  :after (marginalia nerd-icons)
   :config
-  (nerd-icons-completion-mode))
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
 
 (use-package orderless
   ;; Vertico leverages Orderless' flexible matching capabilities, allowing users
@@ -435,17 +437,22 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-(use-package editorconfig
-  :init
-  (put 'evil-shift-width 'safe-local-variable #'integerp)
-  (put 'tex-indent-basic 'safe-local-variable #'integerp)
-  (put 'tex-indent-item 'safe-local-variable #'integerp)
-  (put 'tex-indent-arg 'safe-local-variable #'integerp)
-  (put 'TeX-brace-indent-level 'safe-local-variable #'integerp)
-  (put 'LaTeX-indent-level 'safe-local-variable #'integerp)
-  (put 'LaTeX-item-indent 'safe-local-variable #'integerp)
+;; (use-package editorconfig
+;;   :ensure nil
+;;   :init
+;;   (put 'evil-shift-width 'safe-local-variable #'integerp)
+;;   (put 'tex-indent-basic 'safe-local-variable #'integerp)
+;;   (put 'tex-indent-item 'safe-local-variable #'integerp)
+;;   (put 'tex-indent-arg 'safe-local-variable #'integerp)
+;;   (put 'TeX-brace-indent-level 'safe-local-variable #'integerp)
+;;   (put 'LaTeX-indent-level 'safe-local-variable #'integerp)
+;;   (put 'LaTeX-item-indent 'safe-local-variable #'integerp)
+;;   :config
+;;   (editorconfig-mode 1))
+
+(use-package dtrt-indent
   :config
-  (editorconfig-mode 1))
+  (dtrt-indent-global-mode +1))
 
 (use-package apheleia
   :config
