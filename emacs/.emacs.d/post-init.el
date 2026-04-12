@@ -506,6 +506,16 @@
   :init
   (global-corfu-mode))
 
+(use-package cape
+  :commands (cape-dabbrev cape-file cape-elisp-block)
+  :bind ("C-c p" . cape-prefix-map)
+  :init
+  ;; Add to the global default value of `completion-at-point-functions' which is
+  ;; used by `completion-at-point'.
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'cape-file)
+  (add-hook 'completion-at-point-functions #'cape-elisp-block))
+
 (use-package nerd-icons-corfu
   :config
   (add-to-list 'corfu-margin-formatters 'nerd-icons-corfu-formatter))
@@ -609,5 +619,14 @@
   :after eglot
   :custom (eglot-booster-io-only t)
   :config	(eglot-booster-mode))
+
+(use-package latex
+  :ensure auctex
+  :hook
+  (LaTeX-mode . visual-line-mode)
+  (LaTeX-mode . TeX-source-correlate-mode)
+  :config
+  (add-to-list 'TeX-view-program-selection
+               '(output-pdf "Zathura")))
 
 ;;; post-init.el ends here
