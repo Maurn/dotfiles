@@ -624,6 +624,7 @@
   :ensure auctex
   :hook
   (LaTeX-mode . visual-line-mode)
+  (LaTeX-mode . visual-wrap-prefix-mode)
   (LaTeX-mode . TeX-source-correlate-mode)
   :config
   (add-to-list 'TeX-view-program-selection
