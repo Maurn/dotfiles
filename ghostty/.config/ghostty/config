@@ -1,0 +1,30 @@
+background = 000000
+foreground = ffffff
+
+cursor-color = 00b7eb
+cursor-style = block
+cursor-style-blink = false
+adjust-cursor-thickness = 3
+
+font-family = "Inconsolata"
+font-style = "SemiBold"
+font-size = 13
+
+window-padding-x = 2
+
+palette = 0=#777777
+palette = 1=#9c3528
+palette = 2=#61bc3b
+palette = 3=#f3b43a
+palette = 4=#167fff
+palette = 5=#744560
+palette = 6=#00b7eb
+palette = 7=#c5c8c6
+palette = 8=#777777
+palette = 9=#9c3528
+palette = 10=#61bc3b
+palette = 11=#f3b43a
+palette = 12=#167fff
+palette = 13=#744560
+palette = 14=#00b7eb
+palette = 15=#c5c8c6
