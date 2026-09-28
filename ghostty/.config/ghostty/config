@@ -10,6 +10,8 @@ font-family = "Inconsolata"
 font-style = "SemiBold"
 font-size = 13
 
+quit-after-last-window-closed = false
+
 window-padding-x = 2
 
 palette = 0=#777777
