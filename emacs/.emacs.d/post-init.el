@@ -211,6 +211,7 @@
 (setq evil-want-keybinding nil)
 
 (use-package evil
+  :pin melpa
   :init
   (setopt evil-want-C-u-scroll t
           evil-want-minibuffer t
@@ -236,6 +237,7 @@
     "fd"  'evil-save-and-close))
 
 (use-package evil-collection
+  :pin melpa
   :after evil
   :custom
   (evil-collection-setup-minibuffer t)
