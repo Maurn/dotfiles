@@ -223,6 +223,9 @@
   :config
   (evil-select-search-module 'evil-search-module 'evil-search)
   (add-hook 'window-configuration-change-hook #'evil-normalize-keymaps)
+  ;; fixes https://github.com/emacs-evil/evil/issues/2034
+  (put 'evil-default-state 'permanent-local t)
+  (put 'evil-echo-state 'permanent-local t)
   :general
   (leader-def
     "wh"  'evil-window-left
@@ -234,6 +237,8 @@
 
 (use-package evil-collection
   :after evil
+  :custom
+  (evil-collection-setup-minibuffer t)
   :config
   (evil-collection-init))
 
