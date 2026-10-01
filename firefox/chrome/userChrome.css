@@ -1,0 +1,28 @@
+/* Nova Rounding Adjustments */
+:root {
+    --border-radius-xsmall: 0px !important; /* Nova Default: 4px, Proton Default: 2px */
+    --border-radius-small: 0px !important; /* Nova Default: 8px, Proton Default: 4px */
+    --border-radius-medium: 0px !important; /* Nova Default: 12px, Proton Default: 8px */
+    --border-radius-large: 0px !important; /* Proton Default: 16px, [Undefined in Nova] */
+    --border-radius-xlarge: 0px !important; /* Nova Default: 24px, [Undefined in Proton] */
+
+    /*
+    --tab-border-radius: var(--border-radius-small) !important;
+
+    --button-border-radius: var(--border-radius-small) !important;
+    --toolbarbutton-border-radius: var(--border-radius-small) !important;
+
+    --card-border-radius: var(--border-radius-small) !important;
+    --card-border-radius-compact: var(--border-radius-small) !important;
+    --card-cover-image-border-radius: var(--border-radius-small) !important;
+
+    --input-text-border-radius: var(--border-radius-small) !important;
+
+    --menuitem-border-radius: var(--border-radius-small) !important;
+
+    --popup-border-radius: var(--border-radius-small) !important;
+
+    --panel-border-radius: var(--border-radius-small) !important;
+    --panel-menuitem-border-radius: var(--border-radius-small) !important;
+    */
+}
