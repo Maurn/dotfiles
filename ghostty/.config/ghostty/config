@@ -11,6 +11,7 @@ font-style = "SemiBold"
 font-size = 13
 
 quit-after-last-window-closed = false
+confirm-close-surface = false
 
 window-padding-x = 2
 
