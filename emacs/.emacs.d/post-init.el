@@ -22,14 +22,24 @@
  split-width-threshold 160
  split-height-threshold nil
 
- comment-auto-fill-only-comments t)
+ comment-auto-fill-only-comments t
+
+ ;; Enable indentation+completion using the TAB key.
+ ;; `completion-at-point' is often bound to M-TAB.
+ tab-always-indent 'complete
+ ;; Emacs 30 and newer: Disable Ispell completion function.
+ ;; Try `cape-dict' as an alternative.
+ text-mode-ispell-word-completion nil
+
+ ;; Hide commands in M-x which do not apply to the current mode.  Corfu
+ ;; commands are hidden, since they are not used via M-x. This setting is
+ ;; useful beyond Corfu.
+ read-extended-command-predicate #'command-completion-default-include-p)
 
 (electric-pair-mode)
 (winner-mode)
 (pixel-scroll-precision-mode)
 (auto-revert-mode)
-
-(setq tab-always-indent 'complete)
 
 (defun find-user-init-file ()
   "Edit the `user-init-file', in same window."
@@ -136,6 +146,63 @@
   ;; the mode `compile-angel-on-load-mode' was activated.
   (compile-angel-on-load-mode 1))
 
+;; Auto-revert in Emacs is a feature that automatically updates the
+;; contents of a buffer to reflect changes made to the underlying file
+;; on disk.
+(use-package autorevert
+  :ensure nil
+  :init
+  ;; (setq auto-revert-verbose t)
+  (setq auto-revert-interval 3)
+  (setq auto-revert-remote-files nil)
+  (setq auto-revert-use-notify t)
+  (setq auto-revert-avoid-polling nil)
+  (global-auto-revert-mode 1))
+
+;; Recentf is an Emacs package that maintains a list of recently
+;; accessed files, making it easier to reopen files you have worked on
+;; recently.
+(use-package recentf
+  :ensure nil
+  :init
+  (setq recentf-auto-cleanup (if (daemonp) 300 'never))
+  (setq recentf-exclude
+        (list "\\.tar$" "\\.tbz2$" "\\.tbz$" "\\.tgz$" "\\.bz2$"
+              "\\.bz$" "\\.gz$" "\\.gzip$" "\\.xz$" "\\.zip$"
+              "\\.7z$" "\\.rar$"
+              "COMMIT_EDITMSG\\'"
+              "\\.\\(?:gz\\|gif\\|svg\\|png\\|jpe?g\\|bmp\\|xpm\\)$"
+              "-autoloads\\.el$" "autoload\\.el$"))
+  ;; Enable `recentf-mode'
+  (recentf-mode 1)
+
+  :config
+  ;; A cleanup depth of -90 ensures that `recentf-cleanup' runs before
+  ;; `recentf-save-list', allowing stale entries to be removed before the list
+  ;; is saved by `recentf-save-list', which is automatically added to
+  ;; `kill-emacs-hook' by `recentf-mode'.
+  (add-hook 'kill-emacs-hook #'recentf-cleanup -90))
+
+;; savehist is an Emacs feature that preserves the minibuffer history between
+;; sessions. It saves the history of inputs in the minibuffer, such as commands,
+;; search strings, and other prompts, to a file. This allows users to retain
+;; their minibuffer history across Emacs restarts.
+(use-package savehist
+  :ensure nil
+  :init
+  (setq history-length 300)
+  (setq savehist-autosave-interval 600)
+  (savehist-mode 1))
+
+;; save-place-mode enables Emacs to remember the last location within a file
+;; upon reopening. This feature is particularly beneficial for resuming work at
+;; the precise point where you previously left off.
+(use-package saveplace
+  :ensure nil
+  :init
+  (setq save-place-limit 400)
+  (save-place-mode 1))
+
 (use-package general
   :config
   (general-override-mode 1)
@@ -239,9 +306,6 @@
   (setopt doom-modeline-buffer-file-name-style 'truncate-upto-root
           doom-modeline-icon nil))
 
-;; evil-want-keybinding must be declared before Evil and Evil Collection
-(setq evil-want-keybinding nil)
-
 (use-package evil
   :pin melpa
   :init
@@ -251,7 +315,8 @@
           evil-want-keybinding nil
           evil-undo-system 'undo-fu
           evil-want-Y-yank-to-eol t
-          evil-respect-visual-line-mode t)
+          evil-respect-visual-line-mode t
+          evil-echo-state nil)
   (evil-mode 1)
   :config
   (evil-select-search-module 'evil-search-module 'evil-search)
@@ -259,6 +324,11 @@
   ;; fixes https://github.com/emacs-evil/evil/issues/2034
   (put 'evil-default-state 'permanent-local t)
   (put 'evil-echo-state 'permanent-local t)
+  ;; Occasionally, `evil' fails to respect `evil-search-module' when it is
+  ;; defined inside the :custom block. This fix ensures the search module
+  ;; is correctly set to `evil-search'.
+  (setq evil-search-module 'evil-search)
+  (evil-select-search-module 'evil-search-module 'evil-search)
   :general
   (leader-def
     "wh"  'evil-window-left
@@ -297,22 +367,23 @@
 
 (use-package evil-surround
   :after evil
-  :defer t
-  :commands global-evil-surround-mode
-  :custom
-  (evil-surround-pairs-alist
-   '((?\( . ("(" . ")"))
-     (?\[ . ("[" . "]"))
-     (?\{ . ("{" . "}"))
+  :init
+  (setq evil-surround-pairs-alist
+        '((?\( . ("(" . ")"))
+          (?\[ . ("[" . "]"))
+          (?\{ . ("{" . "}"))
 
-     (?\) . ("(" . ")"))
-     (?\] . ("[" . "]"))
-     (?\} . ("{" . "}"))
+          (?\) . ("(" . ")"))
+          (?\] . ("[" . "]"))
+          (?\} . ("{" . "}"))
 
-     (?< . ("<" . ">"))
-     (?> . ("<" . ">"))))
-  :hook (after-init . global-evil-surround-mode))
+          (?< . ("<" . ">"))
+          (?> . ("<" . ">"))))
+  :config
+  (global-evil-surround-mode 1))
 
+;; The following code enables commenting and uncommenting by pressing gcc in
+;; normal mode and gc in visual mode.
 (with-eval-after-load "evil"
   (evil-define-operator my-evil-comment-or-uncomment (beg end)
     "Toggle comment for the region between BEG and END."
@@ -494,8 +565,9 @@
   (dtrt-indent-global-mode +1))
 
 (use-package apheleia
-  :config
-  (apheleia-global-mode +1))
+  :commands (apheleia-mode
+             apheleia-global-mode)
+  :hook (prog-mode . apheleia-mode))
 
 (use-package corfu
   :custom
@@ -542,18 +614,32 @@
   :custom-face
   (font-lock-property-use-face ((t :weight semibold)))
   :config
-  (setq my-svelte-tsauto-config
-        (make-treesit-auto-recipe
-         :lang 'svelte
-         :ts-mode 'svelte-ts-mode
-         :url "https://github.com/tree-sitter-grammars/tree-sitter-svelte"
-         :revision "master"
-         :source-dir "src"
-         :ext "\\.svelte\\'"))
-  (add-to-list 'treesit-auto-recipe-list my-svelte-tsauto-config)
+  (add-to-list
+   'treesit-auto-recipe-list
+   (make-treesit-auto-recipe
+    :lang 'svelte
+    :ts-mode 'svelte-ts-mode
+    :url "https://github.com/tree-sitter-grammars/tree-sitter-svelte"
+    :revision "master"
+    :source-dir "src"
+    :ext "\\.svelte\\'"))
   (add-to-list 'treesit-auto-langs 'svelte)
 
+  ;; svelte-ts-mode needs this
+  (add-to-list
+   'treesit-auto-recipe-list
+   (make-treesit-auto-recipe
+    :lang 'jsdoc
+    :url "https://github.com/tree-sitter-grammars/tree-sitter-jsdoc"
+    :revision "master"
+    :source-dir "src"
+    :ext "\\.jsdoc\\'"))
+  (add-to-list 'treesit-auto-langs 'jsdoc)
+
   (delete 'yaml treesit-auto-langs)
+  (delete 'cobol treesit-auto-langs)
+  (delete 'swift treesit-auto-langs)
+  (delete 'verilog treesit-auto-langs)
 
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
